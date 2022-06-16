@@ -2,18 +2,17 @@
 
 if [ $# -ne 2 ]; then  
     echo "You need a Host-IP and Target-IP"  
-    echo "Example: mxstart hostip targetip"  
+    echo "Example: mxhelp hostip targetip"  
     exit 1  
 fi  
  
 IP=$1 
 TGT=$2 
- 
 echo "" 
-echo "Update Cheatsheets that Start with mx" 
-ipold=$(cat ~/.cheatsheets/ipoldme) 
-tgtold=$(cat ~/.cheatsheets/ipoldtgt) 
-  
+echo "Mike is Helping..."
+ipold=$(cat ~/mxhelp/ipoldme)
+tgtold=$(cat ~/mxhelp/ipoldtgt)
+
 echo 'UPDATE IP :' $ipold '-->' $IP  
 echo 'UPDATE TGT:' $tgtold '-->' $TGT  
   
@@ -33,16 +32,15 @@ elif [[ $TGT = $ipold ]]; then
     echo "TGT and OLDIP are the same. Abort - You will wreak havoc." 
     exit 1 
 fi 
-echo 'Passed All Tests...' 
  
 #Search and fix 
-find ~/.cheatsheets/mx* -type f -exec sed -i 's/'"$ipold"'/'"$IP"'/gI' {} \; 
-find ~/.cheatsheets/mx* -type f -exec sed -i 's/'"$tgtold"'/'"$TGT"'/gI' {} \; 
- 
-#Update to capture latest 
-echo $IP > ~/.cheatsheets/ipoldme 
-echo $TGT > ~/.cheatsheets/ipoldtgt 
- 
+find ~/mxhelp/mx* -type f -exec sed -i 's/'"$ipold"'/'"$IP"'/gI' {} \;
+find ~/mxhelp/mx* -type f -exec sed -i 's/'"$tgtold"'/'"$TGT"'/gI' {} \;
+
+#Update to capture latest
+echo $IP > ~/mxhelp/ipoldme
+echo $TGT > ~/mxhelp/ipoldtgt
+
 echo "-------------------------------------" 
 echo "Initial nmap" 
 echo -e "\e[1;35m" 
@@ -63,15 +61,7 @@ echo -e "\e[1;m"
 echo "-------------------------------------" 
 echo "Consider nmapAutomator" 
 echo -e "\e[1;35m" 
-echo "nmapAutomator.sh -H" $TGT "-t Port -Pn | tee ports.na   ...didnt find all ports" 
 echo "nmapAutomator.sh -H" $TGT "-t Script | tee script.na" 
 echo "nmapAutomator.sh -H" $TGT "-t Vulns | tee vulns.na" 
 echo "nmapAutomator.sh -H" $TGT "-t Recon | tee recon.na" 
-echo -e "\e[1;m" 
-
-echo "-------------------------------------" 
-echo "Consider dirsearch" 
-echo -e "\e[1;35m" 
-echo "dirsearch -u http://"$TGT "-w "\$medium" -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 400" 
-echo "wfuzz -w "\$subtopmill" -c -f subfighter -Z -u 'cronos.htb' -H 'Host: FUZZ.cronos.htb'" 
 echo -e "\e[1;m" 
