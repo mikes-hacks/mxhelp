@@ -1,7 +1,7 @@
 # mxhelp
-Let "Mike Help" prep for your next pentest.  
-This little script will update all of your favorite copypasta with IP and Target addresses.  
-Easily add any new cheatsheets.  
+Let **Mike Help** you prep for that next pentest.  
+This toolkit will update all of your favorite copypasta with IP and Target addresses.  
+Flexible and easy to add any new cheatsheets.  
 
 # Usage
 ```
