@@ -32,7 +32,7 @@ EOF
 
 # Quick Edits
 Changes - Any changes you make will automatically get 'helped' when you run **mxhelp**.  
-Additions - Adding a new script is easy, just put it in the ~/mxhelp folder, and add a new alias.  
+Additions - Adding a new script is easy, just put it in the ~/mxhelp folder, and add another alias.  
 Remember - For any changes you make, just be sure the IP and TGT match with the existing.  
 
 # Secret Sauce (FYI)
