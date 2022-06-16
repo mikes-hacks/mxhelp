@@ -24,13 +24,13 @@ grep alias ~/.bash_aliases ~/.bashrc ~/.zshrc ~/.*
 (
 cat <<EOF
 alias mxhelp='~/mxhelp/mxhelp'
-alias mxtty='cat ~/mxhelp/mxpytty.txt'
-alias mxsam='cat ~/mxhelp/mxsam.txt'
-alias mxbadchars='cat ~/mxhelp/mxbadchars.txt'
-alias mxreverse='cat ~/mxhelp/mxreverse.txt'
-alias mxtransfer='cat ~/mxhelp/mxtransfer.txt'
-alias mxcurls='cat ~/mxhelp/mxcurls.txt'
-alias mxweb='cat ~/mxhelp/mxweb.txt'
+alias mxtty='cat ~/mxhelp/mxpytty'
+alias mxsam='cat ~/mxhelp/mxsam'
+alias mxbadchars='cat ~/mxhelp/mxbadchars'
+alias mxreverse='cat ~/mxhelp/mxreverse'
+alias mxtransfer='cat ~/mxhelp/mxtransfer'
+alias mxcurls='cat ~/mxhelp/mxcurls'
+alias mxweb='cat ~/mxhelp/mxweb'
 alias myip='cat ~/mxhelp/ipoldme'
 alias tgt='cat ~/mxhelp/ipoldtgt'
 export common="/usr/share/dirb/wordlists/common.txt"
