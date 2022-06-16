@@ -1,0 +1,77 @@
+#!/bin/bash  
+
+if [ $# -ne 2 ]; then  
+    echo "You need a Host-IP and Target-IP"  
+    echo "Example: mxstart hostip targetip"  
+    exit 1  
+fi  
+ 
+IP=$1 
+TGT=$2 
+ 
+echo "" 
+echo "Update Cheatsheets that Start with mx" 
+ipold=$(cat ~/.cheatsheets/ipoldme) 
+tgtold=$(cat ~/.cheatsheets/ipoldtgt) 
+  
+echo 'UPDATE IP :' $ipold '-->' $IP  
+echo 'UPDATE TGT:' $tgtold '-->' $TGT  
+  
+if   [[ ! $IP =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then 
+    echo "IP not valid." 
+    exit 1 
+elif [[ ! $TGT =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then 
+    echo "Target IP not valid." 
+    exit 1 
+elif [[ $IP = $TGT ]]; then 
+    echo "IP and TGT are the same. Abort - You will wreak havoc." 
+    exit 1 
+elif [[ $IP = $tgtold ]]; then 
+    echo "IP and OLDTGT are the same. Abort - You will wreak havoc." 
+    exit 1 
+elif [[ $TGT = $ipold ]]; then 
+    echo "TGT and OLDIP are the same. Abort - You will wreak havoc." 
+    exit 1 
+fi 
+echo 'Passed All Tests...' 
+ 
+#Search and fix 
+find ~/.cheatsheets/mx* -type f -exec sed -i 's/'"$ipold"'/'"$IP"'/gI' {} \; 
+find ~/.cheatsheets/mx* -type f -exec sed -i 's/'"$tgtold"'/'"$TGT"'/gI' {} \; 
+ 
+#Update to capture latest 
+echo $IP > ~/.cheatsheets/ipoldme 
+echo $TGT > ~/.cheatsheets/ipoldtgt 
+ 
+echo "-------------------------------------" 
+echo "Initial nmap" 
+echo -e "\e[1;35m" 
+echo "nmap -p- --min-rate=1000 -T4" $TGT "-Pn | tee ports.nmap" 
+echo "grep ^[0-9] ./ports.nmap" 
+echo "ports=\$(grep ^[0-9] ./ports.nmap | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)" 
+echo "nmap -A -p \$ports" $TGT "-Pn -oA nmaptcp" 
+echo "grep ^[0-9] ./nmaptcp.nmap" 
+echo -e "\e[1;m" 
+ 
+echo "-------------------------------------" 
+echo "Consider UDP" 
+echo -e "\e[1;35m" 
+echo "nmap --top-ports 20 -sU -sV -sC" $TGT "-oG nmapudp20" 
+echo "nmap -p0-65535 -Pn –sU" $TGT "-oG nmapudp" 
+echo -e "\e[1;m" 
+
+echo "-------------------------------------" 
+echo "Consider nmapAutomator" 
+echo -e "\e[1;35m" 
+echo "nmapAutomator.sh -H" $TGT "-t Port -Pn | tee ports.na   ...didnt find all ports" 
+echo "nmapAutomator.sh -H" $TGT "-t Script | tee script.na" 
+echo "nmapAutomator.sh -H" $TGT "-t Vulns | tee vulns.na" 
+echo "nmapAutomator.sh -H" $TGT "-t Recon | tee recon.na" 
+echo -e "\e[1;m" 
+
+echo "-------------------------------------" 
+echo "Consider dirsearch" 
+echo -e "\e[1;35m" 
+echo "dirsearch -u http://"$TGT "-w "\$medium" -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 400" 
+echo "wfuzz -w "\$subtopmill" -c -f subfighter -Z -u 'cronos.htb' -H 'Host: FUZZ.cronos.htb'" 
+echo -e "\e[1;m" 
