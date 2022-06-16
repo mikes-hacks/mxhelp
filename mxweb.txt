@@ -1,0 +1,6 @@
+----------------------
+----------------------
+Webscans
+
+dirsearch -u http://192.168.200.5 -w $medium -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 400
+wfuzz -w $subtopmill -c -f subfighter -Z -u 'cronos.htb' -H 'Host: FUZZ.cronos.htb'
