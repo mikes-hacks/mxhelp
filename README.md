@@ -13,7 +13,7 @@ mxhelp 192.168.119.101 10.1.1.5
 ```
 cd ~
 git clone https://github.com/mikes-hacks/mxhelp.git
-chmod +x ~/mxhelp
+chmod +x ~/mxhelp/mxhelp
 ```
 
 # Alias
