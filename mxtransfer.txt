@@ -1,7 +1,7 @@
 sudo pip3 install pyftpdlib
 sudo python3 -m pyftpdlib -p 21 -u mike -P paxx -w
 ftp 192.168.162.46
-user mike paxx
+user mike helps
 passive
 PUT samx
 PUT systemx
