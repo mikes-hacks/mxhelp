@@ -30,6 +30,11 @@ EOF
 ) >> ~/.bash_aliases
 ```
 
+# Easy Edits
+Any changes you make will automatically get 'helped' when you run **mxhelp**.  
+Make sure to just use reuse the same IP and Target addresses in the files.  
+
+
 # Secret Sauce (FYI)
 ```
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$ipold"'/'"$IP"'/gI' {} \;
