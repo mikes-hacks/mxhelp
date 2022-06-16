@@ -42,6 +42,10 @@ export smallpw="/usr/share/seclists/Discovery/Web-Content/raft-small-words.txt"
 EOF
 ) >> ~/.bash_aliases
 ```
+# Refresh
+Start a new Terminal after you install.  
+This will reload your aliases.  
+
 
 # Quick Edits
 Changes - Any changes you make will automatically get 'helped' when you run **mxhelp**.  
