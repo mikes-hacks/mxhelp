@@ -30,6 +30,7 @@ alias mxbadchars='cat ~/mxhelp/mxbadchars.txt'
 alias mxreverse='cat ~/mxhelp/mxreverse.txt'
 alias mxtransfer='cat ~/mxhelp/mxtransfer.txt'
 alias mxcurls='cat ~/mxhelp/mxcurls.txt'
+alias mxweb='cat ~/mxhelp/mxweb.txt'
 alias myip='cat ~/mxhelp/ipoldme'
 alias tgt='cat ~/mxhelp/ipoldtgt'
 EOF
