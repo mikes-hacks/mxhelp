@@ -1,6 +1,7 @@
-# mxhelp
-Help to auto-update your pentest copy pasta with the IP Addresses
-Easily add any new cheatsheets
+# Summary
+Let Mike Help prep for your next pentest.  
+This little script will update all of your favorite copypasta with IP and Target addresses.  
+Easily add any new cheatsheets.  
 
 # Usage
 ```
