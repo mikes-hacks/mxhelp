@@ -1,5 +1,5 @@
 # mxhelp
-Let **Mike Help** you prep for that next pentest.  
+With **Mike's Help** you will be ready for your next pentest.  
 This toolkit will update all of your favorite copypasta with IP and Target addresses.  
 Flexible and easy to add any new cheatsheets.  
 
