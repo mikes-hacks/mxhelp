@@ -35,3 +35,21 @@ EOF
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$ipold"'/'"$IP"'/gI' {} \;
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$tgtold"'/'"$TGT"'/gI' {} \;
 ```
+
+# Batch add your own scripts
+1. Rename your scripts to prefix 'mx'
+1. Move them to the mxhelp directory
+1. Update your Aliases
+
+```
+cd ~/pentest/copypasta/
+find * -maxdepth 0 -exec mv {} mx{} \;
+mv mx* ~/mxhelp/
+
+(
+cat <<EOF
+alias mxnetcat='cat ~/mxhelp/mxnetcat'
+alias myother='cat ~/mxhelp/mxother'
+EOF
+) >> ~/bash_aliases
+```
