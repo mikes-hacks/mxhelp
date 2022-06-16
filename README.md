@@ -32,13 +32,13 @@ EOF
 
 # Quick Edits
 Changes - Any changes you make will automatically get 'helped' when you run **mxhelp**.  
-Additions - Adding a new script is easy, just put it in the ~/mxhelp folder, and add a new alias.
-Remember - For any changes you make, just be sure the IP and TGT match with the existing.
+Additions - Adding a new script is easy, just put it in the ~/mxhelp folder, and add a new alias.  
+Remember - For any changes you make, just be sure the IP and TGT match with the existing.  
 
 # Secret Sauce (FYI)
-The real power comes from the Linux 'sed' command.
-It will update all of the IP's you and your target.
-Several if-else statements at in-code to ensure that you dont wreak your cheatsheets.
+The real power comes from the Linux 'sed' command.  
+It will update all of the IP's you and your target.  
+Several if-else statements at in-code to ensure that you dont wreak your cheatsheets.  
 ```
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$ipold"'/'"$IP"'/gI' {} \;
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$tgtold"'/'"$TGT"'/gI' {} \;
