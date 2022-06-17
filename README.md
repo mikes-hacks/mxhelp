@@ -75,7 +75,7 @@ mv mx* ~/mxhelp/
 (
 cat <<EOF
 alias mxnetcat='cat ~/mxhelp/mxnetcat'
-alias myother='cat ~/mxhelp/mxother'
+alias mxother='cat ~/mxhelp/mxother'
 EOF
 ) >> ~/bash_aliases
 ```
