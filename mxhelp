@@ -10,8 +10,8 @@ IP=$1
 TGT=$2 
 echo "" 
 echo "Mike is Helping..."
-ipold=$(cat ~/mxhelp/ipoldme)
-tgtold=$(cat ~/mxhelp/ipoldtgt)
+ipold=$(cat ~/mxhelp/z_myip)
+tgtold=$(cat ~/mxhelp/z_tgt)
 
 echo 'UPDATE IP :' $ipold '-->' $IP  
 echo 'UPDATE TGT:' $tgtold '-->' $TGT  
@@ -38,8 +38,8 @@ find ~/mxhelp/mx* -type f -exec sed -i 's/'"$ipold"'/'"$IP"'/gI' {} \;
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$tgtold"'/'"$TGT"'/gI' {} \;
 
 #Update to capture latest
-echo $IP > ~/mxhelp/ipoldme
-echo $TGT > ~/mxhelp/ipoldtgt
+echo $IP > ~/mxhelp/z_myip
+echo $TGT > ~/mxhelp/z_tgt
 
 echo "-------------------------------------" 
 echo "Initial nmap" 
