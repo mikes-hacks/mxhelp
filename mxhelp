@@ -65,3 +65,6 @@ echo "nmapAutomator.sh -H" $TGT "-t Script | tee script.na"
 echo "nmapAutomator.sh -H" $TGT "-t Vulns | tee vulns.na" 
 echo "nmapAutomator.sh -H" $TGT "-t Recon | tee recon.na" 
 echo -e "\e[1;m" 
+
+echo "-------------------------------------" 
+ls ~/mxhelp/mx*
