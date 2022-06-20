@@ -8,9 +8,7 @@ Flexible and easy to add any new cheatsheets.
 mxhelp hostip targetip
 mxhelp 192.168.119.101 10.1.1.5
 ```
-
-<a href="https://asciinema.org/a/tUZ8Q8c1VunREl2764Fun6bYj?autoplay=1"><img src="https://asciinema.org/a/tUZ8Q8c1VunREl2764Fun6bYj.png" width="836"/></a>
-
+<script id="asciicast-tUZ8Q8c1VunREl2764Fun6bYj" src="https://asciinema.org/a/tUZ8Q8c1VunREl2764Fun6bYj.js" async></script>
 
 # Installation
 ```
