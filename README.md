@@ -9,7 +9,7 @@ mxhelp hostip targetip
 mxhelp 192.168.119.101 10.1.1.5
 ```
 
-[![asciicast](https://asciinema.org/a/tUZ8Q8c1VunREl2764Fun6bYj.png)](https://asciinema.org/a/tUZ8Q8c1VunREl2764Fun6bYj&AutoPlay="true")
+[![asciicast](https://asciinema.org/a/tUZ8Q8c1VunREl2764Fun6bYj.svg)](https://asciinema.org/a/tUZ8Q8c1VunREl2764Fun6bYj&AutoPlay=true)
 
 
 # Installation
@@ -37,7 +37,7 @@ alias mxcurls='cat ~/mxhelp/mxcurls'
 alias mxweb='cat ~/mxhelp/mxweb'
 alias myip='cat ~/mxhelp/z_myip'
 alias tgt='cat ~/mxhelp/z_tgt'
-export common="/usr/share/dirb/wordlists/common.txt"
+export common="/usr/share/dirb/wordlists/common.txt"data-autoplay="true"
 export commontenk="/usr/share/seclists/Passwords/Common-Credentials/10k-most-common.txt"
 export subtopmill="/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt"
 export medium="/usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt"
