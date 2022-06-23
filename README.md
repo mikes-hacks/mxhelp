@@ -15,6 +15,9 @@ mxhelp 192.168.119.101 10.1.1.5
 
 https://asciinema.org/a/tUZ8Q8c1VunREl2764Fun6bYj?t=25&speed=2&theme=solarized-dark&autoplay=true
 
+[![asciicast](https://asciinema.org/a/tUZ8Q8c1VunREl2764Fun6bYj.png)](https://asciinema.org/a/tUZ8Q8c1VunREl2764Fun6bYj?t=25&speed=2&theme=solarized-dark&autoplay=true)
+
+
 # Installation
 ```
 cd ~
