@@ -40,7 +40,7 @@ alias myip='cat ~/mxhelp/z_myip'
 alias tgt='cat ~/mxhelp/z_tgt'
 export common="/usr/share/dirb/wordlists/common.txt"data-autoplay="true"
 export commontenk="/usr/share/seclists/Passwords/Common-Credentials/10k-most-common.txt"
-export subtopmill="/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt"
+export subtopmill="/usr/share/seclists/Discovery/DNS/subdomains-top1mil-5000.txt"
 export medium="/usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt"
 export rockyou="/usr/share/seclists/Passwords/Leaked-Databases/rockyou.txt"
 export smallpw="/usr/share/seclists/Discovery/Web-Content/raft-small-words.txt"
