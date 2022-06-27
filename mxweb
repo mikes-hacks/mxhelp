@@ -1,6 +1,36 @@
-----------------------
-----------------------
 Webscans
+export URL="http://192.168.200.5:80" 
+nikto --url $URL 
+dirsearch -u $URL -w $medium -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 400
 
-dirsearch -u http://192.168.200.5 -w $medium -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 400
-wfuzz -w $subtopmill -c -f subfighter -Z -u 'cronos.htb' -H 'Host: FUZZ.cronos.htb'
+Host
+sudo echo dcbob 192.168.200.5 >> /etc/hosts 
+export URL="http://dcbob:80/"  
+
+FUZZ Files 
+export URL="http://dcbob:80/FUZZ"  
+export URL="http://192.168.200.5:80/FUZZ"  
+wfuzz -c -z file,$raft-medium-files --hc 404 --hh 4772 "$URL" 
+  
+FUZZ Directories 
+export URL="http://dcbob:80/FUZZ/"  
+export URL="http://192.168.200.5:80/FUZZ/"  
+wfuzz -c -z file,$raft-medium-directories --hc 404 --hh 4772"$URL" 
+
+FUZZ Vhosts
+wfuzz -w $subtopmill -c -f wfuzz.sub -Z -u 'http://cronos.htb' -H 'Host: FUZZ.cronos.htb' -t 42 --hl 1
+
+FUZZ URL
+wfuzz -z range,0-10 --hl 97 http:/192.168.200.5:80/listproducts.php?cat=FUZZ
+
+Wordpress Plugins/Themes
+wpscan --url $URL --disable-tls-checks --enumerate p --enumerate t 
+
+Wordpress Users  
+wpscan --url $URL --disable-tls-checks --enumerate u 
+echo tom > users 
+echo jerry >> users 
+
+Wordpress Brute Force 
+cewl $URL -m 5 -w cewl.txt 2>/dev/null 
+wpscan --url $URL --disable-tls-checks -U users -P cewl.txt/$rockyou 
