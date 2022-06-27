@@ -9,9 +9,7 @@ mxhelp hostip targetip
 mxhelp 192.168.119.101 10.1.1.5
 ```
 
-<p align="left">
-  <img width="480" src="https://asciinema.org/a/tUZ8Q8c1VunREl2764Fun6bYj.svg" id="asciicast-14" autoplay="1" />
-</p>
+![mxhelp](https://user-images.githubusercontent.com/59158016/176043471-d9c07ce2-19cf-4948-97b5-87a3df1cfde8.gif)
 
 # Installation
 ```
