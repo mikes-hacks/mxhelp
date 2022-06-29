@@ -36,16 +36,12 @@ nmap -p 80 --script http-shellshock --script-args uri=/cgi-bin/vulnscript.sh 192
 nmap -p 80 --script http-shellshock --script-args uri=/cgi-bin/admin.cgi 192.168.200.5 
 nmap -p 443 --script ssl-heartbleed 192.168.200.5 
 nmap -sV --script=nfs-showmount 192.168.200.5
-nmap -p111 --script nfs* 192.168.200.5
-nmap -sV -p111 --script=rpcinfo 192.168.200.5
+nmap -p 111 --script nfs* 192.168.200.5
+nmap -p 111 -sV --script=rpcinfo 192.168.200.5
 sudo nmap -p 139,445 --script=smb-vuln* 192.168.200.5 
 sudo nmap -p 445 --script=smb-enum-shares,smb-enum-users 192.168.200.5 
-sudo nmap --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode,smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494,smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery --script-args=unsafe=1 -T5 192.168.200.5 -oN nmap.smb 
-sudo nmap --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshell,ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-sql-hasdbaccess,ms-sql-dac,ms-sql-dump-hashes \ 
---script-args mssql.instance-port=1433,\ 
-mssql.username=sa,\ 
-mssql.password=,\ 
-mssql.instance-name=MSSQLSERVER -sV -p 1433 192.168.200.5
+sudo nmap --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode,smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494,smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery --script-args=unsafe=1 -T5 192.168.200.5 -oG nmap-smb
+sudo nmap -p 1433 --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshell,ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-sql-hasdbaccess,ms-sql-dac,ms-sql-dump-hashes --script-args mssql.instance-port=1433,mssql.username=sa,mssql.password=,mssql.instance-name=MSSQLSERVER -sV 192.168.200.5 -oG nmap-mssql 
 
 # Consider
 mxweb mxcurls 
