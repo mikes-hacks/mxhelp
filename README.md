@@ -26,13 +26,14 @@ grep alias ~/.bash_aliases ~/.bashrc ~/.zshrc ~/.*
 (
 cat <<EOF
 alias mxhelp='~/mxhelp/mxhelp'
-alias mxtty='cat ~/mxhelp/mxpytty'
-alias mxsam='cat ~/mxhelp/mxsam'
 alias mxbadchars='cat ~/mxhelp/mxbadchars'
+alias mxcurls='cat ~/mxhelp/mxcurls'
+alias mxnmap='cat ~/mxhelp/mxnmap'
 alias mxreverse='cat ~/mxhelp/mxreverse'
+alias mxsam='cat ~/mxhelp/mxsam'
 alias mxtest='cat ~/mxhelp/mxtest'
 alias mxtransfer='cat ~/mxhelp/mxtransfer'
-alias mxcurls='cat ~/mxhelp/mxcurls'
+alias mxtty='cat ~/mxhelp/mxpytty'
 alias mxweb='cat ~/mxhelp/mxweb'
 alias myip='cat ~/mxhelp/z_myip'
 alias tgt='cat ~/mxhelp/z_tgt'
