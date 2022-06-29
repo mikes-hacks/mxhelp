@@ -1,0 +1,45 @@
+# First
+nmap -p- --min-rate=1000 -T4 192.168.200.5 -v --open -Pn | tee nmapports
+grep ^[0-9] ./nmapports
+ports=\$(grep ^[0-9] ./nmapports | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)
+sudo nmap -sV -sC -p $ports 192.168.200.5 -Pn -v -oG nmapfulltcp
+grep ^[0-9] ./nmapfulltcp
+
+# Consider UDP
+sudo nmap --top-ports 20 -sU -sV -sC 192.168.200.5 -oG nmapudp20
+sudo nmap -p0-65535 -Pn –sU 192.168.200.5 -oG nmapudp
+
+# Consider nmapAutomator
+sudo nmapAutomator.sh -H 192.168.200.5 -t Script | tee nautoscript
+sudo nmapAutomator.sh -H 192.168.200.5 -t Vulns | tee nautovulns
+sudo nmapAutomator.sh -H 192.168.200.5 -t Recon | tee nautorecon
+
+# Vulns
+nmap -Pn --script vuln 192.168.1.105  ..vul/cve detection, No Pings 
+nmap --script safe -p 445 192.168.200.5
+
+# Scripts
+locate -r '\.nse$' | xargs grep categories | grep 'default\|version\|safe' | grep smb
+ls -l /usr/share/nmap/scripts/nfs* 
+
+# Services
+nmap -p 443 --script ssl-heartbleed 192.168.200.5
+nmap -p 3306 --script mysql-brute 192.168.200.5
+nmap -p 21 --script ftp-brute 192.168.200.5 
+nmap -p 21 --script ftp-* 192.168.200.5 
+nmap -sU -p 69 --script tftp-enum.nse 192.168.200.5 
+nmap -pT:25 --script smtp-commands.nse 192.168.200.5 
+nmap -p 80 -nv --script=http-vuln-cve2010-2861 192.168.200.5  #coldfusion 
+nmap -p 80 --script http-shellshock --script-args uri=/cgi-bin/vulnscript.sh 192.168.200.5
+nmap -p 80 --script http-shellshock --script-args uri=/cgi-bin/admin.cgi 192.168.200.5 
+nmap -p 443 --script ssl-heartbleed 192.168.200.5 
+nmap -sV --script=nfs-showmount 192.168.200.5
+nmap -p111 --script nfs* 192.168.200.5
+nmap -sV -p111 --script=rpcinfo 192.168.200.5
+snmp-check 192.168.200.5 
+sudo nmap -p 139,445 --script=smb-vuln* 192.168.200.5 
+sudo nmap -p 445 --script=smb-enum-shares,smb-enum-users 192.168.200.5 
+sudo nmap --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode,smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494,smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery --script-args=unsafe=1 -T5 192.168.200.5 -oN nmap.smb 
+
+# Consider
+mxweb mxcurls 
