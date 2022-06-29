@@ -59,13 +59,5 @@ echo "sudo nmap -p0-65535 -Pn –sU" $TGT "-oG nmapudp"
 echo -e "\e[1;m" 
 
 echo "-------------------------------------" 
-echo "Consider nmapAutomator" 
-echo -e "\e[1;35m" 
-echo "sudo nmapAutomator.sh -H" $TGT "-t Script | tee script.na" 
-echo "sudo nmapAutomator.sh -H" $TGT "-t Vulns | tee vulns.na" 
-echo "sudo nmapAutomator.sh -H" $TGT "-t Recon | tee recon.na" 
-echo -e "\e[1;m" 
-
-echo "-------------------------------------" 
 ls ~/mxhelp/mx*
 echo ""
