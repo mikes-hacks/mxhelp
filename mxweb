@@ -2,6 +2,7 @@ Webscans
 export URL="http://192.168.200.5:80" 
 nikto --url $URL 
 dirsearch -u $URL -w $medium -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 400
+gobuster -u $URL -w $raft-medium-directories -x txt,php,html,zip -t 40
 
 Host
 sudo echo dcbob 192.168.200.5 >> /etc/hosts 
