@@ -28,6 +28,7 @@ cat <<EOF
 alias mxhelp='~/mxhelp/mxhelp'
 alias mxbadchars='cat ~/mxhelp/mxbadchars'
 alias mxcurls='cat ~/mxhelp/mxcurls'
+alias mxlinenum='cat ~/mxhelp/mxlinenum'
 alias mxnmap='cat ~/mxhelp/mxnmap'
 alias mxpivot='cat ~/mxhelp/mxpivot'
 alias mxreverse='cat ~/mxhelp/mxreverse'
