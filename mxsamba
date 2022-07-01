@@ -20,8 +20,15 @@ smbmap -H 192.168.200.5 -u admin -p 'creds' -d friendzone
 crackmapexec smb 192.168.200.5 --shares -u '' -p '' 
 crackmapexec smb 192.168.200.5 --shares -u bob -p WowPass
 
+
+=================================== 
+sambascan 
+Search an entire network or hosts for SMB shares, and list public-share contents 
+
+=================================== 
 Reuse samba-creds for FTP
 hydra -l steph -P $rockyou 10.1.1.68 ftp
+
 
 =================================== 
 Find Users
