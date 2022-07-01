@@ -1,0 +1,49 @@
+=================================== 
+DNS 
+
+nmblookup -A 192.168.200.5
+nbtscan 192.168.200.5
+nbtscan -v -s : 192.168.200.5/24 
+nslookup 192.168.200.5
+
+sudo echo 192.168.200.5 mike.com >> /etc/host
+
+
+===================================
+Loop Subnet for Hosts
+
+prep=echo 192.168.200.5 | cut -d'.' -f1-3
+for ip in $(seq 1 255);do host $prep.$ip;done | grep -v "not found" 
+
+dnsrecon -d 192.168.200.5 -r 192.168.200.5/24 
+
+
+===================================
+Loop DNS for Hosts
+
+host -t ns mike.com  
+
+m=mike.com    
+for s in $(host -t ns $m | cut -d " " -f4); do host -l $m $s | grep "has address"; done 
+
+dnsenum mike.com --dnsserver dns.mike.com -f ~/tools/wordlists/dns.txt 
+
+
+===================================
+Zone Transfer
+
+dnsrecon -d mike.com -t axfr  
+nmap --script=dns-zone-transfer -p 53 ns2.mike.com  
+
+
+===================================
+LDAP
+
+ldapsearch -x -h 192.168.200.5 -s base namingcontexts  
+ldapsearch -x -h 192.168.200.5 -b 'DC=mike,DC=com' -s sub | grep -i sam  
+ldapsearch -x -h 192.168.200.5 -D '' -w '' -b "DC=mike,DC=com" 
+
+nmap -n -sV --script "ldap* and not brute" 192.168.118.100 
+web: certificates, emailaddys 
+http://web/about.html 
+
