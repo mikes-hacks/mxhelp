@@ -2,8 +2,13 @@
 Check
 dir C:\Windows\Repair\SAM
 dir C:\Windows\Repair\SYSTEM
+dir C:\Windows\System32\config\SAM
+dir C:\Windows\System32\config\SYSTEM
 dir C:\Windows\System32\config\RegBack\SAM 
 dir C:\Windows\System32\config\RegBack\SYSTEM 
+for %F in ("C:\Windows\Repair" "C:\Windows\System32\config" "C:\Windows\System32\config\RegBack" "") do (
+  dir /s /b /o:gn "%F"
+) | findstr SAM
 
 ================================== 
 reg save hklm\sam C:\Windows\Temp\samx
