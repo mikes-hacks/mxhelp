@@ -4,7 +4,7 @@ Webscans
 export URL="http://192.168.200.5:80" 
 nikto --url $URL 
 dirsearch -u $URL -w $medium -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 400
-gobuster -u $URL -w $raft-medium-directories -x txt,php,html,zip -t 40
+gobuster -u $URL -w $mediumdirs -x txt,php,html,zip -t 40
 
 Host
 sudo echo dcbob 192.168.200.5 >> /etc/hosts 
@@ -13,12 +13,12 @@ export URL="http://dcbob:80/"
 FUZZ Files 
 export URL="http://dcbob:80/FUZZ"  
 export URL="http://192.168.200.5:80/FUZZ"  
-wfuzz -c -z file,$raft-medium-files --hc 404 --hh 4772 "$URL" 
+wfuzz -c -z file,$mediumfiles --hc 404 --hh 4772 "$URL" 
   
 FUZZ Directories 
 export URL="http://dcbob:80/FUZZ/"  
 export URL="http://192.168.200.5:80/FUZZ/"  
-wfuzz -c -z file,$raft-medium-directories --hc 404 --hh 4772 "$URL" 
+wfuzz -c -z file,$mediumdirs --hc 404 --hh 4772 "$URL" 
 
 FUZZ Vhosts
 wfuzz -w $subtopmill -c -f wfuzz.sub -Z -u 'http://dcbob.com' -H 'Host: FUZZ.dcbob.com' -t 42 --hl 1
