@@ -2,13 +2,13 @@
 nmap -p- --min-rate=1000 -T4 192.168.200.5 -v --open -Pn | tee nmap-ports
 grep ^[0-9] ./nmap-ports
 ports=\$(grep ^[0-9] ./nmap-ports | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)
-sudo nmap -sV -sC -O -v -p $ports 192.168.200.5 -Pn -v -oG nmap-fulltcp
+sudo nmap -sV -sC -O -v -p $ports 192.168.200.5 -Pn -v | tee nmap-fulltcp
 grep ^[0-9] ./nmap-fulltcp
 
 # Consider UDP
 sudo nmap --top-ports 20 -sU -sV -sC -v 192.168.200.5 -oG nmap-udp20
 sudo nmap -sUV -T4 -F -v --version-intensity 0 192.168.200.5 -oG nmap-udpfast
-sudo nmap -p0-65535 -Pn –sU -v 192.168.200.5 -oG nmap-udpall
+sudo nmap -p0-65535 -Pn –sU -v 192.168.200.5 | tee nmap-udpall
 
 # Consider nmapAutomator
 sudo nmapAutomator.sh -H 192.168.200.5 -t Script | tee nmap-script
