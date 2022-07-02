@@ -23,6 +23,7 @@ nc -nvlp 8002
 ==================================  
 Windows
 rlwrap nc -nvlp 443 ..then upgrade to socat
+doskey ll=dir /a $*
 
 Kali
 locate socat.exe 
