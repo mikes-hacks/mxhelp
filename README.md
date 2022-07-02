@@ -40,6 +40,7 @@ alias mxtest='cat ~/mxhelp/mxtest'
 alias mxtransfer='cat ~/mxhelp/mxtransfer'
 alias mxtty='cat ~/mxhelp/mxpytty'
 alias mxweb='cat ~/mxhelp/mxweb'
+alias mxwinenum='cat ~/mxhelp/mxwinenum'
 alias myip='cat ~/mxhelp/z_myip'
 alias tgt='cat ~/mxhelp/z_tgt'
 export common="/usr/share/dirb/wordlists/common.txt"data-autoplay="true"
@@ -48,6 +49,8 @@ export subtopmill="/usr/share/seclists/Discovery/DNS/subdomains-top1mil-5000.txt
 export medium="/usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt"
 export rockyou="/usr/share/seclists/Passwords/Leaked-Databases/rockyou.txt"
 export smallpw="/usr/share/seclists/Discovery/Web-Content/raft-small-words.txt"
+export mediumdirs="/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt"
+export mediumfiles="/usr/share/seclists/Discovery/Web-Content/raft-medium-files.txt"
 EOF
 ) >> ~/.bash_aliases
 ```
