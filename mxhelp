@@ -44,10 +44,10 @@ echo $TGT > ~/mxhelp/z_tgt
 echo "-------------------------------------" 
 echo "Initial nmap" 
 echo -e "\e[1;35m" 
-echo "nmap -p- --min-rate=1000 -T4" $TGT "-Pn | tee nmapports" 
+echo "nmap -p- --min-rate=1000 -T4 -v" $TGT "-Pn | tee nmapports" 
 echo "grep ^[0-9] ./nmapports" 
 echo "ports=\$(grep ^[0-9] ./nmapports | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)" 
-echo "sudo nmap -sV -sC -p \$ports" $TGT "-Pn -oG nmapfulltcp"
+echo "sudo nmap -sV -sC -v -p \$ports" $TGT "-Pn -oG nmapfulltcp"
 echo "grep ^[0-9] ./nmapfulltcp" 
 echo -e "\e[1;m" 
  
