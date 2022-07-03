@@ -1,8 +1,9 @@
 # First
-nmap -p- --min-rate=1000 -T4 192.168.200.5 -v --open -Pn | tee nmap-ports
-grep ^[0-9] ./nmap-ports
-ports=\$(grep ^[0-9] ./nmap-ports | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)
-sudo nmap -sV -sC -O -v -p $ports 192.168.200.5 -Pn -v | tee nmap-fulltcp
+sudo nmap -p- --min-rate=1000 -T4 -v 192.168.200.5 -Pn | tee nmap-ports
+ports=$(grep ^[0-9] ./nmap-ports | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)
+echo -e "\nPorts-to-Scan:" $ports
+sudo nmap -sV -sC -v -p $ports 192.168.200.5 -Pn | tee nmap-fulltcp
+echo -e "\nSummary:"
 grep ^[0-9] ./nmap-fulltcp
 
 # Consider UDP
