@@ -45,12 +45,13 @@ echo "-------------------------------------"
 echo "Initial nmap" 
 echo -e "\e[1;35m" 
 echo "sudo nmap -p- --min-rate=1000 -T4 -v" $TGT "-Pn | tee nmap-ports" 
-echo "grep ^[0-9] ./nmap-ports" 
-echo "ports=\$(grep ^[0-9] ./nmapports | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)" 
+echo "ports=\$(grep ^[0-9] ./nmap-ports | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)" 
+echo -e "\nPorts-to-Scan:" $ports
 echo "sudo nmap -sV -sC -v -p \$ports" $TGT "-Pn | tee nmap-fulltcp"
+echo -e "\nSummary:"
 echo "grep ^[0-9] ./nmap-fulltcp" 
 echo -e "\e[1;m" 
- 
+
 echo "-------------------------------------" 
 echo "Consider UDP" 
 echo -e "\e[1;35m" 
