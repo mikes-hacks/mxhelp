@@ -26,8 +26,6 @@ ls -l /usr/share/nmap/scripts/nfs*
 # Services
 nmap -p 443 -v --script ssl-heartbleed 192.168.200.5
 nmap -p 3306 -v --script mysql-brute -T5 -nv 192.168.200.5
-nmap -p 21 -v --script ftp-brute 192.168.200.5 
-nmap -p 21 -v --script ftp-* 192.168.200.5 
 nmap -sU -p 69 -v --script tftp-enum.nse 192.168.200.5 
 nmap -sU -p 69 -v --script tftp-enum.nse --script-args tftp-enum.filelist=windowsloot.txt 192.168.200.5
 nmap -pT:25 -v --script smtp-commands.nse 192.168.200.5 
@@ -42,6 +40,9 @@ sudo nmap -p 139,445 -v --script=smb-vuln* 192.168.200.5
 sudo nmap -p 445 -v --script=smb-enum-shares,smb-enum-users 192.168.200.5 
 sudo nmap -v --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode,smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494,smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery --script-args=unsafe=1 -T5 192.168.200.5 -oG nmap-smb
 sudo nmap -p 1433 -v --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshell,ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-sql-hasdbaccess,ms-sql-dac,ms-sql-dump-hashes --script-args mssql.instance-port=1433,mssql.username=sa,mssql.password=,mssql.instance-name=MSSQLSERVER -sV 192.168.200.5 -oG nmap-mssql 
+
+# Next
+hydra -C $ftp-betterdefaultpasslist 192.168.200.5 ftp
 
 
 # Default cred scan: 
