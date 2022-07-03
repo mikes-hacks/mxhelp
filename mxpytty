@@ -11,7 +11,7 @@ bash
 stty cols 120 rows 35
 export TERM=xterm-256color 
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/tmp 
-alias ll='ls -lsaht --color=auto' 
+alias ll='ls -lah --color=auto' 
 alias lt='ls -lsahtr --color=auto' 
 reset
 
