@@ -93,13 +93,15 @@ EOF
 ) >> ~/bash_aliases
 ```
 
-# Add Colors with ccat
+# Add Colors (Optional)
 ```
+vim ./.bash_aliases
+alias cat='pygmentize -O style=monokai -l=bash'
+or
 cd ~/Downloads
 wget https://github.com/owenthereal/ccat/releases/download/v1.1.0/linux-amd64-1.1.0.tar.gz
 tar xvf linux-amd64-1.1.0.tar.gz 
 sudo cp linux-amd64-1.1.0/ccat /usr/bin/ccat
 vim ./.bash_aliases
 alias cat='ccat -G String="darkblue" -G Plaintext="lightgrey"'
-
 ```
