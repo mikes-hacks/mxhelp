@@ -10,6 +10,7 @@ searchsploit linux kernel 1.2 debian priv esc
 searchsploit linux kernel | grep -v dos | grep ' 3\.' | grep -i 'root\|privilege\|exploit'  
 linux-exploit-suggester.sh --uname <uname-a string>
 
+alias ll='ls -lah --color=auto' 
 cat /etc/passwd
 grep -vE 'nologin|false' /etc/passwd  
 ll /etc/passwd /etc/shadow 
