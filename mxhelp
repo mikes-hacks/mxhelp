@@ -46,9 +46,9 @@ echo "Initial nmap"
 echo -e "\e[1;35m" 
 echo "sudo nmap -p- --min-rate=1000 -T4 -v" $TGT "-Pn | tee nmap-ports" 
 echo "ports=\$(grep ^[0-9] ./nmap-ports | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)" 
-echo -e "\nPorts-to-Scan:" $ports
+echo "echo -e '\nPorts-to-Scan:'" $ports
 echo "sudo nmap -sV -sC -v -p \$ports" $TGT "-Pn | tee nmap-fulltcp"
-echo -e "\nSummary:"
+echo "echo -e '\nSummary:'"
 echo "grep ^[0-9] ./nmap-fulltcp" 
 echo -e "\e[1;m" 
 
@@ -58,6 +58,9 @@ echo -e "\e[1;35m"
 echo "sudo nmap --top-ports 20 -sU -sV -sC -v" $TGT "| tee nmap-udp20" 
 echo "sudo nmap -p0-65535 -Pn –sU -v" $TGT "| tee nmap-udp" 
 echo -e "\e[1;m" 
+
+echo "-------------------------------------" 
+echo "More: mxnmap" 
 
 echo "-------------------------------------" 
 ls ~/mxhelp/
