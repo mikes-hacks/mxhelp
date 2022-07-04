@@ -156,7 +156,7 @@ Burp Pw Guess (even with protections)
 =================================== 
 Scrape
 
-cewl 192.168.200.5 --e --email_file emails.txt 
+cewl 192.168.200.5 -n -e --email_file emails2.txt -v
 cewl 192.168.200.5 -m 4 -d 3 -w cewl6deep5.txt 
 sort dict.txt | uniq > dict.txt  
 echo 'foundthis' >> dict.txt               
