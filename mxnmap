@@ -17,7 +17,7 @@ sudo nmapAutomator.sh -H 192.168.200.5 -t Vulns | tee nmap-vulns
 sudo nmapAutomator.sh -H 192.168.200.5 -t Recon | tee nmap-recon
 
 # Vulns
-nmap -Pn -v --script vuln 192.168.1.105  ..vul/cve detection, No Pings 
+nmap -Pn -v --script vuln 192.168.200.5  ..vul/cve detection, No Pings 
 nmap --script safe -v -p 445 192.168.200.5
 
 # Scripts
@@ -44,7 +44,6 @@ sudo nmap -p 1433 -v --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshe
 
 # Next
 hydra -C $ftpbetterdefaultpasslist 192.168.200.5 ftp
-
 
 # Default cred scan: 
 changeme.py 192.168.200.5
