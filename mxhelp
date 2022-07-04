@@ -60,5 +60,5 @@ echo "sudo nmap -p0-65535 -Pn –sU -v" $TGT "| tee nmap-udp"
 echo -e "\e[1;m" 
 
 echo "-------------------------------------" 
-ls ~/mxhelp/mx*
+ls ~/mxhelp/
 echo ""
