@@ -6,9 +6,9 @@ sudo nmap -sV -sC -v -p $ports 192.168.200.5 -Pn | tee nmap-fulltcp
 echo -e "\nSummary:"
 grep ^[0-9] ./nmap-fulltcp
 
-# Consider UDP
-sudo nmap --top-ports 20 -sU -sV -sC -v 192.168.200.5 -oG nmap-udp20
-sudo nmap -sUV -T4 -F -v --version-intensity 0 192.168.200.5 -oG nmap-udpfast
+# Consider UDP (ex: snmp)
+sudo nmap --top-ports 20 -sU -sV -sC -v 192.168.200.5 | tee nmap-udp20
+sudo nmap -sUV -T4 -F -v --version-intensity 0 192.168.200.5 | tee nmap-udpfast
 sudo nmap -p0-65535 -Pn –sU -v 192.168.200.5 | tee nmap-udpall
 
 # Consider nmapAutomator
@@ -28,7 +28,6 @@ ls -l /usr/share/nmap/scripts/nfs*
 nmap -p 443 -v --script ssl-heartbleed 192.168.200.5
 nmap -sU -p 69 -v --script tftp-enum.nse 192.168.200.5 
 nmap -sU -p 69 -v --script tftp-enum.nse --script-args tftp-enum.filelist=windowsloot.txt 192.168.200.5
-nmap -pT:25 -v --script smtp-commands.nse 192.168.200.5 
 nmap -p 80 -nv --script=http-vuln-cve2010-2861 192.168.200.5  #coldfusion 
 nmap -p 80 -v --script http-shellshock --script-args uri=/cgi-bin/vulnscript.sh 192.168.200.5
 nmap -p 80 -v --script http-shellshock --script-args uri=/cgi-bin/admin.cgi 192.168.200.5 
@@ -36,6 +35,10 @@ nmap -p 443 -v --script ssl-heartbleed 192.168.200.5
 nmap -sV -v --script=nfs-showmount 192.168.200.5
 nmap -p 111 -v --script nfs* 192.168.200.5
 nmap -p 111 -sV -v --script=rpcinfo 192.168.200.5
+
+# SMTP
+nmap -pT:25 -v --script smtp-commands.nse 192.168.200.5
+nmap -v -p 25,465,587 --script smtp-enum-users --script-args smtp-enum-users.methods={VRFY} 192.168.200.5
 
 # SMB
 sudo nmap -p 139,445 -v --script=smb-vuln* 192.168.200.5 
@@ -55,6 +58,15 @@ psql -h 192.168.200.5 -U postgres -p 5437
 nmap -p 3306 -v --script mysql-brute -T5 -nv 192.168.200.5
 mysql -h 192.168.200.5 --port=3306 --user=root -p 
 mysql -h 192.168.200.5 -uroot -ppassword -e 'show databases;' 
+
+# SNMP
+snmp-check 192.168.200.5  ..Favorite (TCP?)
+sudo nmap -sU --open -p161 192.168.200.5
+echo -e "public\nprivate\nmanager" > community.txt 
+REF: danielmiessler > "common-snmp-community-strings.txt"
+onesixtyone -c community.txt 192.168.200.5
+snmpwalk -c public -v1 -t 10 192.168.200.5
+snmpwalk -c public -v1 192.168.200.5 1.3.6.1.4.1.77.1.2.25 
 
 # SSH
 hydra -f -V -I -t 50 -l bob -P $rockyou 192.168.200.5 ssh -s 22022
