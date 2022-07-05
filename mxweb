@@ -7,7 +7,7 @@ dirsearch -u $URL -w $medium -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 4
 gobuster -u $URL -w $mediumdirs -x txt,php,html,zip -t 40
 
 Host
-sudo echo dcbob 192.168.200.5 >> /etc/hosts 
+echo 192.168.200.5 dcbob | sudo tee -a /etc/hosts
 export URL="http://dcbob:80/"  
 
 FUZZ Files 
