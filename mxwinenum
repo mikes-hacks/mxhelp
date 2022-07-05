@@ -9,8 +9,9 @@ net users
 net user mike 
 net user Administrator 
 net group "Domain Admins" 
-whoami /priv  ..seimpersonate = juicy/printspoof
- 
+whoami /priv                         ..impersonate=juicy/printspoof
+reg query HKLM /f pass /t REG_SZ /s  ..pw search
+
 ================================== 
 Files
 
