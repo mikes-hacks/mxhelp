@@ -1,0 +1,161 @@
+================================== 
+Linux
+
+/etc/passwd 
+/etc/shadow 
+/etc/group 
+/etc/ssh/ssh_config 
+/etc/ssh/sshd_config 
+/etc/vsftpd/vsftpd.conf 
+/etc/postfix/main.cf  
+/etc/apache2/apache2.conf 
+/etc/apache2/.htpasswd 
+/etc/httpd/conf/httpd.conf 
+/usr/local/etc/apache2/httpd.conf 
+/var/www/config.php 
+/var/www/html/wp-config.php 
+/var/www/login.php 
+/var/www/html/db.php 
+/var/www/html/db.php5 
+/var/www/mysql_data.conf  
+/root/.ssh/id_rsa 
+/root/.ssh/authorized_keys 
+/home/user/.ssh/authorized_keys 
+/home/user/.ssh/id_rsa 
+/home/user/.bash_history 
+
+
+================================== 
+Windows
+
+c:\Windows\win.ini   
+c:\Windows\System32\drivers\etc\hosts  
+c:\Windows\System32\License.rtf 
+c:\Windows\system32\win.ini  
+c:\WINNT\win.ini  
+c:\ProgramData\Microsoft\Diagnosis\osver.txt 
+c:\Windows\System32\Licenses\neutral\_Default\Professional\license.rtf 
+c:\Windows\System32\Licenses\neutral\_Default\Enterprise\license.rtf 
+c:\Windows\WindowsUpdate.log 
+c:\Windows\System32\eula.txt 
+c:\Windows\system32\win.ini 
+c:\WINDOWS\System32\drivers\etc\hosts 
+c:\Windows\win.ini  
+c:\WINNT\win.ini 
+c:\autoexec.bat 
+c:\boot.ini 
+c:\inetpub\logs\LogFiles 
+c:\inetpub\wwwroot\Web.config 
+c:\inetpub\wwwroot\db.php 
+c:\inetpub\wwwroot\user\db.php 
+c:\pagefile.sys 
+c:\sysprep.inf 
+c:\sysprep\sysprep.inf 
+c:\sysprep\sysprep.xml 
+c:\Windows\debug\NetSetup.log 
+c:\Windows\iis5.log 
+c:\Windows\iis6.log 
+c:\Windows\iis7.log 
+c:\Windows\Panther\Unattend.txt 
+c:\Windows\Panther\Unattend.xml 
+c:\Windows\Panther\Unattended.xml 
+c:\Windows\Panther\unattended\xml 
+c:\Windows\Panther\Unattend\Unattended.xml  
+c:\Windows\Panther\Unattend\Unattend.txt 
+c:\Windows\Panther\Unattended.xml  
+c:\Windows\Panther\sysprep.inf 
+c:\Windows\repair\sam 
+c:\Windows\repair\SAM 
+c:\Windows\repair\security 
+c:\Windows\repair\software 
+c:\Windows\repair\system 
+c:\Windows\repair\SYSTEM 
+c:\Windows\system32\CCM\logs\*.log 
+c:\Windows\system32\config\AppEvent.Evt 
+c:\Windows\system32\config\AppEvent.Evt 
+c:\Windows\system32\config\SecEvent.Evt  
+c:\Windows\system32\config\default.sav  
+c:\Windows\system32\config\security.sav  
+c:\Windows\system32\config\software.sav  
+c:\Windows\system32\config\system.sav  
+c:\Windows\system32\config\regback\default  
+c:\Windows\system32\config\regback\sam  
+c:\Windows\system32\config\regback\security  
+c:\Windows\system32\config\regback\system  
+c:\Windows\system32\config\regback\software 
+c:\Windows\system32\config\default.sav 
+c:\Windows\System32\config\RegBack\SAM 
+c:\Windows\system32\config\regback\default 
+c:\Windows\System32\config\RegBack\system 
+c:\Windows\System32\config\RegBack\SYSTEM 
+c:\Windows\system32\config\regback\software 
+c:\Windows\System32\config\SAM 
+c:\Windows\system32\config\SecEvent.Evt 
+c:\Windows\system32\config\security.sav 
+c:\Windows\system32\config\software.sav 
+c:\Windows\System32\config\SYSTEM 
+c:\Windows\system32\config\system.sav 
+c:\Windows\System32\drivers\etc\hosts 
+c:\Windows\System32\drivers\etc\networks 
+c:\Windows\system32\inetsrv\config\applicationHost.config 
+c:\Windows\system32\inetsrv\config\schema\ASPNET_schema.xml 
+c:\Windows\system32\logfiles\httperr\httperr1.log 
+c:\Windows\system32\debug\NetSetup.log 
+c:\Windows\system32\config\AppEvent.Evt 
+c:\Windows\system32\config\SecEvent.Evt 
+c:\Windows\system32\win.ini 
+c:\Program Files\Apache Group\Apache2\conf\httpd.conf 
+c:\Program Files\Apache Group\Apache\conf\httpd.conf 
+c:\Program Files\Apache Group\Apache\logs\access.log 
+c:\Program Files\Apache Group\Apache\logs\error.log 
+c:\Program Files\FileZilla Server\FileZilla Server.xml 
+c:\Program Files (x86)\Apache Group\Apache2\conf\httpd.conf  
+c:\Program Files (x86)\Apache Group\Apache\conf\httpd.conf  
+c:\Program Files (x86)\Apache Group\Apache\conf\access.log  
+c:\Program Files (x86)\Apache Group\Apache\conf\error.log  
+c:\Program Files (x86)\FileZilla Server\FileZilla Server.xml  
+c:\Program Files\MySQL\data\hostname.err 
+c:\Program Files\MySQL\data\mysql-bin.log 
+c:\Program Files\MySQL\data\mysql.err 
+c:\Program Files\MySQL\data\mysql.log 
+c:\Program Files\MySQL\my.ini 
+c:\Program Files\MySQL\my.cnf 
+c:\Program Files\MySQL\MySQL Server 5.0\data\hostname.err 
+c:\Program Files\MySQL\MySQL Server 5.0\data\mysql-bin.log  
+c:\Program Files\MySQL\MySQL Server 5.0\data\mysql.err  
+c:\Program Files\MySQL\MySQL Server 5.0\data\mysql.log  
+c:\Program Files\MySQL\MySQL Server 5.0\my.cnf 
+c:\Program Files\MySQL\MySQL Server 5.0\my.ini 
+c:\Program Files\MySQL\MySQL Server 5.1\my.ini  
+c:\MySQL\data\hostname.err 
+c:\MySQL\data\mysql.err 
+c:\MySQL\data\mysql.log 
+c:\MySQL\my.cnf 
+c:\MySQL\my.ini 
+c:\Program Files\xampp\apache\conf\httpd.conf  
+c:\Program Files (x86)\xampp\apache\conf\httpd.conf  
+c:\xampp\apache\bin\php.ini 
+c:\xampp\apache\logs\access.log  
+c:\xampp\apache\logs\error.log  
+c:\WINNT\php.ini 
+c:\Windows\php.ini  
+c:\php4\php.ini 
+c:\php5\php.ini 
+c:\php\php.ini 
+c:\apache\php\php.ini 
+c:\apache\logs\access.log 
+c:\apache\logs\error.log 
+c:\Users\Administrator\NTUser.dat 
+c:\Documents and Settings\Administrator\NTUser.dat 
+c:\Documents and Settings\Bobby\NTUser.dat 
+c:\Users\Administrator\ntuser.dat 
+c:\Users\Bobby\ntuser.dat 
+c:\inetpub\wwwroot\global.asa 
+c:\Windows\debug\NetSetup.log  
+c:\Windows\System32\inetsrv\config\schema\ASPNET_schema.xml  
+c:\Windows\System32\inetsrv\config\applicationHost.config  
+c:\inetpub\logs\LogFiles\W3SVC1\u_ex[YYMMDD].log 
+c:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\Backup\master.mdf 
+c:\Progra~1\Micros~1\MSSQL14.SQLEXPRESS\MSSQL\Backup\master.bak 
+c:\Progra~1\Micros~1\MSSQL14.SQLEXPRESS\MSSQL\Backup\master.mdf 
+%USERPROFILE%\LocalS~1\Tempor~1\Content.IE5\index.dat
