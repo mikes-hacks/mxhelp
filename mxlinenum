@@ -48,7 +48,7 @@ ll /root
 ll /root/.ssh/*
 cat /root/.*history  
 
-ll /etc/
+ll /etc
 ll /etc/group
 grep -iR /etc .secret
 ll /opt  
@@ -62,6 +62,7 @@ ll /tmp
 ll /dev/shm
 ll /var/tmp 
 
+ll /var/www
 ll /var/www/html
 ll /var/www/classes
 cat /etc/apache2/apache2.conf 
