@@ -4,7 +4,8 @@ Samba
 sudo nmap -p 445 --script=smb-enum-shares,smb-enum-users 192.168.200.5 
 sudo nmap --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode,smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494,smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery --script-args=unsafe=1 -T5 192.168.200.5 -oG nmap-smb
 
-enum4linux -a 192.168.200.5
+# SMB
+enum4linux -A 192.168.200.5
 
 smbclient -L 192.168.200.5 
 smbclient -L 192.168.200.5 -p12445
@@ -54,9 +55,19 @@ Search an entire network or hosts for SMB shares, and list public-share contents
 Reuse samba-creds for FTP
 hydra -l steph -P $rockyou 192.168.200.5 ftp
 
-
 =================================== 
 Find Users
 
 rpcclient 192.168.200.5 -U '' 
 r> enumdomusers 
+
+
+=================================== 
+NFS
+
+showmount -e 192.168.200.5
+mkdir /tmp/bu 
+su mount -t nfs 192.168.200.5/backups /tmp/bu 
+cd /tmp/bu 
+find | tee ~/lab/nfslist.txt 
+find | grep -i config 
