@@ -73,6 +73,8 @@ curl -iL 192.168.200.5            ..redirects
 curl -iL http://192.168.200.5     ..bypass WAF
 curl -v –request OPTIONS http://  ..WebDAV Options
 
+Version/Creds/Comments
+curl http://192.168.200.5 | html2text | grep -i 'ver\|release\|build\|user\|pass\|comment' 
 
 =================================== 
 Checks
@@ -183,6 +185,7 @@ admin' --
 PHP SQLi Parameter
 
 View Page Source > Ctrl-F "?"  
+curl http://192.168.200.5 | html2text | grep -i '?' 
 http://192.168.200.5/room.php?cod=1'
 Error/no-graphic = perfect! 
 
