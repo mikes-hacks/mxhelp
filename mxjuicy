@@ -11,8 +11,10 @@ Linux
 /etc/apache2/apache2.conf 
 /etc/apache2/.htpasswd 
 /etc/httpd/conf/httpd.conf 
+/etc/phpmyadmin/config-db.php  
 /usr/local/etc/apache2/httpd.conf 
 /var/www/config.php 
+/var/www/wp-config.php 
 /var/www/html/wp-config.php 
 /var/www/login.php 
 /var/www/html/db.php 
