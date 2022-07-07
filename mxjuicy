@@ -17,6 +17,7 @@ Linux
 /var/www/login.php 
 /var/www/html/db.php 
 /var/www/html/db.php5 
+/var/www/html/wp-config.php  
 /var/www/mysql_data.conf  
 /root/.ssh/id_rsa 
 /root/.ssh/authorized_keys 
