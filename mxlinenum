@@ -4,7 +4,8 @@ whoami
 groups
 
 uname –a
-cat /etc/*release  
+cat /etc/*release
+file /bin/bash
 searchsploit linux kernel ubuntu 16.04 
 searchsploit linux kernel 1.2 debian priv esc 
 searchsploit linux kernel | grep -v dos | grep ' 3\.' | grep -i 'root\|privilege\|exploit'  
