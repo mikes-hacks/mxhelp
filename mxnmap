@@ -15,7 +15,7 @@ sudo nmap -p0-65535 -Pn –sU -v 192.168.200.5 | tee nmap-udpall
 sudo nmapAutomator.sh -H 192.168.200.5 -t Script | tee nmap-auto-script
 sudo nmapAutomator.sh -H 192.168.200.5 -t Vulns | tee nmap-auto-vulns
 sudo nmapAutomator.sh -H 192.168.200.5 -t Recon | tee nmap-auto-recon
-sudo nmapAutomator.sh -H 192.168.200.5 -t Full | tee nmap-auto-full
+sudo nmapAutomator.sh -H 192.168.200.5 -t All | tee nmap-auto-all
 
 # Vulns
 nmap -Pn -v --script vuln 192.168.200.5  ..vul/cve detection, No Pings 
