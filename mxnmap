@@ -12,9 +12,10 @@ sudo nmap -sUV -T4 -F -v --version-intensity 0 192.168.200.5 | tee nmap-udpfast
 sudo nmap -p0-65535 -Pn –sU -v 192.168.200.5 | tee nmap-udpall
 
 # Consider nmapAutomator
-sudo nmapAutomator.sh -H 192.168.200.5 -t Script | tee nmap-script
-sudo nmapAutomator.sh -H 192.168.200.5 -t Vulns | tee nmap-vulns
-sudo nmapAutomator.sh -H 192.168.200.5 -t Recon | tee nmap-recon
+sudo nmapAutomator.sh -H 192.168.200.5 -t Script | tee nmap-auto-script
+sudo nmapAutomator.sh -H 192.168.200.5 -t Vulns | tee nmap-auto-vulns
+sudo nmapAutomator.sh -H 192.168.200.5 -t Recon | tee nmap-auto-recon
+sudo nmapAutomator.sh -H 192.168.200.5 -t Full | tee nmap-auto-full
 
 # Vulns
 nmap -Pn -v --script vuln 192.168.200.5  ..vul/cve detection, No Pings 
