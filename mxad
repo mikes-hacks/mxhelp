@@ -1,0 +1,54 @@
+=================================== 
+PORTS
+
+53 Simple DNS Plus - DNS is usually UDP, but sometimes TCP is needed for large packets
+9389 MC-NMF .Net Message Framing - Active Directory Management Gateway Service
+
+389 LDAP - For Queries to the Domain Controller
+636 tcpwrapped - LDAPS for TLS/SSL -  Port to use for LDAP querying using SSL
+3269 tcpwrapped - Querying LDAP using Global Catalog using SSL
+3268 MS AD LDAP - For queries targeted at the Global Catalog.
+
+88 Kerberos-sec - Authentication protocol (88 and 464 are Standard Kerberos)
+464 kpasswd5 -  Kerberos Password Change - for changing/setting passwords against AD
+
+135 RPC - Remote Procedure Call Endpoint Mapper service. Enables systems find services/ports
+593 ncacn_http - RPC over HTTP - Used for Messaging Service
+139 Netbios - Network Basic Input Output System name resolution to serve Windows File and Printer Sharing.
+445 MS DS  - Server Message Blocks (SMB) to serve Windows File and Printer Sharing.
+
+3389 Remote Desktop
+5985 HTTP SSDP/UPnP - WinRM (remote desktop)
+
+
+=================================== 
+Hacktricks
+
+https://github.com/S1ckB0y1337/Active-Directory-Exploitation-Cheat-Sheet 
+https://book.hacktricks.xyz/windows/active-directory-methodology 
+ 
+DNS 53 https://book.hacktricks.xyz/network-services-pentesting/pentesting-dns
+KRB 88 https://book.hacktricks.xyz/network-services-pentesting/pentesting-kerberos-88
+RPC 135 https://book.hacktricks.xyz/network-services-pentesting/135-pentesting-msrpc
+LDAP 389,636,3268,3269 https://book.hacktricks.xyz/network-services-pentesting/pentesting-ldap
+
+=================================== 
+vim /etc/hosts
+
+DNS
+dnsrecon -d 192.168.200.5 -r 192.168.200.5/24 
+
+Host
+host -t ns mike.com  
+dnsenum mike.com --dnsserver dns.mike.com -f ~/tools/wordlists/dns.txt 
+
+Zone Transfer
+dnsrecon -d mike.com -t axfr  
+nmap --script=dns-zone-transfer -p 53 ns2.mysite.com 
+
+LDAP
+nmap -n -sV --script "ldap* and not brute" 192.168.200.5
+ldapsearch -x -h 192.168.200.5 -s base namingcontexts  
+ldapsearch -x -h 192.168.200.5 -b 'DC=mike,DC=com' -s sub | grep -i sam  
+ldapsearch -x -h 192.168.200.5 -D '' -w '' -b "DC=acme,DC=com" |  grep sAMAccountName: 
+ldapsearch -x -h 192.168.200.5 -D "cn=admin,dc=acme,dc=com" -s sub "cn=*"
