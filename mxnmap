@@ -103,7 +103,7 @@ ncrack -vv --user Administrator -P /root/oscp/passwords.txt rdp://192.168.200.5
 
 # LDAP
 nmap -n -sV --script "ldap* and not brute" 192.168.200.5 | tee nmap-ldap
-ldapsearch -x -h 192.168.200.5 -D '' -w '' -b "DC=mike,DC=domain" | grep sAMAccountName:
+ldapsearch -x -H "ldap://192.168.200.5" -D '' -w '' -b "DC=mike,DC=domain" | grep sAMAccountName:
 
 # 554 - RTSP
 Port 1030/1032/1033/1038
