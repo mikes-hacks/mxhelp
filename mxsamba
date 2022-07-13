@@ -5,17 +5,26 @@ sudo nmap -p 445 --script=smb-enum-shares,smb-enum-users 192.168.200.5
 sudo nmap --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode,smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-mbenum,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494,smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery,smb-vuln-regsvc-dos  --script-args=unsafe=1 -T5 192.168.200.5 -p 445 | tee nmap-smb
 
 =================================== 
+First Checks
+
 enum4linux -a 192.168.200.5
+smbmap -H 192.168.200.5
+smbmap -H 192.168.200.5 -u '' -p '' 
+smbclient -L 192.168.200.5 
+smbclient -L //192.168.200.5/ -U "guest"
+smbclient -N -L \\\\192.168.200.5 
+smbclient //192.168.200.5/share -N
+
 
 =================================== 
+More 
+
 smbmap -H 192.168.200.5
 smbmap -H 192.168.200.5 -u '' -p '' 
 smbmap -H 192.168.200.5 -R --depth 5 
 smbmap -H 192.168.200.5 -R share -A Groups.xml -q
 smbmap -H 192.168.200.5 -u admin -p 'paxx' -d mike.com
 
-
-=================================== 
 smbclient -L 192.168.200.5 
 smbclient -L 192.168.200.5 -p12445
 smbclient -L //192.168.200.5  
