@@ -9,8 +9,9 @@ enum4linux -a 192.168.200.5
 
 =================================== 
 smbmap -H 192.168.200.5
-smbmap -H 192.168.200.5 -R --depth 5 
 smbmap -H 192.168.200.5 -u '' -p '' 
+smbmap -H 192.168.200.5 -R --depth 5 
+smbmap -H 192.168.200.5 -R share -A Groups.xml -q
 smbmap -H 192.168.200.5 -u admin -p 'paxx' -d mike.com
 
 
@@ -21,6 +22,7 @@ smbclient -L //192.168.200.5
 smbclient -L //192.168.200.5/ -U "guest"
 
 smbclient //192.168.200.5/share 
+smbclient //192.168.200.5/share -N
 smbclient //192.168.200.5/share -U admin
 smbclient \\\\192.168.200.5\\ipc$ -U admin
 smbclient //192.168.200.5/secrets -U mike.com\\admin%paxxword
@@ -29,6 +31,7 @@ mask ""
 recurse ON  
 prompt OFF 
 mget *
+
 
 =================================== 
 Find Users
