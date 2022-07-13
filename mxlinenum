@@ -6,6 +6,7 @@ groups
 uname –a
 cat /etc/*release
 file /bin/bash
+env
 searchsploit linux kernel ubuntu 16.04 
 searchsploit linux kernel 1.2 debian priv esc 
 searchsploit linux kernel | grep -v dos | grep ' 3\.' | grep -i 'root\|privilege\|exploit'  
@@ -58,7 +59,10 @@ vim id_rsa; chmod 600 id_rsa; ssh root@192.168.200.5 -i id_rsa
 
 =================================== 
 alias ll='ls -lsaht --color=auto'
+
+env
 cd /home; ll 
+ls -lsaR /home/ 2>/dev/null 
 cat /home/*/.bashrc 
 cat /home/*/.*history 
 find /home -name ".*history" 
@@ -119,7 +123,7 @@ lsblk
 lsmod 
 
 env 
-ls -lah (interesting paths) 
+ls -lah /weird
 PATH=/usr/local/bin:/usr/bin:/bin:/usr/games 
 
 =================================== 
@@ -154,7 +158,7 @@ grep -ri -e password -e username -e db ./ --exclude=*.jpg -A1 -B1 --color=always
 crontab -l 
 cat /etc/crontab 
 ll /etc/cron* 
-ll /etc/cron.daily 
+crontab -u root -l 
 grep "CRON" /var/log/cron.log 
 find / -user root -writable -type f -not -path "/proc/*"  2>/dev/null 
 watch -n 1 'systemctl list-timers' 
@@ -162,6 +166,7 @@ systemctl list-timers
 pidof X 
 journalctl -f
 Tools: Linpeas, Procmon, pspy
+
 
 =================================== 
 Procmon
