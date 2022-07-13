@@ -27,6 +27,9 @@ FUZZ URL
 export URL="http://dcbob:80/listproducts.php?cat=FUZZ"  
 wfuzz -z range,0-10 --hl 97 "$URL"
 
+Bust IIS
+gobuster -k -u $URL -w /usr/share/seclists/Discovery/Web-Content/IIS.fuzz.txt -t 50 
+
 Wordpress Plugins/Themes
 wpscan --url $URL --disable-tls-checks --enumerate p --enumerate t 
 
