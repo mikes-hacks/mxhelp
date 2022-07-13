@@ -55,6 +55,7 @@ sudo nmap -v --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,sm
 smbmap -H 192.168.200.5
 smbmap -H 192.168.200.5 -u '' -p '' 
 smbclient -L 192.168.200.5 
+smbclient -N -L \\\\192.168.200.5 
 smbclient -L //192.168.200.5/ -U "guest"
 smbclient //192.168.200.5/share -N
 
