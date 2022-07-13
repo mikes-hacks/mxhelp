@@ -32,16 +32,22 @@ RPC 135 https://book.hacktricks.xyz/network-services-pentesting/135-pentesting-m
 LDAP 389,636,3268,3269 https://book.hacktricks.xyz/network-services-pentesting/pentesting-ldap
 
 ===================================
-vim /etc/hosts
+sudo vim /etc/hosts
 
 DNS
+nmap -sC -sV -p 53,389,3268 192.168.200.5
 dnsrecon -d 192.168.200.5 -r 192.168.200.5/24 
 
 Host
 host -t ns mike.com  
 dnsenum mike.com --dnsserver dns.mike.com -f ~/tools/wordlists/dns.txt 
 
+Resolve 
+dig  @192.168.200.5 mike.com
+dig  @192.168.200.5 forest.mike.com
+
 Zone Transfer
+dig axfr  @192.168.200.5 mike.com
 dnsrecon -d mike.com -t axfr  
 nmap --script=dns-zone-transfer -p 53 ns2.mike.com 
 
@@ -113,8 +119,12 @@ Hunting with NO creds
 
 RPC
 nmap -p 135 --script=msrpc-enum 192.168.200.5 
-rpcclient 192.168.200.5 -U ''
-r> enumdomusers
+rpcclient -U '' -N 192.168.200.5
+$> enumdomusers          =Users - We can crack with these!!!
+$> enumdomgroups         =Groups
+$> querygroup 0x200      =Domain Admins      
+$> querygroupmem 0x200   =Found rid:[0x1f4] 
+$> queryuser 0x1f4       =Administrator 
 
 SMB
 sudo nmap -p 445 -v --script=smb-enum-shares,smb-enum-users 192.168.200.5
@@ -123,7 +133,9 @@ enum4linux -A 192.168.200.5
 crackmapexec smb 192.168.200.5 -u guest -p "" --shares 
 smbmap -H 192.168.200.5
 smbmap -H 192.168.200.5 -u '' -p '' 
+smbmap -H 192.168.200.5 -u mike -p mike
 smbclient -L 192.168.200.5 -p12445
+smbclient -L -N //192.168.200.5
 smbclient -L //192.168.200.5  
 smbclient -L //192.168.200.5/ -U "guest"
 smbclient //192.168.200.5/share 
