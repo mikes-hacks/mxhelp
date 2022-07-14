@@ -111,9 +111,13 @@ hydra -t 1 -V -f -l users.txt -P $commontenk rdp://192.168.200.5
 ncrack -vv --user Administrator -P /root/oscp/passwords.txt rdp://192.168.200.5
 xfreerdp /v:192.168.200.5 /d:mike.com /u:bob /p:paxxword -sec-nla +clipboard /geometry /w:1680 /h:900
 
-# LDAP
+# 389/636 LDAP
 nmap -n -sV --script "ldap* and not brute" 192.168.200.5 | tee nmap-ldap
 ldapsearch -x -H "ldap://192.168.200.5" -D '' -w '' -b "DC=mike,DC=domain" | grep sAMAccountName:
+ldapsearch -v -x -b "DC=mike,DC=com" -H "ldap://192.168.200.5" "(objectclass=*)" | grep -i -e 'pass\|name\|desc'
+
+# 88 Kerberos
+Needed for AS-REP Roasting (and usernames)
 
 # 554 - RTSP
 Port 1030/1032/1033/1038
