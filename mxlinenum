@@ -109,9 +109,13 @@ ll /reports
 ll /var/backup
 ll /private
 
+tree -l 
+find -L . 
+find /weird -type f -follow -print 
+find /weird -type f -follow -print|xargs ls -l 
+
 find / -type f -user bob 2>/dev/null 
 find / -type d -user bob 2>/dev/null  
-
 
 
 =================================== 
