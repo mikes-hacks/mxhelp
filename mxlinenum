@@ -133,6 +133,9 @@ find /weird -type f -follow -print|xargs ls -l
 find / -type f -user bob 2>/dev/null 
 find / -type d -user bob 2>/dev/null  
 
+LinEnum finds World Writable:
+/usr/lib/python2.7/os.py 
+
 
 =================================== 
 mount
