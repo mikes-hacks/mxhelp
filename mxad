@@ -171,6 +171,13 @@ Might find the 'LAPS' Admin password
 dir "c:\Program Files"  ..LAPS
 ldapsearch -v -x -D bob@mike.com -w paxxword -b "DC=mike,DC=com" -H "ldap://192.168.200.5" "(ms-MCS-AdmPwd=*)" ms-MCS-AdmPwd 
 
+===================================  
+LDAP Beautiful Results to HTML
+  
+ldapdomaindump -u 'htb.local\bob' -p paxxword 192.168.200.5 -o ~/lab/ldap/ 
+firefox ~/lab/ldap/domain_users.html  
+firefox ~/lab/ldap/domain_computers.html 
+
 
 ===================================
 Hunt for Usernames
