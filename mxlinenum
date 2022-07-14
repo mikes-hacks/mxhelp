@@ -272,3 +272,6 @@ cp ./linux-exploit-suggester/linux-exploit-suggester.sh ./linux_privesc/
 cd ~/tools/linux_privesc
 wget "https://github.com/diego-treitos/linux-smart-enumeration/releases/latest/download/lse.sh"
 
+===================================
+Proof
+cat proof.txt && whoami && hostname && ip addr 
