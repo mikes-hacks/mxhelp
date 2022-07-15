@@ -151,6 +151,7 @@ Internal Services
 ps aux | grep -i root --color=auto  
 netstat -antup | grep 127 
 nc -nv 127.0.0.1 25
+
 REF: mxpivot
 
 =================================== 
@@ -159,9 +160,12 @@ ip a
 ifconfig 
 ps -ef 
 netstat -plantu | grep LIST
+ss -tulpn
 iptables -L 
 grep -Hs iptables /etc/* 
 tail /var/log/auth.log 
+
+
 
 =================================== 
 grep -i pass * -a3 -b3 
