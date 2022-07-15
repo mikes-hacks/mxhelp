@@ -527,4 +527,4 @@ type proof.txt && whoami && hostname && ipconfig
  
 ================================== 
 Consider
-mxsam mxpivot mxtransfer mxad
+mxsam, mxpivot, mxtransfer, mxad, mxsamba
