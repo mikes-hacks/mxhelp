@@ -92,6 +92,7 @@ cat /root/.*history
 ll /etc
 ll /etc/group
 grep -iR /etc .secret
+ll /etc/systemd/system/*service 
 ll /opt  
 cd /var/mail; ll; cat www-data 
 ll /var/spool/mail 
@@ -102,7 +103,6 @@ ll /usr/bin/pkexec
 ll /tmp 
 ll /dev/shm
 ll /var/tmp 
-
 ll /var/www
 ll /var/www/html
 ll /var/www/classes
@@ -148,9 +148,10 @@ PATH=/usr/local/bin:/usr/bin:/bin:/usr/games
 
 =================================== 
 Internal Services
-ps aux | grep -i root --color=auto     
+ps aux | grep -i root --color=auto  
 netstat -antup | grep 127 
-nc -nv 127.0.0.1 25  
+nc -nv 127.0.0.1 25
+REF: mxpivot
 
 =================================== 
 Other Networks/Connections
