@@ -14,11 +14,17 @@ vncviewer -passwd secret localhost:4444
 firefox 127.0.0.1:4444
 
 ===================================
-Linux Internal Service
+Linux Internal Service (Forward)
 From Kali, Requires access to bob w/password
 
 ssh -L 4444:127.0.0.1:5901 -N -f bob@192.168.200.5
 vncviewer -passwd secret localhost:4444 
+
+===================================
+Linux Internal Port (Expose)
+From Target, take internal port 7000, expose to 8080
+socat tcp-listen:7000,reuseaddr,fork tcp:localhost:8080
+firefox http://192.168.200.5:8080
 
 
 ===================================
