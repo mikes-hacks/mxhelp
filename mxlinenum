@@ -142,9 +142,11 @@ cat /etc/sudoers
 lsblk 
 lsmod 
 
-env 
+env   ..paths/passwords/secrets
 ls -lah /weird
 PATH=/usr/local/bin:/usr/bin:/bin:/usr/games 
+
+getcap -r / 2>/dev/null
 
 =================================== 
 Internal Services
