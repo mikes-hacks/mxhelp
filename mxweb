@@ -67,6 +67,7 @@ https://192.168.200.5
 https://192.168.200.5:8080 
 https://192.168.200.5:8080/robots.txt 
 https://192.168.200.5:8080/~mike
+https://192.168.200.5:8080/servername
 
 curl -A "GoogleBot" 192.168.200.5 
 curl -i 192.168.200.5             ..headers
