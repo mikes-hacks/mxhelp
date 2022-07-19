@@ -14,8 +14,11 @@ which awk perl python ruby gcc cc vi vim nmap find netcat nc wget tftp ftp 2>/de
 
 =================================== 
 alias ll='ls -lah --color=auto' 
+
 cat /etc/passwd
 grep -vE 'nologin|false' /etc/passwd  
+su founduser (pw: founduser)
+hydra founduser... 10kcommon
 ll /etc/passwd /etc/shadow 
 
 =================================== 
