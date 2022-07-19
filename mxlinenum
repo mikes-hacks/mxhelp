@@ -191,7 +191,16 @@ watch -n 1 'systemctl list-timers'
 systemctl list-timers 
 pidof X 
 journalctl -f
-Tools: Linpeas, Procmon, pspy
+Tools: Linpeas, Procmon, pspy, lse
+
+=================================== 
+Shared Objects
+cat /etc/crontab 
+/usr/bin/log-sweeper  ..try to execute
+"Shared Object" (so) file missing 
+Error while loading shared libraries: utils.so 
+Cannot open shared object file: No such file 
+find / -type d -writable 2>/dev/null  ..look for writable directory
 
 
 =================================== 
