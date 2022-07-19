@@ -28,6 +28,7 @@ ls -l /usr/share/nmap/scripts/nfs*
 # 21 FTP
 nmap -p 21 --script=ftp-anon,ftp-libopie,ftp-proftpd-backdoor,ftp-vsftpd-backdoor,ftp-vuln-cve2010-4221,tftp-enum 192.168.200.5
 hydra -C $ftpbetterdefaultpasslist 192.168.200.5 ftp
+ftp 192.168.200.5  ..anonymous : anonymous@anon.com ..passive (want this on)
 
 # 22 SSH
 ssh founduser@192.168.141.60  (pw: founduser)
