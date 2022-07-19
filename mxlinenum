@@ -1,8 +1,7 @@
 =================================== 
-id 
+id       ..groups you are in might be exploitable like: docker
 whoami 
 groups
-
 uname –a
 cat /etc/*release
 file /bin/bash
