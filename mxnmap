@@ -137,6 +137,7 @@ nmap -p 3306 -v --script mysql-brute -T5 -nv 192.168.200.5
 mysql -h 192.168.200.5 -u root -p
 mysql -h 192.168.200.5 --port=3306 --user=root -p 
 mysql -h 192.168.200.5 -uroot -ppassword -e 'show databases;' 
+show databases; use previse; show tables; select * from accounts; 
 
 # 3389 RDP Remote Desktop
 rdesktop -u guest -p guest 192.168.200.5 -g 94%   ..Login to learn OS
@@ -146,6 +147,10 @@ xfreerdp /v:192.168.200.5 /d:mike.com /u:bob /p:paxxword -sec-nla +clipboard /ge
 
 # 5437 Postgres
 psql -h 192.168.200.5 -U postgres -p 5437
+\list
+\c secretdb
+\d
+select * from users; 
 
 ===================================
 # Consider
