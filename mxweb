@@ -2,9 +2,10 @@
 Webscans
 
 export URL="http://192.168.200.5:80" 
+dirsearch -w $medium -e ,,txt,cfg,html,php,bak -t 50 -u $URL
+dirsearch -w $medium -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 400 -u $URL
+gobuster -w $mediumdirs -x txt,php,html,zip -t 40 -u $URL
 nikto --url $URL 
-dirsearch -u $URL -w $medium -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 400
-gobuster -u $URL -w $mediumdirs -x txt,php,html,zip -t 40
 
 Host
 echo 192.168.200.5 dcbob | sudo tee -a /etc/hosts
@@ -122,6 +123,14 @@ Hydra - Brute Force (if you have username)
 Google - FileZilla Authentication Bypass
 Google - FileZilla SQLIi bypass
 
+=================================== 
+Redirects
+
+Account-Create > Redirect to login.php
+Might be able to Force Creation through Burp
+Capture with Burp. HTTP History. Send to Repeater.
+Change to POST, Add Parameters.
+username=mike&password=helps&confirm=helps
 
 =================================== 
 LFI
