@@ -1,3 +1,4 @@
+=================================== 
 # First
 sudo nmap -p- --min-rate=1000 -T4 -v 192.168.200.5 -Pn | tee nmap-ports
 ports=$(grep ^[0-9] ./nmap-ports | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)
@@ -11,12 +12,6 @@ sudo nmap --top-ports 20 -sU -sV -sC -v 192.168.200.5 | tee nmap-udp20
 sudo nmap -sUV -T4 -F -v --version-intensity 0 192.168.200.5 | tee nmap-udpfast
 sudo nmap -p0-65535 -Pn –sU -v 192.168.200.5 | tee nmap-udpall
 
-# Consider nmapAutomator
-sudo nmapAutomator.sh -H 192.168.200.5 -t Script | tee nmap-auto-script
-sudo nmapAutomator.sh -H 192.168.200.5 -t Vulns | tee nmap-auto-vulns
-sudo nmapAutomator.sh -H 192.168.200.5 -t Recon | tee nmap-auto-recon
-sudo nmapAutomator.sh -H 192.168.200.5 -t All | tee nmap-auto-all
-
 # Vulns
 nmap -Pn -v --script vuln 192.168.200.5  ..vul/cve detection, No Pings 
 nmap --script safe -v -p 445 192.168.200.5
@@ -25,6 +20,22 @@ nmap --script safe -v -p 445 192.168.200.5
 locate -r '\.nse$' | xargs grep categories | grep 'default\|version\|safe' | grep smb
 ls -l /usr/share/nmap/scripts/nfs* 
 
+=================================== 
+# nmapAutomator
+sudo nmapAutomator.sh -H 192.168.200.5 -t Script | tee nmap-auto-script
+sudo nmapAutomator.sh -H 192.168.200.5 -t Vulns | tee nmap-auto-vulns
+sudo nmapAutomator.sh -H 192.168.200.5 -t Recon | tee nmap-auto-recon
+sudo nmapAutomator.sh -H 192.168.200.5 -t All | tee nmap-auto-all
+
+===================================
+# Default cred scan: 
+changeme.py 192.168.200.5
+changeme.py 192.168.200.5/24 
+changeme.py nmap_subnet.xml 
+changeme.py --protocols ssh,ssh_key 192.168.200.5/24 
+changeme.py snmp://192.168.200.5
+
+=================================== 
 # 21 FTP
 nmap -p 21 --script=ftp-anon,ftp-libopie,ftp-proftpd-backdoor,ftp-vsftpd-backdoor,ftp-vuln-cve2010-4221,tftp-enum 192.168.200.5
 hydra -C $ftpbetterdefaultpasslist 192.168.200.5 ftp
@@ -136,13 +147,6 @@ xfreerdp /v:192.168.200.5 /d:mike.com /u:bob /p:paxxword -sec-nla +clipboard /ge
 # 5437 Postgres
 psql -h 192.168.200.5 -U postgres -p 5437
 
-
-# Default cred scan: 
-changeme.py 192.168.200.5
-changeme.py 192.168.200.5/24 
-changeme.py nmap_subnet.xml 
-changeme.py --protocols ssh,ssh_key 192.168.200.5/24 
-changeme.py snmp://192.168.200.5
-
+===================================
 # Consider
 mxweb mxcurls mxsamba
