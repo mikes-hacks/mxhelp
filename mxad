@@ -161,10 +161,14 @@ Might find an interesting Comment. No password needed.
 ldapsearch -v -x -b "DC=hutch,DC=offsec" -H "ldap://192.168.200.5" "(objectclass=*)" | grep -i -e 'pass\|name\|desc' 
 
 LDAP Other Searches
-ldapsearch -x -H "ldap://192.168.200.5" -s base namingcontexts  
-ldapsearch -x -H "ldap://192.168.200.5" -b 'DC=mike,DC=com' -s sub | grep -i sam  
+ldapsearch -s base -x -H "ldap://192.168.200.5" | grep namingContexts
+ldapsearch -x -H "ldap://192.168.200.5" -b "DC=mike,DC=com"
 ldapsearch -x -H "ldap://192.168.200.5" -D '' -w '' -b "DC=mike,DC=com" |  grep sAMAccountName: 
+ldapsearch -x -H "ldap://192.168.200.5" -b 'DC=mike,DC=com' -s sub | grep -i sam  
+ldapsearch -v -x -b "DC=mike,DC=com" -H "ldap://192.168.200.5" "(objectclass=*)" | grep -i -e 'pass\|name\|desc' 
 ldapsearch -x -H "ldap://192.168.200.5" -D "cn=admin,dc=mike,dc=com" -s sub "cn=*"
+ldapdomaindump -u 'htb.local\bob' -p paxxword 192.168.200.5 -o ~/lab/ldap/ 
+firefox ~/lab/ldap/domain_users.html
 
 LDAP Query with Creds 
 Might find the 'LAPS' Admin password 
