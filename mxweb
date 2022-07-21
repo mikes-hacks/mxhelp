@@ -283,7 +283,9 @@ Brute
 Login hydra (especially if you have username) 
 Consider geisha - 4 websites, 1 username, all rabbit-holes.. hydra gets SSH
 Burp Pw Guess (even with protections) 
- 
+
+REF: mxbrutes
+
 =================================== 
 Scrape
 
@@ -474,4 +476,4 @@ Go back - Explore all of your open-services from NMAP.
 
 =================================== 
 Consider
-mxnmap mxcurls 
+mxnmap mxcurls mxbrutes
