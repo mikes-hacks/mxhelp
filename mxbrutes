@@ -33,7 +33,8 @@ hydra -V -f -t 1 -l cory -P $commontenk rdp://192.168.200.5
 =================================== 
 Dictionary
 
-grep -i nibble $rockyou > mydict.txt 
+cat biglist.txt | sort -u | pw-inspector -m 6 -M 63 > dict.txt
+grep -i nibble $rockyou > dict.txt 
 cewl 192.168.200.5/otrs/index.pl -m 4 -w cewl.txt  
 sort cewl.txt | uniq > dict.txt 
 echo 'csc438' >> dict.txt 
