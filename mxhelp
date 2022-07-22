@@ -62,15 +62,16 @@ echo -e "\e[1;m"
 echo "-------------------------------------" 
 echo "Consider UDP" 
 echo -e "\e[1;35m" 
-echo "sudo nmap --top-ports 20 -sU -sV -sC -v" $TGT "| tee nmap-udp20" 
-echo "sudo nmap -p- -Pn –sU --min-rate 10000 -v" $TGT "| tee nmap-udp" 
+echo "sudo nmap -sU -T 5 --top-ports 20 -v" $TGT "| tee nmap-udp20" 
+echo "sudo nmap -sU -T 5 --top-ports 1000 -v -Pn" $TGT "| tee nmap-udp1000" 
+echo "nc" $TGT "-u 27960
 echo -e "\e[1;m" 
 
 echo "-------------------------------------" 
 echo "Consider nmapAutomator"
 echo "sudo nmapAutomator.sh -H" $TGT "-t Script | tee nmap-auto-script
 echo "sudo nmapAutomator.sh -H" $TGT "-t Vulns | tee nmap-auto-vulns
-echo "sudo nmapAutomator.sh -H" $TGT "-t Recon | tee nmap-auto-recon
+echo "sudo nmapAutomator.sh -H" $TGT "-t Recon | tee nmap-auto-recon   #Favorite
 echo "sudo nmapAutomator.sh -H" $TGT "-t All | tee nmap-auto-all
 
 echo "-------------------------------------" 
