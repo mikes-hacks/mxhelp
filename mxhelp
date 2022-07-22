@@ -55,7 +55,7 @@ echo -e "\e[1;m"
 echo "-------------------------------------" 
 echo "HTML Results" 
 echo -e "\e[1;35m" 
-echo "xsltproc nmap-fulltcp.xml ~/tools/nmap/honze.xsl -o nmap-fulltcp.html"
+echo "xsltproc nmap-fulltcp.xml ~/tools/nmapxml/honze.xsl -o nmap-fulltcp.html"
 echo "firefox nmap-fulltcp.html &"
 echo -e "\e[1;m" 
 
