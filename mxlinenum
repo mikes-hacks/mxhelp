@@ -158,6 +158,7 @@ lsblk
 lsmod 
 
 env   ..paths/passwords/secrets
+echo $PATH | tr ':''\n'
 ls -lah /weird
 PATH=/usr/local/bin:/usr/bin:/bin:/usr/games 
 
