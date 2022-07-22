@@ -3,9 +3,14 @@
 sudo nmap -p- --min-rate=1000 -T4 -v 192.168.200.5 -Pn | tee nmap-ports
 ports=$(grep ^[0-9] ./nmap-ports | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)
 echo -e "\nPorts-to-Scan:" $ports
-sudo nmap -sV -sC -v -p $ports 192.168.200.5 -Pn | tee nmap-fulltcp
+sudo nmap -sV -sC -v -p $ports 192.168.200.5 -Pn -oA nmap-fulltcp | tee nmap-tee
 echo -e "\nSummary:"
-grep ^[0-9] ./nmap-fulltcp
+grep ^[0-9] ./nmap-tee
+
+# HTML
+wget https://raw.githubusercontent.com/honze-net/nmap-bootstrap-xsl/master/nmap-bootstrap.xsl -O ~/tools/nmap/honze.xsl
+xsltproc nmap-fulltcp.xml ~/tools/nmap/honze.xsl -o nmap-fulltcp.html
+firefox nmap-fulltcp.html &
 
 # Consider UDP (ex: snmp)
 sudo nmap --top-ports 20 -sU -sV -sC -Pn -v 192.168.200.5 | tee nmap-udp20
