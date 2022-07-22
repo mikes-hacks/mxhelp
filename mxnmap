@@ -8,8 +8,8 @@ echo -e "\nSummary:"
 grep ^[0-9] ./nmap-tee
 
 # HTML
-wget https://raw.githubusercontent.com/honze-net/nmap-bootstrap-xsl/master/nmap-bootstrap.xsl -O ~/tools/nmap/honze.xsl
-xsltproc nmap-fulltcp.xml ~/tools/nmap/honze.xsl -o nmap-fulltcp.html
+wget https://raw.githubusercontent.com/honze-net/nmap-bootstrap-xsl/master/nmap-bootstrap.xsl -O ~/tools/nmapxml/honze.xsl
+xsltproc nmap-fulltcp.xml ~/tools/nmapxml/honze.xsl -o nmap-fulltcp.html
 firefox nmap-fulltcp.html &
 
 # Consider UDP (ex: snmp)
