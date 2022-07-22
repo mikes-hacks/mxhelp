@@ -13,9 +13,11 @@ xsltproc nmap-fulltcp.xml ~/tools/nmap/honze.xsl -o nmap-fulltcp.html
 firefox nmap-fulltcp.html &
 
 # Consider UDP (ex: snmp)
-sudo nmap --top-ports 20 -sU -sV -sC -Pn -v 192.168.200.5 | tee nmap-udp20
-sudo nmap -sUV -T4 -F -v --version-intensity 0 192.168.200.5 | tee nmap-udpfast
-sudo nmap -p0-65535 -Pn –sU -v 192.168.200.5 | tee nmap-udpall
+sudo nmap -sU -T4 --top-ports 20 -v 192.168.200.5 | tee nmap-udp20
+sudo nmap -sU -T4 --top-ports 1000 -Pn -v 192.168.200.5 | tee nmap-udp1000
+ports=$(grep ^[0-9] ./nmap-udp1000 | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)
+sudo nmap -pU -sC -sV -p $ports 192.168.200.5 -Pn -v | tee nmap-udp
+nc 192.168.200.5 -u 161
 
 # Vulns
 nmap -Pn -v --script vuln 192.168.200.5  ..vul/cve detection, No Pings 
