@@ -69,10 +69,10 @@ echo -e "\e[1;m"
 
 echo "-------------------------------------" 
 echo "Consider nmapAutomator"
-echo "sudo nmapAutomator.sh -H" $TGT "-t Script | tee nmap-auto-script
-echo "sudo nmapAutomator.sh -H" $TGT "-t Vulns | tee nmap-auto-vulns
-echo "sudo nmapAutomator.sh -H" $TGT "-t Recon | tee nmap-auto-recon   #Favorite
-echo "sudo nmapAutomator.sh -H" $TGT "-t All | tee nmap-auto-all
+echo "sudo nmapAutomator.sh -H" $TGT "-t Script | tee nmap-auto-script"
+echo "sudo nmapAutomator.sh -H" $TGT "-t Vulns | tee nmap-auto-vulns"
+echo "sudo nmapAutomator.sh -H" $TGT "-t Recon | tee nmap-auto-recon"
+echo "sudo nmapAutomator.sh -H" $TGT "-t All | tee nmap-auto-all"
 
 echo "-------------------------------------" 
 echo "More" 
