@@ -64,7 +64,7 @@ echo "Consider UDP"
 echo -e "\e[1;35m" 
 echo "sudo nmap -sU -T 5 --top-ports 20 -v" $TGT "| tee nmap-udp20" 
 echo "sudo nmap -sU -T 5 --top-ports 1000 -v -Pn" $TGT "| tee nmap-udp1000" 
-echo "nc" $TGT "-u 27960
+echo "nc" $TGT "-u 27960"
 echo -e "\e[1;m" 
 
 echo "-------------------------------------" 
