@@ -71,6 +71,11 @@ sudo -s
 ps -aux | grep pass   ..found root: /usr/bin/password-store 
 strings core.493      ..created, even though errors 
 
+Screen running as root
+export TERM=xterm
+screen -ls root/
+screen -x root/
+
 =================================== 
 Watch for Injections for Rootbash
 
