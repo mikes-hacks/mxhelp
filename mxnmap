@@ -137,7 +137,7 @@ smbclient //192.168.200.5/share -N
 smbclient \\\\192.168.200.5\\share -U bob
 
 # 161/162 SNMP (UDP)
-snmp-check -t 192.168.200.5 -c public
+snmp-check 192.168.200.5 -c public
 sudo nmap -vv -sV -sU -Pn -p 161,162 --script=snmp-netstat,snmp-processes 192.168.200.5
 echo -e "public\nprivate\nmanager\ncommunity" > community.txt 
 REF: danielmiessler > "common-snmp-community-strings.txt"
