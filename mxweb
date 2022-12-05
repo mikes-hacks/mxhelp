@@ -17,20 +17,13 @@ Host
 echo 192.168.200.5 dcbob | sudo tee -a /etc/hosts
 export URL="http://dcbob:80/"  
 
-FUZZ Files 
-export URL="http://dcbob:80/FUZZ"  
-export URL="http://192.168.200.5:80/FUZZ"  
-wfuzz -c -z file,$mediumfiles --hc 404 --hh 4772 "$URL" 
-  
-FUZZ Directories 
-export URL="http://dcbob:80/FUZZ/"  
-export URL="http://192.168.200.5:80/FUZZ/"  
-wfuzz -c -z file,$mediumdirs --hc 404 --hh 4772 "$URL" 
+WFUZZ
+export URL="http://bob.htb"  
+wfuzz -c -z file,$mediumfiles --hc 404 --hh 4772 -u $URL/FUZZ
+wfuzz -c -z file,$mediumdirs --hc 404 --hh 4772 -u $URL/FUZZ/
+wfuzz -c -Z -w $subtopmill -t 42 --hl 1 -u $URL -H 'Host: FUZZ.bob.htb' 
 
-FUZZ Vhosts
-wfuzz -w $subtopmill -c -f wfuzz.sub -Z -u 'http://dcbob.com' -H 'Host: FUZZ.dcbob.com' -t 42 --hl 1
-
-FUZZ URL
+WFUZZ URL
 export URL="http://dcbob:80/listproducts.php?cat=FUZZ"  
 wfuzz -z range,0-10 --hl 97 "$URL"
 
@@ -44,6 +37,10 @@ Wordpress Users
 wpscan --url $URL --disable-tls-checks --enumerate u 
 echo tom > users 
 echo jerry >> users 
+
+Wordpress Favorite
+wpscan --url $URL -e ap,at,u --plugins-detection aggressive --api-token $wptoken | tee wp-aggro.results
+grep -e '[!]\|[+]' wp-aggro.results
 
 Wordpress Brute Force 
 cewl $URL -m 5 -w cewl.txt 2>/dev/null 
