@@ -126,6 +126,7 @@ ll /var/tmp
 ll /var/www
 ll /var/www/html
 ll /var/www/classes
+find /var/www/ -writable
 cat /etc/apache2/apache2.conf 
 cat /etc/apache2/.htpasswd 
 cat /etc/httpd/conf/httpd.conf 
