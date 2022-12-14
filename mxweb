@@ -100,6 +100,12 @@ EternalBlue/Shellshock/Heartbleed (Well-Known)
 Remote Code Execution (RCE) 
 CRM/Wordpress= Vulns, Addon, Upload, Theme 
 
+=================================== 
+Web-Form "Send us a message"
+<img src="http://192.168.162.46/test"></img>
+<a href="http://192.168.162.46/">clickme</a>
+sudo nc -nvlp 80 ...See if we get a respone, or click
+
 
 =================================== 
 Admin/Logins
