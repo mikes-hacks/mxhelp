@@ -25,6 +25,13 @@ ssh -L 4444:127.0.0.1:5901 -N -f bob@192.168.200.5
 vncviewer -passwd secret localhost:4444 
 
 ===================================
+Linux SSH Shortcut
+Port-Forward while you are inside a remote ssh-prompt:
+$ ~C
+ssh> -L 8000:127.0.0.1:80
+firefox http:127.0.0.1:8000
+
+===================================
 Linux Internal Port (Expose)
 From Target, take internal port 7000, expose to 8080
 socat tcp-listen:7000,reuseaddr,fork tcp:localhost:8080
