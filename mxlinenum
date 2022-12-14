@@ -127,14 +127,15 @@ ll /var/www
 ll /var/www/html
 ll /var/www/classes
 find /var/www/ -writable
-cat /etc/apache2/apache2.conf 
-cat /etc/apache2/.htpasswd 
-cat /etc/httpd/conf/httpd.conf 
-cat /usr/local/etc/apache2/httpd.conf 
-grep -i db_ /var/www/wp-config.php 
-grep -i db_ /var/www/html/wp-config.php 
-grep -R pass /etc/phpmyadmin/  
-grep -i pass /etc/phpmyadmin/config-db.php  
+cat /etc/apache2/apache2.conf
+grep -Pv "^\s*#" /etc/apache2/apache2.conf
+cat /etc/apache2/.htpasswd
+cat /etc/httpd/conf/httpd.conf
+cat /usr/local/etc/apache2/httpd.conf
+grep -i db_ /var/www/wp-config.php
+grep -i db_ /var/www/html/wp-config.php
+grep -R pass /etc/phpmyadmin/
+grep -i pass /etc/phpmyadmin/config-db.php
 
 ll /weird
 ll /backups
