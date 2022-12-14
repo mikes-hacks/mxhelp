@@ -17,6 +17,10 @@ firefox 127.0.0.1:4444
 Linux Internal Service (Forward)
 From Kali, Requires access to bob w/password
 
+Quick Port Forward (Internal Website)
+ssh bob@192.168.200.5 -L 80:127.0.0.1:80 
+
+VNC
 ssh -L 4444:127.0.0.1:5901 -N -f bob@192.168.200.5
 vncviewer -passwd secret localhost:4444 
 
