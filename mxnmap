@@ -49,6 +49,7 @@ hydra -C $ftpdefaults 192.168.200.5 ftp
 ftp 192.168.200.5  ..anonymous : anonymous@anon.com ..passive (want this on)
 
 # 22 SSH
+Ubuntu 0.7 (Bionic) + Werkzeug/Python3.6 = likely Docker!
 ssh founduser@192.168.141.60  (pw: founduser)
 hydra -f -V -I -t 50 -l founduser -P $rockyou 192.168.200.5 ssh -s 22022
 
