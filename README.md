@@ -35,7 +35,7 @@ grep alias ~/.bash_aliases ~/.bashrc ~/.zshrc ~/.*
 cat <<EOF
 alias mxhelp='~/mxhelp/mxhelp'
 alias mxad='glow ~/mxhelp/mxad'
-alias mxbadchars='glow ~/mxhelp/mxbadchars'
+alias mxbadchars='cat ~/mxhelp/mxbadchars'
 alias mxcurls='glow ~/mxhelp/mxcurls'
 alias mxdns='glow ~/mxhelp/mxdns'
 alias mxjuicy='glow ~/mxhelp/mxjuicy'
