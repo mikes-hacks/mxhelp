@@ -1,181 +1,246 @@
-=================================== 
+---
+---
 # First
-sudo nmap -p- --min-rate=1000 -T4 -v 192.168.200.5 -Pn | tee nmap-ports
+```bash
+sudo nmap -p- --min-rate=1000 -T4 -v 10.129.97.56 -Pn | tee nmap-ports
 ports=$(grep ^[0-9] ./nmap-ports | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)
 echo -e "\nPorts-to-Scan:" $ports
-sudo nmap -sV -sC -v -p $ports 192.168.200.5 -Pn -oA nmap-fulltcp | tee nmap-tee
+sudo nmap -sV -sC -v -p $ports 10.129.97.56 -Pn -oA nmap-fulltcp | tee nmap-tee
 echo -e "\nSummary:"
 grep ^[0-9] ./nmap-tee
+```
 
 # HTML
+```bash
 wget https://raw.githubusercontent.com/honze-net/nmap-bootstrap-xsl/master/nmap-bootstrap.xsl -O ~/tools/nmapxml/honze.xsl
 xsltproc nmap-fulltcp.xml ~/tools/nmapxml/honze.xsl -o nmap-fulltcp.html
 firefox nmap-fulltcp.html &
+```
 
 # Consider UDP (ex: snmp)
-sudo nmap -sU -T4 --top-ports 20 -v 192.168.200.5 | tee nmap-udp20
-sudo nmap -sU -T4 --top-ports 1000 -Pn -v 192.168.200.5 | tee nmap-udp1000
+```bash
+sudo nmap -sU -T4 --top-ports 20 -v 10.129.97.56 | tee nmap-udp20
+sudo nmap -sU -T4 --top-ports 1000 -Pn -v 10.129.97.56 | tee nmap-udp1000
 ports=$(grep ^[0-9] ./nmap-udp1000 | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//)
-sudo nmap -pU -sC -sV -p $ports 192.168.200.5 -Pn -v | tee nmap-udp
-nc 192.168.200.5 -u 161
+sudo nmap -pU -sC -sV -p $ports 10.129.97.56 -Pn -v | tee nmap-udp
+nc 10.129.97.56 -u 161
+```
 
 # Vulns
-nmap -Pn -v --script vuln 192.168.200.5  ..vul/cve detection, No Pings 
-nmap --script safe -v -p 445 192.168.200.5
+```bash
+nmap -Pn -v --script vuln 10.129.97.56  ..vul/cve detection, No Pings 
+nmap --script safe -v -p 445 10.129.97.56
+```
 
 # Scripts
+```bash
 locate -r '\.nse$' | xargs grep categories | grep 'default\|version\|safe' | grep smb
 ls -l /usr/share/nmap/scripts/nfs* 
+```
 
-=================================== 
+---
 # nmapAutomator
-sudo nmapAutomator.sh -H 192.168.200.5 -t Script | tee nmap-auto-script
-sudo nmapAutomator.sh -H 192.168.200.5 -t Vulns | tee nmap-auto-vulns
-sudo nmapAutomator.sh -H 192.168.200.5 -t Recon | tee nmap-auto-recon
-sudo nmapAutomator.sh -H 192.168.200.5 -t All | tee nmap-auto-all
+```bash
+sudo nmapAutomator.sh -H 10.129.97.56 -t Script | tee nmap-auto-script
+sudo nmapAutomator.sh -H 10.129.97.56 -t Vulns | tee nmap-auto-vulns
+sudo nmapAutomator.sh -H 10.129.97.56 -t Recon | tee nmap-auto-recon
+sudo nmapAutomator.sh -H 10.129.97.56 -t All | tee nmap-auto-all
+```
 
-===================================
+---
 # Default cred scan: 
-changeme.py 192.168.200.5
-changeme.py 192.168.200.5/24 
+```bash
+changeme.py 10.129.97.56
+changeme.py 10.129.97.56/24 
 changeme.py nmap_subnet.xml 
-changeme.py --protocols ssh,ssh_key 192.168.200.5/24 
-changeme.py snmp://192.168.200.5
+changeme.py --protocols ssh,ssh_key 10.129.97.56/24 
+changeme.py snmp://10.129.97.56
+```
 
-=================================== 
+---
 # 21 FTP
-nmap -p 21 --script=ftp-anon,ftp-libopie,ftp-proftpd-backdoor,ftp-vsftpd-backdoor,ftp-vuln-cve2010-4221,tftp-enum 192.168.200.5
-hydra -C $ftpdefaults 192.168.200.5 ftp
-ftp 192.168.200.5  ..anonymous : anonymous@anon.com ..passive (want this on)
+```bash
+nmap -p 21 --script=ftp-anon,ftp-libopie,ftp-proftpd-backdoor,ftp-vsftpd-backdoor,ftp-vuln-cve2010-4221,tftp-enum 10.129.97.56
+hydra -C $ftpdefaults 10.129.97.56 ftp
+ftp 10.129.97.56  ..anonymous : anonymous@anon.com ..passive (want this on)
+```
 
 # 22 SSH
-Ubuntu 0.7 (Bionic) + Werkzeug/Python3.6 = likely Docker!
+```bash
 ssh founduser@192.168.141.60  (pw: founduser)
-hydra -f -V -I -t 50 -l founduser -P $rockyou 192.168.200.5 ssh -s 22022
+hydra -f -V -I -t 50 -l founduser -P $rockyou 10.129.97.56 ssh -s 22022
+```
 
 # 25 SMTP
-nmap -pT:25 -v --script smtp-commands.nse 192.168.200.5
-nmap -v -p 25 --script smtp-enum-users --script-args smtp-enum-users.methods={VRFY} 192.168.200.5
-nmap -v -p 25 --script smtp-commands,smtp-enum-users,smtp-vuln-cve2010-4344,smtp-vuln-cve2011-1720,smtp-vuln-cve2011-1764 192.168.200.5
-smtp-user-enum -V -m RCPT -w -f '<user@example.com>' -d 'domain.local' -U "unix_users.txt" 192.168.200.5 25 2>&1
-nc -nvv 192.168.200.5 25
+```bash
+nmap -pT:25 -v --script smtp-commands.nse 10.129.97.56
+nmap -v -p 25 --script smtp-enum-users --script-args smtp-enum-users.methods={VRFY} 10.129.97.56
+nmap -v -p 25 --script smtp-commands,smtp-enum-users,smtp-vuln-cve2010-4344,smtp-vuln-cve2011-1720,smtp-vuln-cve2011-1764 10.129.97.56
+smtp-user-enum -V -m RCPT -w -f '<user@example.com>' -d 'domain.local' -U "unix_users.txt" 10.129.97.56 25 2>&1
+nc -nvv 10.129.97.56 25
 HELO foo<cr><lf>
 VRFY root
+```
 
 # 53 DNS
-sudo nmap -p 53 -Pn -sU -sV 192.168.200.5
-dig axfr @192.168.200.5 mike.com
+```bash
+sudo nmap -p 53 -Pn -sU -sV 10.129.97.56
+dig axfr @10.129.97.56 mike.com
 gobuster dns -d mike.com -w $subtopmill -t 16
+```
 
 # 69 UDP TFTP
-nmap -sU -p 69 -v --script tftp-enum.nse 192.168.200.5 
-nmap -sU -p 69 -v --script tftp-enum.nse --script-args tftp-enum.filelist=windowsloot.txt 192.168.200.5
+```bash
+nmap -sU -p 69 -v --script tftp-enum.nse 10.129.97.56 
+nmap -sU -p 69 -v --script tftp-enum.nse --script-args tftp-enum.filelist=windowsloot.txt 10.129.97.56
+```
 
 # 80/443 Web
-nikto -h 192.168.200.5
-whatweb --color=always --no-errors -a 3 -v 192.168.200.5
-nmap -p 80 -nv --script=http-vuln-cve2010-2861 192.168.200.5  #coldfusion 
-nmap -p 80 -v --script http-shellshock --script-args uri=/cgi-bin/vulnscript.sh 192.168.200.5
-nmap -p 80 -v --script http-shellshock --script-args uri=/cgi-bin/admin.cgi 192.168.200.5 
-nmap -p 443 -v --script ssl-heartbleed 192.168.200.5
-sslscan 192.168.200.5:443
+```bash
+nikto -h 10.129.97.56
+whatweb --color=always --no-errors -a 3 -v 10.129.97.56
+nmap -p 80 -nv --script=http-vuln-cve2010-2861 10.129.97.56  #coldfusion 
+nmap -p 80 -v --script http-shellshock --script-args uri=/cgi-bin/vulnscript.sh 10.129.97.56
+nmap -p 80 -v --script http-shellshock --script-args uri=/cgi-bin/admin.cgi 10.129.97.56 
+nmap -p 443 -v --script ssl-heartbleed 10.129.97.56
+sslscan 10.129.97.56:443
+```
 
 # 88 Kerberos
 Needed for AS-REP Roasting (and usernames) - See mxad
-nmap -Pn -sV -p 88,464 --script="banner,krb5-enum-users" 192.168.200.5
+```bash
+nmap -Pn -sV -p 88,464 --script="banner,krb5-enum-users" 10.129.97.56
+```
 
 # 110 POP3
-nmap -Pn -sV -p $port "--script=banner,(pop3* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" 192.168.200.5
-hydra -l bob -P /usr/share/wordlistsnmap.lst -f 192.168.200.5 pop3 -V
-nc -nv 192.168.200.5 110
+```bash
+nmap -Pn -sV -p $port "--script=banner,(pop3* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" 10.129.97.56
+hydra -l bob -P /usr/share/wordlistsnmap.lst -f 10.129.97.56 pop3 -V
+nc -nv 10.129.97.56 110
 USER bob
 PASS paxx
 list
 retr 1
+```
 
 # 111/135 RPC
-nmap -p 111,135 -Pn -sV --script=banner,msrpc-enum,rpc-grind,rpcinfo 192.168.200.5  
-rpcbind -p 192.168.200.5
+```bash
+nmap -p 111,135 -Pn -sV --script=banner,msrpc-enum,rpc-grind,rpcinfo 10.129.97.56  
+rpcbind -p 10.129.97.56
 msf > use exploit/windows/dcerpc/ms03_026_dcom
-rpcclient 192.168.200.5 -U ''
+rpcclient 10.129.97.56 -U ''
 srvinfo
 enumdomusers
+```
 
 # 111/2049 NFS/mountd
-nmap -sV -v --script=nfs-showmount 192.168.200.5
-nmap -p 111,2049 -v --script nfs* 192.168.200.5
-sudo showmount -e 192.168.200.5
+```bash
+nmap -sV -v --script=nfs-showmount 10.129.97.56
+nmap -p 111,2049 -v --script nfs* 10.129.97.56
+sudo showmount -e 10.129.97.56
 mkdir secrets
-sudo mount -t nfs 192.168.200.5/secrets secrets/
-sudo mount -o rw,vers=2 192.168.200.5:/secrets secrets/
-sudo mount -o nolock 192.168.200.5:/secrets secrets/   #older NFS
+sudo mount -t nfs 10.129.97.56/secrets secrets/
+sudo mount -o rw,vers=2 10.129.97.56:/secrets secrets/
+sudo mount -o nolock 10.129.97.56:/secrets secrets/   #older NFS
 cd secrets; grep -irl password
+```
 
 # 113 IDENT
+```bash
 grep -i auth-owner ./nmap-fulltcp
 grep ^[0-9] ./nmap-ports | cut -d '/' -f 1 | tr '\n' ' ' 
-ident-user-enum 192.168.200.5 22 80 113 8080 10000 
+ident-user-enum 10.129.97.56 22 80 113 8080 10000 
+```
 
-#123 NTP (UDP)
-sudo nmap -sU -p 123 --script ntp-info 192.168.200.5
+# 123 NTP (UDP)
+```bash
+sudo nmap -sU -p 123 --script ntp-info 10.129.97.56
+```
 
 # 143/993 IMAP
-nmap -Pn -sV -p $port "--script=banner,(imap* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" 192.168.200.5
+```bash
+nmap -Pn -sV -p $port "--script=banner,(imap* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" 10.129.97.56
+```
 
 # 139/445 SMB
-nmblookup -A 192.168.200.5
-enum4linux -A 192.168.200.5
-sudo ./smbver.sh 192.168.200.5 139
-sudo nmap -p 139,445 -v --script=smb-vuln* 192.168.200.5 
-sudo nmap -p 445 -v --script=smb-enum-shares,smb-enum-users 192.168.200.5 
-sudo nmap -v --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode,smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494,smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery --script-args=unsafe=1 -T5 192.168.200.5 -oG nmap-smb
-smbmap -H 192.168.200.5
-smbmap -H 192.168.200.5 -U '' -P '' 
-smbclient --list 192.168.200.5 
-smbclient -N --list \\\\192.168.200.5 
-smbclient --list //192.168.200.5/ -U "guest"
-smbclient //192.168.200.5/share -N
-smbclient \\\\192.168.200.5\\share -U bob
+```bash
+nmblookup -A 10.129.97.56
+enum4linux -A 10.129.97.56
+sudo ./smbver.sh 10.129.97.56 139
+sudo nmap -p 139,445 -v --script=smb-vuln* 10.129.97.56 
+sudo nmap -p 445 -v --script=smb-enum-shares,smb-enum-users 10.129.97.56 
+
+sudo nmap -v --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse, \
+smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode, \
+smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker, \
+smb-enum-groups,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494, \
+smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067, \
+smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery \
+--script-args=unsafe=1 -T5 10.129.97.56 -oG nmap-smb
+
+smbmap -H 10.129.97.56
+smbmap -H 10.129.97.56 -U '' -P '' 
+smbclient --list 10.129.97.56 
+smbclient -N --list \\\\10.129.97.56 
+smbclient --list //10.129.97.56/ -U "guest"
+smbclient //10.129.97.56/share -N
+smbclient \\\\10.129.97.56\\share -U bob
+```
 
 # 161/162 SNMP (UDP)
-snmp-check 192.168.200.5 -c public
-sudo nmap -vv -sV -sU -Pn -p 161,162 --script=snmp-netstat,snmp-processes 192.168.200.5
-hydra -P common-snmp-community-strings.txt 192.168.200.5 snmp  #brute to get community strings
+```bash
+snmp-check -t 10.129.97.56 -c public
+sudo nmap -vv -sV -sU -Pn -p 161,162 --script=snmp-netstat,snmp-processes 10.129.97.56
 echo -e "public\nprivate\nmanager\ncommunity" > community.txt 
 REF: danielmiessler > "common-snmp-community-strings.txt"
-onesixtyone -c community.txt 192.168.200.5
-snmpwalk -c public -v1 -t 10 192.168.200.5
-snmpwalk -c public -v1 192.168.200.5 1.3.6.1.4.1.77.1.2.25 
+onesixtyone -c community.txt 10.129.97.56
+snmpwalk -c public -v1 -t 10 10.129.97.56
+snmpwalk -c public -v1 10.129.97.56 1.3.6.1.4.1.77.1.2.25 
+```
 
 # 389/636 LDAP
-nmap -n -sV --script "ldap* and not brute" 192.168.200.5 | tee nmap-ldap
-ldapsearch -s base -x -H "ldap://192.168.200.5" | grep namingContexts
-ldapsearch -x -H "ldap://192.168.200.5" -b "DC=mike,DC=com"
-ldapsearch -x -H "ldap://192.168.200.5" -D '' -w '' -b "DC=mike,DC=domain" | grep sAMAccountName:
-ldapsearch -v -x -b "DC=mike,DC=com" -H "ldap://192.168.200.5" "(objectclass=*)" | grep -i -e 'pass\|name\|desc' 
-ldapdomaindump -u 'htb.local\bob' -p paxxword 192.168.200.5 -o ~/lab/ldap/ 
+```bash
+nmap -n -sV --script "ldap* and not brute" 10.129.97.56 | tee nmap-ldap
+ldapsearch -s base -x -H "ldap://10.129.97.56" | grep namingContexts
+ldapsearch -x -H "ldap://10.129.97.56" -b "DC=mike,DC=com"
+ldapsearch -x -H "ldap://10.129.97.56" -D '' -w '' -b "DC=mike,DC=domain" | grep sAMAccountName:
+ldapsearch -v -x -b "DC=mike,DC=com" -H "ldap://10.129.97.56" "(objectclass=*)" | grep -i -e 'pass\|name\|desc' 
+ldapdomaindump -u 'htb.local\bob' -p paxxword 10.129.97.56 -o ~/lab/ldap/ 
 firefox ~/lab/ldap/domain_users.html  
+```
 
 # 554 - RTSP
 Port 1030/1032/1033/1038
 Used by RPC to connect in domain network. Usually nothing.
 
-#1100 Java RMI
-nmap -Pn -sV -p 1100 --script="banner,rmi-vuln-classloader,rmi-dumpregistry" -oN "tcp_110_rmi_nmap.txt" 192.168.200.5
+# 1100 Java RMI
+```bash
+nmap -Pn -sV -p 1100 --script="banner,rmi-vuln-classloader,rmi-dumpregistry" -oN "tcp_110_rmi_nmap.txt" 10.129.97.56
+```
 
 # 1433 MSSQL
-sudo nmap -p 1433 -v --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshell,ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-sql-hasdbaccess,ms-sql-dac,ms-sql-dump-hashes --script-args mssql.instance-port=1433,mssql.username=sa,mssql.password=,mssql.instance-name=MSSQLSERVER -sV 192.168.200.5 -oG nmap-mssql 
-mssqlclient.py -db msdb hostname/sa:paxxword@192.168.200.5
+```bash
+sudo nmap -p 1433 -v --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshell, \
+ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-sql-hasdbaccess,ms-sql-dac, \
+ms-sql-dump-hashes --script-args mssql.instance-port=1433,mssql.username=sa, \
+mssql.password=,mssql.instance-name=MSSQLSERVER -sV 10.129.97.56 -oG nmap-mssql 
+
+mssqlclient.py -db msdb hostname/sa:paxxword@10.129.97.56
+```
+```sql
 SELECT name FROM master.dbo.sysdatabases
 SELECT * FROM secretdb.INFORMATION_SCHEMA.TABLES
 SELECT sp.name AS login, sp.type_desc AS login_type, sl.password_hash, sp.create_date, sp.modify_date, 
 CASE WHEN sp.is_disabled = 1 THEN 'Disabled' ELSE 'Enabled' END AS status 
 FROM sys.server_principals sp LEFT JOIN sys.sql_logins sl ON sp.principal_id = sl.principal_id 
 WHERE sp.type NOT IN ('G', 'R') ORDER BY sp.name 
+```
 
 # 1521 ORACLE
-tnscmd10g version -h 192.168.200.5
-tnscmd10g status -h 192.168.200.5
+```bash
+tnscmd10g version -h 10.129.97.56
+tnscmd10g status -h 10.129.97.56
+```
 
 # 2100 - Oracle XML DB
 Can be accessed through ftp. Some default passwords here: 
@@ -184,31 +249,42 @@ sys:sys
 scott:tiger
 
 # 3306 MySQL
-nmap -p 3306 -sV -Pn -vv -script=mysql-audit,mysql-databases,mysql-dump-hashes,mysql-empty-password,mysql-enum,mysql-info,mysql-query,mysql-users,mysql-variables,mysql-vuln-cve2012-2122 192.168.200.5
-nmap -p 3306 -v --script mysql-brute -T5 -nv 192.168.200.5
-mysql -h 192.168.200.5 -u root -p
-mysql -h 192.168.200.5 --port=3306 --user=root -p 
-mysql -h 192.168.200.5 -uroot -ppassword -e 'show databases;' 
+```bash
+nmap -p 3306 -sV -Pn -vv -script=mysql-audit,mysql-databases,mysql-dump-hashes,mysql-empty-password,mysql-enum,mysql-info,mysql-query,mysql-users,mysql-variables,mysql-vuln-cve2012-2122 10.129.97.56
+nmap -p 3306 -v --script mysql-brute -T5 -nv 10.129.97.56
+mysql -h 10.129.97.56 -u root -p
+mysql -h 10.129.97.56 --port=3306 --user=root -p 
+mysql -h 10.129.97.56 -uroot -ppassword -e 'show databases;' 
+```
+```mysql
 show databases; use previse; show tables; show variables; show grants; select * from accounts; 
 SELECT user,password,authentication_string,create_priv,insert_priv,update_priv,alter_priv,delete_priv,drop_priv FROM mysql.user WHERE user = 'root';
 SELECT grantee, table_schema, privilege_type FROM information_schema.schema_privileges;     
 SELECT user FROM mysql.user WHERE file_priv='Y';
+```
 
 # 3389 RDP Remote Desktop
-nmap -Pn -sV -p 3389 --script="banner,(rdp* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" 192.168.200.5
-rdesktop -u guest -p guest 192.168.200.5 -g 94%
-hydra -t 1 -V -f -l bob -P $commontenk rdp://192.168.200.5
-ncrack -vv --user Administrator -P $smallpw rdp://192.168.200.5
-xfreerdp /v:192.168.200.5 /u:Administrator
-xfreerdp /v:192.168.200.5 /d:mike.com /u:bob /p:paxxword -sec-nla +clipboard /geometry /w:1680 /h:900
+```bash
+nmap -Pn -sV -p 3389 --script="banner,(rdp* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" 10.129.97.56
+rdesktop -u guest -p guest 10.129.97.56 -g 94%
+hydra -t 1 -V -f -l bob -P $commontenk rdp://10.129.97.56
+ncrack -vv --user Administrator -P $smallpw rdp://10.129.97.56
+xfreerdp /v:10.129.97.56 /u:Administrator
+xfreerdp /v:10.129.97.56 /d:mike.com /u:bob /p:paxxword -sec-nla +clipboard /geometry /w:1680 /h:900
+```
 
 # 5060 SIP (UDP)
-svmap 192.168.200.5
-svwar -m INVITE -e 200-250 192.168.200.5
+```bash
+svmap 10.129.97.56
+svwar -m INVITE -e 200-250 10.129.97.56
+```
 
 # 5437 Postgres
-psql -h 192.168.200.5 -U postgres -p 5437
-PGPASSWORD=postgres psql -h 192.168.200.5 -p 5437 -U postgres
+```bash
+psql -h 10.129.97.56 -U postgres -p 5437
+PGPASSWORD=postgres psql -h 10.129.97.56 -p 5437 -U postgres
+```
+```mysql
 \list; \c secretdb; \d table; \du+
 SELECT datname FROM pg_database;
 SELECT current_setting ('is_superuser');
@@ -216,19 +292,26 @@ select * from users;
 SHOW config_file;
 CREATE TABLE demo(t text);COPY demo FROM '/etc/passwd';SELECT * FROM demo;
 SELECT usename, passwd from pg_shadow;
+```
 
-#5900 VNC
-nmap -Pn -sV -p 5900 --script="banner,(vnc* or realvnc* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" --script-args="unsafe=1" 192.168.200.5
+# 5900 VNC
+```bash
+nmap -Pn -sV -p 5900 --script="banner,(vnc* or realvnc* or ssl*) and not (brute or broadcast or dos or external or fuzzer)" --script-args="unsafe=1" 10.129.97.56
+```
 
 # 5985 WinRM
 Microsoft HTTPAPI httpd 2.0
-evil-winrm -i 192.168.200.5 -u mike -p helps
-evil-winrm -i 192.168.200.5 -u administrator -H 7dfclsdfklesk..
+```bash
+evil-winrm -i 10.129.97.56 -u mike -p helps
+evil-winrm -i 10.129.97.56 -u administrator -H 7dfclsdfklesk..
+```
 
 # 8009 AJP (Apache Jserv Protocol)
-nmap -Pn -sV -p 8009 -n --script ajp-auth,ajp-headers,ajp-methods,ajp-request 192.168.200.5
+```bash
+nmap -Pn -sV -p 8009 -n --script ajp-auth,ajp-headers,ajp-methods,ajp-request 10.129.97.56
+```
 
 
-===================================
+---
 # Consider
 mxweb mxcurls mxsamba mxbrutes
