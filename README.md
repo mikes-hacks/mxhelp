@@ -12,39 +12,47 @@ mxhelp 192.168.119.101 10.1.1.5
 ![mxhelp](https://user-images.githubusercontent.com/59158016/176043471-d9c07ce2-19cf-4948-97b5-87a3df1cfde8.gif)
 
 # Installation
-```
+```bash
 cd ~
 git clone https://github.com/mikes-hacks/mxhelp.git
 chmod +x ~/mxhelp/mxhelp
+```
+
+# Glow
+Makes markdown pretty
+```bash
+wget https://github.com/charmbracelet/glow/releases/download/v1.4.1/glow_1.4.1_linux_amd64.deb -P ~/Downloads
+chmod 754 ~/Downloads/glow_1.4.1_linux_amd64.deb
+sudo apt install ~/Downloads/glow_1.4.1_linux_amd64.deb
 ```
 
 # Alias
 To add aliases, first check to see where you normally keep them  
 grep alias ~/.bash_aliases ~/.bashrc ~/.zshrc ~/.*
 
-```
+```bash
 (
 cat <<EOF
 alias mxhelp='~/mxhelp/mxhelp'
-alias mxad='cat ~/mxhelp/mxad'
-alias mxbadchars='cat ~/mxhelp/mxbadchars'
-alias mxcurls='cat ~/mxhelp/mxcurls'
-alias mxdns='cat ~/mxhelp/mxdns'
-alias mxjuicy='cat ~/mxhelp/mxjuicy'
-alias mxlinenum='cat ~/mxhelp/mxlinenum'
-alias mxnmap='cat ~/mxhelp/mxnmap'
-alias mxpersist='cat ~/mxhelp/mxpersist'
-alias mxpivot='cat ~/mxhelp/mxpivot'
-alias mxreverse='cat ~/mxhelp/mxreverse'
-alias mxrootbash='cat ~/mxhelp/mxrootbash'
-alias mxsam='cat ~/mxhelp/mxsam'
-alias mxsamba='cat ~/mxhelp/mxsamba'
-alias mxtest='cat ~/mxhelp/mxtest'
-alias mxtransfer='cat ~/mxhelp/mxtransfer'
-alias mxpytty='cat ~/mxhelp/mxpytty'
-alias mxsqli='cat ~/mxhelp/mxsqli'
-alias mxweb='cat ~/mxhelp/mxweb'
-alias mxwinenum='cat ~/mxhelp/mxwinenum'
+alias mxad='glow ~/mxhelp/mxad'
+alias mxbadchars='glow ~/mxhelp/mxbadchars'
+alias mxcurls='glow ~/mxhelp/mxcurls'
+alias mxdns='glow ~/mxhelp/mxdns'
+alias mxjuicy='glow ~/mxhelp/mxjuicy'
+alias mxlinenum='glow ~/mxhelp/mxlinenum'
+alias mxnmap='glow ~/mxhelp/mxnmap'
+alias mxpersist='glow ~/mxhelp/mxpersist'
+alias mxpivot='glow ~/mxhelp/mxpivot'
+alias mxreverse='glow ~/mxhelp/mxreverse'
+alias mxrootbash='glow ~/mxhelp/mxrootbash'
+alias mxsam='glow ~/mxhelp/mxsam'
+alias mxsamba='glow ~/mxhelp/mxsamba'
+alias mxtest='glow ~/mxhelp/mxtest'
+alias mxtransfer='glow ~/mxhelp/mxtransfer'
+alias mxpytty='glow ~/mxhelp/mxpytty'
+alias mxsqli='glow ~/mxhelp/mxsqli'
+alias mxweb='glow ~/mxhelp/mxweb'
+alias mxwinenum='glow ~/mxhelp/mxwinenum'
 alias myip='cat ~/mxhelp/z_myip'
 alias tgt='cat ~/mxhelp/z_tgt'
 export common="/usr/share/dirb/wordlists/common.txt"
@@ -74,7 +82,7 @@ Remember - For any changes you make, just be sure the IP and TGT match with the 
 The real power comes from the Linux 'sed' command.  
 It will update all of your IP's for Host and Target.  
 The script will also run checks to make sure you dont wreak your cheatsheets.  
-```
+```bash
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$ipold"'/'"$IP"'/gI' {} \;
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$tgtold"'/'"$TGT"'/gI' {} \;
 ```
@@ -84,7 +92,7 @@ find ~/mxhelp/mx* -type f -exec sed -i 's/'"$tgtold"'/'"$TGT"'/gI' {} \;
 1. Move them to the mxhelp directory
 1. Update your Aliases
 
-```
+```bash
 cd ~/pentest/copypasta/
 find * -maxdepth 0 -exec mv {} mx{} \;
 mv mx* ~/mxhelp/
@@ -95,17 +103,4 @@ alias mxnetcat='cat ~/mxhelp/mxnetcat'
 alias mxother='cat ~/mxhelp/mxother'
 EOF
 ) >> ~/bash_aliases
-```
-
-# Add Colors (Optional)
-```
-vim ./.bash_aliases
-alias cat='pygmentize -O style=monokai -l=bash'
-or
-cd ~/Downloads
-wget https://github.com/owenthereal/ccat/releases/download/v1.1.0/linux-amd64-1.1.0.tar.gz
-tar xvf linux-amd64-1.1.0.tar.gz 
-sudo cp linux-amd64-1.1.0/ccat /usr/bin/ccat
-vim ./.bash_aliases
-alias cat='ccat -G String="darkblue" -G Plaintext="lightgrey"'
 ```
