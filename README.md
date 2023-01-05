@@ -18,12 +18,14 @@ git clone https://github.com/mikes-hacks/mxhelp.git
 chmod +x ~/mxhelp/mxhelp
 ```
 
-# Glow
-Makes markdown pretty
-```bash
-wget https://github.com/charmbracelet/glow/releases/download/v1.4.1/glow_1.4.1_linux_amd64.deb -P ~/Downloads
-chmod 754 ~/Downloads/glow_1.4.1_linux_amd64.deb
-sudo apt install ~/Downloads/glow_1.4.1_linux_amd64.deb
+# Add Colors
+```
+cd ~/Downloads
+wget https://github.com/owenthereal/ccat/releases/download/v1.1.0/linux-amd64-1.1.0.tar.gz
+tar xvf linux-amd64-1.1.0.tar.gz 
+sudo cp linux-amd64-1.1.0/ccat /usr/bin/ccat
+vim ./.bash_aliases
+alias ccat='ccat -G String="bold" -G Plaintext="brown" -G Keyword="fuchsia" -G Comment="white" -G Type="yellow"'
 ```
 
 # Alias
@@ -34,28 +36,29 @@ grep alias ~/.bash_aliases ~/.bashrc ~/.zshrc ~/.*
 (
 cat <<EOF
 alias mxhelp='~/mxhelp/mxhelp'
-alias mxad='glow ~/mxhelp/mxad'
-alias mxbadchars='cat ~/mxhelp/mxbadchars'
-alias mxbrutes='glow ~/mxhelp/mxbrutes'
-alias mxcurls='glow ~/mxhelp/mxcurls'
-alias mxdns='glow ~/mxhelp/mxdns'
-alias mxjuicy='glow ~/mxhelp/mxjuicy'
-alias mxlinenum='glow ~/mxhelp/mxlinenum'
-alias mxnmap='glow ~/mxhelp/mxnmap'
-alias mxpersist='glow ~/mxhelp/mxpersist'
-alias mxpivot='glow ~/mxhelp/mxpivot'
-alias mxreverse='glow ~/mxhelp/mxreverse'
-alias mxrootbash='glow ~/mxhelp/mxrootbash'
-alias mxsam='glow ~/mxhelp/mxsam'
-alias mxsamba='glow ~/mxhelp/mxsamba'
-alias mxtest='glow ~/mxhelp/mxtest'
-alias mxtransfer='glow ~/mxhelp/mxtransfer'
-alias mxpytty='glow ~/mxhelp/mxpytty'
-alias mxsqli='glow ~/mxhelp/mxsqli'
-alias mxweb='glow ~/mxhelp/mxweb'
-alias mxwinenum='glow ~/mxhelp/mxwinenum'
-alias myip='cat ~/mxhelp/z_myip'
-alias tgt='cat ~/mxhelp/z_tgt'
+alias mxad='ccat ~/mxhelp/mxad'
+alias mxbadchars='ccat ~/mxhelp/mxbadchars'
+alias mxbrutes='ccat ~/mxhelp/mxbrutes'
+alias mxcurls='ccat ~/mxhelp/mxcurls'
+alias mxdns='ccat ~/mxhelp/mxdns'
+alias mxjuicy='ccat ~/mxhelp/mxjuicy'
+alias mxlinenum='ccat ~/mxhelp/mxlinenum'
+alias mxnmap='ccat ~/mxhelp/mxnmap'
+alias mxpersist='ccat ~/mxhelp/mxpersist'
+alias mxpivot='ccat ~/mxhelp/mxpivot'
+alias mxreverse='ccat ~/mxhelp/mxreverse'
+alias mxrootbash='ccat ~/mxhelp/mxrootbash'
+alias mxsam='ccat ~/mxhelp/mxsam'
+alias mxsamba='ccat ~/mxhelp/mxsamba'
+alias mxtest='ccat ~/mxhelp/mxtest'
+alias mxtransfer='ccat ~/mxhelp/mxtransfer'
+alias mxpytty='ccat ~/mxhelp/mxpytty'
+alias mxsqli='ccat ~/mxhelp/mxsqli'
+alias mxweb='ccat ~/mxhelp/mxweb'
+alias mxwinenum='ccat ~/mxhelp/mxwinenum'
+alias myip='ccat ~/mxhelp/z_myip'
+alias tgt='ccat ~/mxhelp/z_tgt'
+ccat='ccat -G String="bold" -G Plaintext="brown" -G Keyword="fuchsia" -G Comment="white" -G Type="yellow"'
 export common="/usr/share/dirb/wordlists/common.txt"
 export commontenk="/usr/share/seclists/Passwords/Common-Credentials/10k-most-common.txt"
 export subtopmill="/usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt"
@@ -87,6 +90,11 @@ The script will also run checks to make sure you dont wreak your cheatsheets.
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$ipold"'/'"$IP"'/gI' {} \;
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$tgtold"'/'"$TGT"'/gI' {} \;
 ```
+
+# FAQ
+1. Why isn't this in Markdown?
+`One of my favorite features is double-click-and-paste-to-terminal. This makes it so easy to 'use' the scripts. When I added the markdown tags and colors, a lot of the content became indented with extra spacing. That made it more 'manual' to copy the script-lines. Leaving it as plain-text allows the mouse to quick-click and use the commands.`
+
 
 # Batch add your own scripts
 1. Rename your scripts to prefix 'mx'
