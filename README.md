@@ -24,8 +24,6 @@ cd ~/Downloads
 wget https://github.com/owenthereal/ccat/releases/download/v1.1.0/linux-amd64-1.1.0.tar.gz
 tar xvf linux-amd64-1.1.0.tar.gz 
 sudo cp linux-amd64-1.1.0/ccat /usr/bin/ccat
-vim ./.bash_aliases
-alias ccat='ccat -G String="bold" -G Plaintext="brown" -G Keyword="fuchsia" -G Comment="white" -G Type="yellow"'
 ```
 
 # Alias
@@ -58,7 +56,7 @@ alias mxweb='ccat ~/mxhelp/mxweb'
 alias mxwinenum='ccat ~/mxhelp/mxwinenum'
 alias myip='ccat ~/mxhelp/z_myip'
 alias tgt='ccat ~/mxhelp/z_tgt'
-ccat='ccat -G String="bold" -G Plaintext="brown" -G Keyword="fuchsia" -G Comment="white" -G Type="yellow"'
+alias ccat='ccat --bg="dark" -G Decimal="*green*" -G Keyword="blue" -G Punctuation="*yellow*" -G Plaintext="reset" -G String="brown" -G Type="*white*" -G Literal="fuchsia"'
 export common="/usr/share/dirb/wordlists/common.txt"
 export commontenk="/usr/share/seclists/Passwords/Common-Credentials/10k-most-common.txt"
 export subtopmill="/usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt"
@@ -93,8 +91,7 @@ find ~/mxhelp/mx* -type f -exec sed -i 's/'"$tgtold"'/'"$TGT"'/gI' {} \;
 
 # FAQ
 1. Why isn't this in Markdown?
-`One of my favorite features is double-click-and-paste-to-terminal. This makes it so easy to 'use' the scripts. When I added the markdown tags and colors, a lot of the content became indented with extra spacing. That made it more 'manual' to copy the script-lines. Leaving it as plain-text allows the mouse to quick-click and use the commands.`
-
+`A favorite feature is double-click-and-paste-to-terminal. This makes it easy to use the scripts. Adding markdown tags and colors caused the content to have extra spacing which is harder to quick-copy. Leaving it as plain-text allows the mouse to quick-click and use the commands.`
 
 # Batch add your own scripts
 1. Rename your scripts to prefix 'mx'
