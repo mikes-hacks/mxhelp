@@ -70,7 +70,7 @@ ftp 192.168.200.5  ..anonymous : anonymous@anon.com ..passive (want this on)
 =================================== 
 22 SSH
 
-Beware Fake OpenSSH 5.3 Zero-Day
+Beware Fake OpenSSH 5.3 Zero-Day on github
 ssh founduser@192.168.200.5  (pw: founduser)
 hydra -f -V -I -t 50 -l founduser -P $rockyou 192.168.200.5 ssh -s 22022
 
