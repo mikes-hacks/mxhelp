@@ -42,7 +42,7 @@ firefox http://192.168.200.5:8080
 SSH Tunnel Port
 From Kali, to Bob, to Deeper-Target
 
-sudo ssh -N bob@10.0.0.251 -p22 -L 8080:10.1.1.1:80  
+sudo ssh -N bob@192.168.200.5 -p22 -L 8080:10.1.1.1:80  
 firefox http://127.0.0.1:8080/ 
 
 
@@ -72,13 +72,13 @@ IP="$1"; for port in $(seq 1 65535); do (echo '.' >/dev/tcp/192.168.200.5/$port 
 ===================================
 Tunnel the Whole-Network (Linux Target)
 
-sshuttle -r bob@10.0.0.251 10.1.1.0/24   
-sshuttle -r root@10.0.0.251 10.1.1.0/24 --ssh-cmd 'ssh -i ~/lab/bob/.ssh/id_rsa' 
+sshuttle -r bob@192.168.200.5 192.168.200.0/24   
+sshuttle -r root@192.168.200.5 192.168.200.0/24 --ssh-cmd 'ssh -i ~/lab/bob/.ssh/id_rsa' 
 
 ===================================
 SSH Tunnel Port (Linux Target)
 
-sudo ssh -N bob@10.0.0.251 -p22 -L 8080:10.1.1.1:80  
+sudo ssh -N bob@192.168.200.5 -p22 -L 8080:10.1.1.1:80  
 firefox http://127.0.0.1:8080/ 
 
 
@@ -96,10 +96,10 @@ Found SMB on Remote Box
 Get access to the SMB on deeper box. 
 Forward a 'deeper' windows-target-smb port back to kali 
 We have access to bob@192.168.200.5 w/password 
-We can SMB to 10.2.2.2 
+We can SMB to 10.1.1.1
 
 Kali:
-sudo ssh -N -L 0.0.0.0:445:10.2.2.2:445 bob@192.168.200.5
+sudo ssh -N -L 0.0.0.0:445:10.1.1.1:445 bob@192.168.200.5
 sudo vim /etc/samba/smb.conf 
 min protocol = SMB2 
 sudo /etc/init.d/smbd restart 
