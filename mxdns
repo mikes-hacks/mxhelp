@@ -43,7 +43,7 @@ ldapsearch -x -h 192.168.200.5 -s base namingcontexts
 ldapsearch -x -h 192.168.200.5 -b 'DC=mike,DC=com' -s sub | grep -i sam  
 ldapsearch -x -h 192.168.200.5 -D '' -w '' -b "DC=mike,DC=com" 
 
-nmap -n -sV --script "ldap* and not brute" 192.168.118.100 
+nmap -n -sV --script "ldap* and not brute" 192.168.200.5
 web: certificates, emailaddys 
 http://web/about.html 
 
