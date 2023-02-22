@@ -153,6 +153,7 @@ netsh advfirewall firewall show rule name=all
 netsh firewall set opmode disable
 netsh advfirewall set allprofiles state off  
 
+
  
 ================================== 
 mountvol 
@@ -209,6 +210,8 @@ reg query "HKCU\Software\SimonTatham\PuTTY\Sessions"
 
 search -f *pass* 
 
+netsh wlan show profiles
+netsh wlan profile name="mywifi" key=clear
 
 ================================== 
 Startups
