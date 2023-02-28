@@ -1,4 +1,13 @@
 =================================== 
+Github
+Flexible location to store your "clean" notes.
+Especially for Sharing.
+Sync with vscode, git push/pull, or manually update!
+Easy 'clone' to download.
+Owned now by Microsoft?!
+"Could" be great for teams to share docs, but many hurdles.
+
+=================================== 
 Prep
 sudo vim /etc/hosts
 export URL="http://backdoor.htb"
