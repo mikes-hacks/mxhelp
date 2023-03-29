@@ -149,6 +149,10 @@ exiftool -filename -gpslatitude -gpslongitude -T images/  > gps.txt
 exiftool -overwrite_original -all= -ext jpg -ext jpeg -ext png -ext bmp .
 exiftool -csv -CreateDate -Keywords -r -ext jpg /full/path/folder > results.csv
 
+FOCA Scrapes
+https://www.elevenpaths.com/labstools/foca/index.html
+FOCA > Menu > New Project > Create > Drag Folder > Extract All Metadata > Save Log
+
 ===================================
 Redirects
 
