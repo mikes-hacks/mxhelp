@@ -1,13 +1,4 @@
 =================================== 
-Github
-Flexible location to store your "clean" notes.
-Especially for Sharing.
-Sync with vscode, git push/pull, or manually update!
-Easy 'clone' to download.
-Owned now by Microsoft?!
-"Could" be great for teams to share docs, but many hurdles.
-
-=================================== 
 Prep
 sudo vim /etc/hosts
 export URL="http://backdoor.htb"
@@ -68,7 +59,7 @@ Find Forms, Inputs, PHP, CGI, SQLi, Command Injections
 Version of package (Wordpress, Drupal, Etc) for Exploits
 
 =================================== 
-Checks
+Quick Checks
 
 ssl certificate - user/email/vhosts - Juicy!!
 Cookie Manager - Might have 'Admin'
@@ -142,7 +133,23 @@ Hydra - Brute Force (if you have username)
 Google - FileZilla Authentication Bypass
 Google - FileZilla SQLIi bypass
 
-=================================== 
+===================================
+Download
+
+wget 192.168.200.5
+wget -r 192.168.200.5
+wget -r 192.168.200.5/secrets
+
+===================================
+Metadata
+
+grep -ir ".pdf\|.doc\|.xls\|.pdf\|.ppt\|.jp\|.bmp\|.png\|.txt\|x$" ./
+exiftool -g1 secrets.xlsx -w %f_exif.txt
+exiftool -filename -gpslatitude -gpslongitude -T images/  > gps.txt
+exiftool -overwrite_original -all= -ext jpg -ext jpeg -ext png -ext bmp .
+exiftool -csv -CreateDate -Keywords -r -ext jpg /full/path/folder > results.csv
+
+===================================
 Redirects
 
 Account-Create > Redirect to login.php
