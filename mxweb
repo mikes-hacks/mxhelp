@@ -150,7 +150,7 @@ exiftool -overwrite_original -all= -ext jpg -ext jpeg -ext png -ext bmp .
 exiftool -csv -CreateDate -Keywords -r -ext jpg /full/path/folder > results.csv
 
 FOCA Scrapes
-https://www.elevenpaths.com/labstools/foca/index.html
+https://github.com/ElevenPaths/FOCA
 FOCA > Menu > New Project > Create > Drag Folder > Extract All Metadata > Save Log
 
 ===================================
