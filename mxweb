@@ -139,11 +139,18 @@ Download
 wget 192.168.200.5
 wget -r 192.168.200.5
 wget -r 192.168.200.5/secrets
+wget -r -l inf -A txt,bmp,png,jpg,jpeg,doc,docx,xls,xlsx,ppt,pptx,pdf,cfg,conf,config,sql,py https://192.168.200.5
+
 
 ===================================
 Metadata
 
+grep -ir password ./*
 grep -ir ".pdf\|.doc\|.xls\|.pdf\|.ppt\|.jp\|.bmp\|.png\|.txt\|x$" ./
+
+find ./* -name "*.doc*"
+find ./* -name '*config*' -exec grep -H 'pass' {} \;
+
 exiftool -g1 secrets.xlsx -w %f_exif.txt
 exiftool -filename -gpslatitude -gpslongitude -T images/  > gps.txt
 exiftool -overwrite_original -all= -ext jpg -ext jpeg -ext png -ext bmp .
