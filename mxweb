@@ -17,12 +17,12 @@ Host
 echo 192.168.200.5 dcbob | sudo tee -a /etc/hosts
 export URL="http://dcbob:80/"  
 
-FUZZ - Fast!!  (hh-hide chars)
+WFUZZ - Fast!!  (hh-hide chars)
 export URL="http://bob.htb"  
 wfuzz -c -z file,$mediumfiles --hc 404 --hh 4772 -u $URL/FUZZ
 wfuzz -c -z file,$mediumdirs --hc 404 --hh 4772 -u $URL/FUZZ/
 wfuzz -c -Z -w $subtopmill -t 42 --hl 1 -u $URL -H 'Host: FUZZ.bob.htb' --hh 33560
-gobuster vhost -u $URL -w $subtopmill
+gobuster dns -d site.com -i -w $subtopmill --wildcard
 
 WFUZZ URL
 export URL="http://dcbob:80/listproducts.php?cat=FUZZ"  
