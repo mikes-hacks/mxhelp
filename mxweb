@@ -534,4 +534,4 @@ Go back - Explore all of your open-services from NMAP.
 
 =================================== 
 Consider
-mxnmap mxcurls mxbrutes
+mxnmap mxcurls mxsqli mxbrutes
