@@ -23,6 +23,12 @@ http://192.168.200.5/room.php?cod=1'
 Error/no-graphic = We have injection
 
 =================================== 
+Burp
+
+If Burp finds a SQL Injection possibility.
+Send it to SQLMap!
+
+=================================== 
 Cookie + Timebased Injection
 
 Cookie: TrackingId=x'||dbms_pipe.receive_message(('a'),10)  ..oracle
