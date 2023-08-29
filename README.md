@@ -24,6 +24,7 @@ cd ~/Downloads
 wget https://github.com/owenthereal/ccat/releases/download/v1.1.0/linux-amd64-1.1.0.tar.gz
 tar xvf linux-amd64-1.1.0.tar.gz 
 sudo cp linux-amd64-1.1.0/ccat /usr/bin/ccat
+sudo chmod 755 /usr/bin/ccat
 ```
 
 # Alias
