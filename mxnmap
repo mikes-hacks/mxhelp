@@ -149,12 +149,12 @@ enumdomusers
 111/2049 NFS/mountd
 
 nmap -sV -v --script=nfs-showmount 192.168.200.5
-nmap -p 111,2049 -v --script nfs* 192.168.200.5
+nmap -p 111,2049 -v --script=nfs* 192.168.200.5
 sudo showmount -e 192.168.200.5
-mkdir secrets
-sudo mount -t nfs 192.168.200.5/secrets secrets/
-sudo mount -o rw,vers=2 192.168.200.5:/secrets secrets/
-sudo mount -o nolock 192.168.200.5:/secrets secrets/   #older NFS
+sudo mkdir /mnt/secrets
+sudo mount -t nfs 192.168.200.5/secrets /mnt/secrets/
+sudo mount -o rw,vers=2 192.168.200.5:/secrets /mnt/secrets/
+sudo mount -o nolock 192.168.200.5:/secrets /mnt/secrets/   #older NFS
 cd secrets; grep -irl password
 
 
