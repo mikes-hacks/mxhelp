@@ -11,7 +11,7 @@ dirsearch -u $URL -w $medium -e ,,txt,cfg,html,php,bak -t 50
 dirsearch -u $URL -w $medium -e ,,txt,cfg,bak,html,php,asp,aspx -r -f -t 50 -x 400
 gobuster -u $URL -w $mediumdirs -x txt,php,html,zip -t 40
 whatweb --color=always --no-errors -a 3 -v 192.168.200.5
-nikto --url $URL 
+nikto -host $URL 
 
 Host
 echo 192.168.200.5 dcbob | sudo tee -a /etc/hosts
