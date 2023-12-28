@@ -186,7 +186,7 @@ enum4linux -A 192.168.200.5
 sudo ./smbver.sh 192.168.200.5 139
 sudo nmap -p 139,445 -v --script=smb-vuln* 192.168.200.5 
 sudo nmap -p 445 -v --script=smb-enum-shares,smb-enum-users 192.168.200.5 
-sudo nmap -p 139,445 -v -T5 192.168.200.5 -oG nmap-smb --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode, smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494, smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery --script-args=unsafe=1
+sudo nmap -p 139,445 -v -T5 192.168.200.5 -oA nmap-smb --script=smb2-capabilities,smb-print-text,smb2-security-mode.nse,smb-protocols,smb2-time.nse,smb-psexec,smb2-vuln-uptime,smb-security-mode, smb-server-stats,smb-double-pulsar-backdoor,smb-system-info,smb-vuln-conficker,smb-enum-groups,smb-vuln-cve2009-3103,smb-enum-processes,smb-vuln-cve-2017-7494, smb-vuln-ms06-025,smb-enum-shares,smb-vuln-ms07-029,smb-enum-users,smb-vuln-ms08-067,smb-vuln-ms10-054,smb-ls,smb-vuln-ms10-061,smb-vuln-ms17-010,smb-os-discovery --script-args=unsafe=1
 
 smbmap -H 192.168.200.5
 smbmap -H 192.168.200.5 -U '' -P '' 
