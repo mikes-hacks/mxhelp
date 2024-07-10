@@ -85,7 +85,7 @@ Remember - For any changes you make, just be sure the IP and TGT match with the 
 # Secret Sauce (FYI)
 The real power comes from the Linux 'sed' command.  
 It will update all of your IP's for Host and Target.  
-The script will also run checks to make sure you dont wreak your cheatsheets.  
+The script will also run checks to make sure you dont wrek your cheatsheets.  
 ```bash
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$ipold"'/'"$IP"'/gI' {} \;
 find ~/mxhelp/mx* -type f -exec sed -i 's/'"$tgtold"'/'"$TGT"'/gI' {} \;
