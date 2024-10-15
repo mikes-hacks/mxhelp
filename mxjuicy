@@ -343,7 +343,17 @@ c:\WINNT\php.ini
 c:\xampp\apache\bin\php.ini
 c:\xampp\apache\logs\access.log
 c:\xampp\apache\logs\error.log
+c:\Nagios\etc\nagios.cfg
+c:\Nagios\etc\ncpa.cfg
 
 ==================================
 Switch to Double Slash Format:
 grep 'c:' mxjuicy | sed 's/\\/\\\\/g'
+
+==================================
+Convert Spaces to Shortpaths:
+mxjuicy | grep x86 | sed 's/Program Files (x86)/PROGRA~2/g'
+mxjuicy | grep x86 | sed 's/Program Files/PROGRA~1/g'
+mxjuicy | grep x86 | sed 's/MySQL Server 5.0/MYSQLS~1.0/g'
+mxjuicy | grep x86 | sed 's/FileZilla Server/FILEZI~1/g'
+mxjuicy | grep x86 | sed 's/Apache Group/APACHE~1/g'
