@@ -213,6 +213,7 @@ grep -lri pass ./ --exclude=*.jpg
 grep -ri pass ./ --exclude=*.jpg -A1 -B1 
 grep -ri -e pass -e username -e db ./ -A1 -B1 *.txt *.ini 
 grep -ri -e password -e username -e db ./ --exclude=*.jpg -A1 -B1 --color=always | more 
+find . -type f 2>/dev/null \( -iname '*user*' -o -iname '*account*' -o -iname '*config*' -o -iname '*passw*' -o -iname '*root*' -o -iname 'web.config' -o -iname 'id_rsa' -o -iname 'grub.conf' -o -iname 'httpd.conf' -o -iname 'httpd.conf.ini' -o -iname 'inetd.conf' -o -iname 'lighttpd.conf' -o -iname 'lilo.conf' -o -iname 'modsec.conf' -o -iname 'modules.conf' -o -iname 'my.conf' -o -iname 'mysql_data.conf' -o -iname 'proftp.conf' -o -iname 'proftpd.conf' -o -iname 'pure-config.pl' -o -iname 'pure-ftpd.conf' -o -iname 'resolv.conf' -o -iname 'smb.conf' -o -iname 'snmpd.conf' -o -iname 'srm.conf' -o -iname 'ssh_config' -o -iname 'sshd_config' -o -iname 'syslog.conf' -o -iname 'vsftpd.conf' -o -iname 'db.php' -o -iname 'db.php5' -o -iname 'httpd.conf.php' -o -iname 'login.php' -o -iname '.php_history' -o -iname 'php.ini' -o -iname 'wp-config.php' -o -iname 'config.inc.php' -o -iname 'SAM$' -o -iname 'SYSTEM$' -o -iname 'SECURITY$' -o -iname 'ntds.dit' -o -iname 'adamntds.dit' -o -iname '.mysql_history' -o -iname '.nano_history' -o -iname '.bash_history' -o -iname '.psql_history' -o -iname '.zsh_history' \) | xargs -d '\n' grep -iEH 'ssh|pass|admin|root' 2>/dev/null
 
 =================================== 
 JOBS
